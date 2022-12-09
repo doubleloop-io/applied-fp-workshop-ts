@@ -1,0 +1,16 @@
+version: 2
+
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    pull-request-branch-name:
+      separator: '-'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'npm'
+    directory: '/client/'
+    pull-request-branch-name:
+      separator: '-'
+    schedule:
+      interval: 'daily'
