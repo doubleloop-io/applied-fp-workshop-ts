@@ -1,0 +1,17 @@
+{
+  "version": "0.1",
+  "language": "en",
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/.cache/**",
+    "**/dist/**",
+    "**/.git/**",
+    "**/.cache/**",
+    "**/*.tsbuildinfo",
+    "tmp/",
+    "yarn.lock",
+    "**/yarn-error.log",
+    ".vscode"
+  ],
+  "words": []
+}
