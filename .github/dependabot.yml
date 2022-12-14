@@ -10,6 +10,7 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: '/'
+    open-pull-requests-limit: 100
     pull-request-branch-name:
       separator: '-'
     schedule:
