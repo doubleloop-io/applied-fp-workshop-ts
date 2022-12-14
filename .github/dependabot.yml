@@ -9,7 +9,7 @@ updates:
       interval: 'daily'
 
   - package-ecosystem: 'npm'
-    directory: '/client/'
+    directory: '/'
     pull-request-branch-name:
       separator: '-'
     schedule:
