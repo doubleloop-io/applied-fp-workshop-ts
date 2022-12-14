@@ -18,7 +18,7 @@
     "@typescript-eslint/parser": "4.33.0",
     "@types/jest": "26.0.20",
     "jest": "26.6.3",
-    "ts-jest": "26.5.3",
+    "ts-jest": "26.5.6",
     "cspell": "6.17.0"
   },
   "scripts": {
