@@ -1,4 +1,4 @@
-import * as myLib from '../src'
+import * as myLib from '..'
 
 describe('greet', () => {
   it('greets the world', () => {
