@@ -13,5 +13,7 @@
     "**/yarn-error.log",
     ".vscode"
   ],
-  "words": []
+  "words": [
+    "effectful"
+  ]
 }
