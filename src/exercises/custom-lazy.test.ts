@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { pipe } from "fp-ts/function"
 
 describe.skip("custom lazy monad", () => {
