@@ -1,7 +1,9 @@
+// TODO - 6: remove disable comment
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { pipe } from "fp-ts/function"
 
+// TODO - 1: remove skip marker
 describe.skip("custom option monad", () => {
     type Option<A> = None | Some<A>
     type None = {
@@ -20,9 +22,7 @@ describe.skip("custom option monad", () => {
         throw new Error("TODO")
     }
 
-    const isSome: <A>(oa: Option<A>) => boolean = (oa) => {
-        throw new Error("TODO")
-    }
+    const isSome: <A>(oa: Option<A>) => boolean = (oa) => oa._tag === "Some"
 
     const map: <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B> =
         (f) => (fa) => {
@@ -48,24 +48,28 @@ describe.skip("custom option monad", () => {
         some(x.toString().split("").reverse().join(""))
 
     test("creation phase", () => {
+        // TODO - 2: implement 'of' function
         const result = of(10)
 
         expect(isSome(result)).toBeTruthy()
     })
 
     test("combination phase - normal", () => {
+        // TODO - 3: implement 'map' function
         const result = pipe(some(10), map(increment))
 
         expect(result).toStrictEqual(some(11))
     })
 
     test("combination phase - effectful", () => {
+        // TODO - 4: implement 'chain' function
         const result = pipe(some(10), chain(reverseString))
 
         expect(result).toStrictEqual(some("01"))
     })
 
     test("removal phase - value", () => {
+        // TODO - 5: implement 'fold' function
         const result = pipe(
             some(10),
             fold(

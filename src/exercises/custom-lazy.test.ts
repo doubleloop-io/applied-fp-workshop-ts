@@ -1,7 +1,9 @@
+// TODO - 6: remove disable comment
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { pipe } from "fp-ts/function"
 
+// TODO - 1: remove skip marker
 describe.skip("custom lazy monad", () => {
     type Lazy<A> = () => A
 
@@ -42,11 +44,13 @@ describe.skip("custom lazy monad", () => {
     }
 
     test("creation phase", () => {
+        // TODO - 2: implement 'of' function
         const result = of(10)
         expect(result()).toStrictEqual(10)
     })
 
     test("combination phase - normal", () => {
+        // TODO - 3: implement 'map' function
         const result = pipe(of(10), map(increment))
         expect(logs).toStrictEqual([])
         expect(result()).toStrictEqual(11)
@@ -54,6 +58,7 @@ describe.skip("custom lazy monad", () => {
     })
 
     test("combination phase - effectful", () => {
+        // TODO - 4: implement 'chain' function
         const result = pipe(of(10), chain(reverseString))
         expect(logs).toStrictEqual([])
         expect(result()).toStrictEqual("01")
@@ -61,6 +66,7 @@ describe.skip("custom lazy monad", () => {
     })
 
     test("removal phase - value", () => {
+        // TODO - 5: implement 'fold' function
         const result = pipe(of(10), fold())
         expect(result).toStrictEqual(10)
     })
