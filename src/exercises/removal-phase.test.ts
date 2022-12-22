@@ -1,6 +1,6 @@
 import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
-import { pipe } from "fp-ts/lib/function"
+import { pipe } from "fp-ts/function"
 
 // TODO - 1: remove skip marker
 describe.skip("removal phase", () => {

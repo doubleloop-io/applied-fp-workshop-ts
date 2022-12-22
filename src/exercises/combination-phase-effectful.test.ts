@@ -1,7 +1,8 @@
 import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
-import { pipe } from "fp-ts/lib/function"
+import { pipe } from "fp-ts/function"
 
+// TODO - 1: remove skip marker
 describe.skip("combination phase", () => {
     type Item = {
         qty: number
@@ -19,24 +20,33 @@ describe.skip("combination phase", () => {
         value <= item.qty ? O.some({ qty: item.qty - value }) : O.none
 
     test("checkOut after valid creation", () => {
-        const result = pipe(createItem("100"), O.chain(checkOut(10)))
+        const result = pipe(
+            createItem("100"),
+            // TODO - 2: "call" checkOut 10
+        )
 
-        expect(result).toStrictEqual(O.some({ qty: 90 }))
+        // TODO - 3: change expectation
+        expect(result).toStrictEqual(null)
     })
 
     test("checkOut after invalid creation", () => {
-        const result = pipe(createItem("asd"), O.chain(checkOut(10)))
+        const result = pipe(
+            createItem("asd"),
+            // TODO - 4: "call" checkOut 10
+        )
 
-        expect(result).toStrictEqual(O.none)
+        // TODO - 5: change expectation
+        expect(result).toStrictEqual(null)
     })
 
     test("checkIn and checkOut after valid creation", () => {
         const result = pipe(
             createItem("100"),
-            O.map(checkIn(10)),
-            O.chain(checkOut(20)),
+            // TODO - 6: "call" checkIn 10
+            // TODO - 7: "call" checkOut 20
         )
 
-        expect(result).toStrictEqual(O.some({ qty: 90 }))
+        // TODO - 8: change expectation
+        expect(result).toStrictEqual(null)
     })
 })
