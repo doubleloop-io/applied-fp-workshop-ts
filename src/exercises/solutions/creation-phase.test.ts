@@ -22,14 +22,18 @@ describe.skip("creation phase", () => {
             : { _tag: "Invalid" }
 
     test("item creation", () => {
-        expect(createItem("10")).toStrictEqual({
+        const result = createItem("10")
+
+        expect(result).toStrictEqual({
             _tag: "Valid",
             value: { qty: 10 },
         })
     })
 
     test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
-        expect(createItem(x)).toStrictEqual({
+        const result = createItem(x)
+
+        expect(result).toStrictEqual({
             _tag: "Invalid",
         })
     })
@@ -39,10 +43,14 @@ describe.skip("creation phase", () => {
         qty.match(/^[0-9]+$/i) ? O.some({ qty: parseInt(qty, 10) }) : O.none
 
     test("item creation", () => {
-        expect(createItemFpTs("10")).toStrictEqual(O.some({ qty: 10 }))
+        const result = createItemFpTs("10")
+
+        expect(result).toStrictEqual(O.some({ qty: 10 }))
     })
 
     test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
-        expect(createItemFpTs(x)).toStrictEqual(O.none)
+        const result = createItemFpTs(x)
+
+        expect(result).toStrictEqual(O.none)
     })
 })

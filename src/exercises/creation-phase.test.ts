@@ -16,11 +16,15 @@ describe.skip("creation phase", () => {
 
     // TODO - 4: change test expectation
     test("item creation", () => {
-        expect(createItem("10")).toStrictEqual({ qty: 10 })
+        const result = createItem("10")
+
+        expect(result).toStrictEqual({ qty: 10 })
     })
 
     // TODO - 5: change test expectation
     test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
-        expect(() => createItem(x)).toThrow()
+        const result = () => createItem(x)
+
+        expect(result).toThrow()
     })
 })
