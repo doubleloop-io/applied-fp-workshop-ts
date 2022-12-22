@@ -8,9 +8,12 @@ describe.skip("combination phase - list", () => {
         qty: number
     }
 
+    type itemCtorFn = (qty: number) => Item
+    const itemCtor: itemCtorFn = (qty): Item => ({ qty })
+
     type createItemFn = (qty: string) => Option<Item>
     const createItem: createItemFn = (qty) =>
-        qty.match(/^[0-9]+$/i) ? O.some({ qty: parseInt(qty, 10) }) : O.none
+        qty.match(/^[0-9]+$/i) ? O.some(itemCtor(parseInt(qty, 10))) : O.none
 
     test("all valid - individual results", () => {
         const values = ["1", "10", "100"]

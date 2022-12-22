@@ -18,10 +18,10 @@ describe.skip("chaining", () => {
         qty: item.qty + value,
     })
 
-    const anyItem: Item = { id: 123, qty: 10 }
+    const aItem: Item = { id: 123, qty: 10 }
 
     test("chaining w/ Option Monad", () => {
-        const load = (id: ItemId): Option<Item> => O.of(anyItem)
+        const load = (id: ItemId): Option<Item> => O.of(aItem)
         const save = (item: Item): Option<void> => O.of(constVoid())
 
         const program: Option<void> = pipe(
@@ -33,7 +33,7 @@ describe.skip("chaining", () => {
 
     test("chaining w/ Either Monad", () => {
         type Error = string
-        const load = (id: ItemId): Either<Error, Item> => E.of(anyItem)
+        const load = (id: ItemId): Either<Error, Item> => E.of(aItem)
         const save = (item: Item): Either<Error, Item> => E.of(item)
 
         const program: Either<Error, Item> = pipe(
@@ -44,7 +44,7 @@ describe.skip("chaining", () => {
     })
 
     test("chaining w/ Task Monad", () => {
-        const load = (id: ItemId): Task<Item> => T.of(anyItem)
+        const load = (id: ItemId): Task<Item> => T.of(aItem)
         const save = (item: Item): Task<Item> => T.of(item)
 
         const program: Task<Item> = pipe(
@@ -56,7 +56,7 @@ describe.skip("chaining", () => {
 
     test("chaining w/ TaskEither Monad", () => {
         type Error = string
-        const load = (id: ItemId): TaskEither<Error, Item> => TE.of(anyItem)
+        const load = (id: ItemId): TaskEither<Error, Item> => TE.of(aItem)
         const save = (item: Item): TaskEither<Error, Item> => TE.of(item)
 
         const program: TaskEither<Error, Item> = pipe(

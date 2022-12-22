@@ -6,6 +6,9 @@ describe.skip("creation phase", () => {
         qty: number
     }
 
+    type itemCtorFn = (qty: number) => Item
+    const itemCtor: itemCtorFn = (qty): Item => ({ qty })
+
     type OptionalItem = Invalid | Valid
     type Invalid = {
         readonly _tag: "Invalid"
@@ -18,7 +21,7 @@ describe.skip("creation phase", () => {
     type createItemFn = (qty: string) => OptionalItem
     const createItem: createItemFn = (qty) =>
         qty.match(/^[0-9]+$/i)
-            ? { _tag: "Valid", value: { qty: parseInt(qty, 10) } }
+            ? { _tag: "Valid", value: itemCtor(parseInt(qty, 10)) }
             : { _tag: "Invalid" }
 
     test("item creation", () => {
