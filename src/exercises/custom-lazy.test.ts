@@ -1,6 +1,3 @@
-// TODO - 6: remove disable comment
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { pipe } from "fp-ts/function"
 
 // TODO - 1: remove skip marker
