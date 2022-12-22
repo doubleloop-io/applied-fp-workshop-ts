@@ -1,5 +1,5 @@
 // TODO - 1: remove skip marker
-describe("creation phase", () => {
+describe.skip("creation phase", () => {
     type Item = {
         qty: number
     }
