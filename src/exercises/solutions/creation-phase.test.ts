@@ -1,7 +1,7 @@
 import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 
-describe("creation phase", () => {
+describe.skip("creation phase", () => {
     type Item = {
         qty: number
     }
@@ -15,7 +15,8 @@ describe("creation phase", () => {
         readonly value: Item
     }
 
-    const createItem: (qty: string) => OptionalItem = (qty) =>
+    type createItemFn = (qty: string) => OptionalItem
+    const createItem: createItemFn = (qty) =>
         qty.match(/^[0-9]+$/i)
             ? { _tag: "Valid", value: { qty: parseInt(qty, 10) } }
             : { _tag: "Invalid" }
@@ -33,7 +34,8 @@ describe("creation phase", () => {
         })
     })
 
-    const createItemFpTs: (qty: string) => Option<Item> = (qty) =>
+    type createItemFpTsFn = (qty: string) => Option<Item>
+    const createItemFpTs: createItemFpTsFn = (qty) =>
         qty.match(/^[0-9]+$/i) ? O.some({ qty: parseInt(qty, 10) }) : O.none
 
     test("item creation", () => {
