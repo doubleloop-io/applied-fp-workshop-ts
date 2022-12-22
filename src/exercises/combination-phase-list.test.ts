@@ -4,7 +4,7 @@ import * as O from "fp-ts/Option"
 import * as A from "fp-ts/Array"
 
 // TODO - 1: remove skip marker
-describe.skip("combination phase  - list", () => {
+describe.skip("combination phase - list", () => {
     type Item = {
         qty: number
     }

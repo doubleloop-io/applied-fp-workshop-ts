@@ -3,7 +3,7 @@ import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 import * as A from "fp-ts/Array"
 
-describe.skip("combination phase  - list", () => {
+describe.skip("combination phase - list", () => {
     type Item = {
         qty: number
     }

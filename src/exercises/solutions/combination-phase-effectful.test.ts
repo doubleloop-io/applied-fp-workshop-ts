@@ -1,6 +1,6 @@
+import { pipe } from "fp-ts/function"
 import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
-import { pipe } from "fp-ts/function"
 
 describe.skip("combination phase - effectful", () => {
     type Item = {
