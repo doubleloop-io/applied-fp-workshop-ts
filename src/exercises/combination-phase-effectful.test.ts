@@ -25,7 +25,7 @@ describe.skip("combination phase - effectful", () => {
     test("checkOut after valid creation", () => {
         const result = pipe(
             createItem("100"),
-            // TODO - 2: "call" checkOut 10
+            // TODO - 2: use 'chain' to check out 10
         )
 
         // TODO - 3: change expectation
@@ -35,7 +35,7 @@ describe.skip("combination phase - effectful", () => {
     test("checkOut after invalid creation", () => {
         const result = pipe(
             createItem("asd"),
-            // TODO - 4: "call" checkOut 10
+            // TODO - 4: check out 10
         )
 
         // TODO - 5: change expectation
@@ -45,8 +45,8 @@ describe.skip("combination phase - effectful", () => {
     test("checkIn and checkOut after valid creation", () => {
         const result = pipe(
             createItem("100"),
-            // TODO - 6: "call" checkIn 10
-            // TODO - 7: "call" checkOut 20
+            // TODO - 6: check in 10
+            // TODO - 7: check out 20
         )
 
         // TODO - 8: change expectation

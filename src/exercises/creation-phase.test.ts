@@ -17,17 +17,17 @@ describe.skip("creation phase", () => {
         else throw new Error("invalid item") // or return null | undefined
     }
 
-    // TODO - 4: change test expectation
     test("item creation", () => {
         const result = createItem("10")
 
+        // TODO - 4: change test expectation
         expect(result).toStrictEqual(itemCtor(10))
     })
 
-    // TODO - 5: change test expectation
     test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
         const result = () => createItem(x)
 
+        // TODO - 5: change test expectation
         expect(result).toThrow()
     })
 })

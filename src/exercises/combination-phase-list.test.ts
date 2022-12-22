@@ -20,7 +20,7 @@ describe.skip("combination phase - list", () => {
         const values = ["1", "10", "100"]
         const result = pipe(
             values,
-            // TODO - 2: Map over values array to create items
+            // TODO - 2: map over values and create items
         )
 
         expect(result).toStrictEqual([
@@ -34,7 +34,7 @@ describe.skip("combination phase - list", () => {
         const values = ["1", "asd", "100"]
         const result = pipe(
             values,
-            // TODO - 3: Map over values array to create items
+            // TODO - 3: map over values and create items
         )
 
         expect(result).toStrictEqual([
