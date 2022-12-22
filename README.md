@@ -1,36 +1,15 @@
-# applied-fp-ts
+# Applied Functional Programming Workshop - Typescript Edition
 
-[![Test](https:&#x2F;&#x2F;github.com&#x2F;doubleloop-io&#x2F;applied-fp-workshop-ts&#x2F;actions&#x2F;workflows&#x2F;build.yml&#x2F;badge.svg)](https:&#x2F;&#x2F;github.com&#x2F;doubleloop-io&#x2F;applied-fp-workshop-ts&#x2F;actions&#x2F;workflows&#x2F;build.yml)
+[![Test](https://github.com/doubleloop-io/applied-fp-workshop-ts/actions/workflows/build.yml/badge.svg)](https://github.com/doubleloop-io/applied-fp-workshop-ts/actions/workflows/build.yml)
 
-[API Docs](https://github.com/doubleloop-io/applied-fp-workshop-ts)
+## Yarn Commands
 
----
+Run tests:
 
-<!-- AUTO-GENERATED-CONTENT:START (TOC) -->
-
-- [Install](#install)
-- [Example](#example)
-
-<!-- AUTO-GENERATED-CONTENT:END -->
-
-## Install
-
-Uses `fp-ts` as a peer dependency.
-
-```bash
-yarn add fp-ts applied-fp-ts
+```sh
+$ yarn test
 ```
 
-or
+## Documentation
 
-```bash
-npm install fp-ts applied-fp-ts
-```
-
-## Example
-
-```ts
-import * as Lib from 'applied-fp-ts'
-
-// write an example...
-```
+[FP-TS API](https://gcanti.github.io/fp-ts/modules/)
