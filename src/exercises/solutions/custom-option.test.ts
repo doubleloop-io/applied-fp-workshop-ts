@@ -1,56 +1,6 @@
 import { pipe } from "fp-ts/function"
 
-describe("custom option monad", () => {
-    type Option<A> = None | Some<A>
-    type None = {
-        readonly _tag: "None"
-    }
-    type Some<A> = {
-        readonly _tag: "Some"
-        readonly value: A
-    }
-
-    const none: <A>() => Option<A> = () => ({ _tag: "None" })
-
-    const some: <A>(a: A) => Option<A> = (a) => ({ _tag: "Some", value: a })
-
-    const of: <A>(a: A) => Option<A> = (a) => (a ? some(a) : none())
-
-    const isSome: <A>(oa: Option<A>) => boolean = (oa) => oa._tag === "Some"
-
-    const map: <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B> =
-        (f) => (fa) => {
-            switch (fa._tag) {
-                case "Some":
-                    return some(f(fa.value))
-                case "None":
-                    return none()
-            }
-        }
-
-    const chain: <A, B>(
-        f: (a: A) => Option<B>,
-    ) => (fa: Option<A>) => Option<B> = (f) => (fa) => {
-        switch (fa._tag) {
-            case "Some":
-                return f(fa.value)
-            case "None":
-                return none()
-        }
-    }
-
-    const fold: <A, B>(
-        onNone: () => B,
-        onSome: (a: A) => B,
-    ) => (ma: Option<A>) => B = (on, os) => (fa) => {
-        switch (fa._tag) {
-            case "Some":
-                return os(fa.value)
-            case "None":
-                return on()
-        }
-    }
-
+describe.skip("custom option monad", () => {
     const increment: (x: number) => number = (x) => x + 1
 
     const reverseString: (x: number) => Option<string> = (x) =>
@@ -97,4 +47,65 @@ describe("custom option monad", () => {
 
         expect(result).toStrictEqual("none")
     })
+
+    // data types
+    type Option<A> = None | Some<A>
+    type None = {
+        readonly _tag: "None"
+    }
+    type Some<A> = {
+        readonly _tag: "Some"
+        readonly value: A
+    }
+
+    // constructors
+    type noneFn = <A>() => Option<A>
+    const none: noneFn = () => ({ _tag: "None" })
+
+    type someFn = <A>(a: A) => Option<A>
+    const some: someFn = (a) => ({ _tag: "Some", value: a })
+
+    type ofFn = <A>(a: A) => Option<A>
+    const of: ofFn = (a) => (a ? some(a) : none())
+
+    // utilities
+    type isSomeFn = <A>(oa: Option<A>) => boolean
+    const isSome: isSomeFn = (oa) => oa._tag === "Some"
+
+    // combiners
+    type mapFn = <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B>
+    const map: mapFn = (f) => (fa) => {
+        switch (fa._tag) {
+            case "Some":
+                return some(f(fa.value))
+            case "None":
+                return none()
+        }
+    }
+
+    type chainFn = <A, B>(
+        f: (a: A) => Option<B>,
+    ) => (fa: Option<A>) => Option<B>
+    const chain: chainFn = (f) => (fa) => {
+        switch (fa._tag) {
+            case "Some":
+                return f(fa.value)
+            case "None":
+                return none()
+        }
+    }
+
+    // folders / runners
+    type foldFn = <A, B>(
+        onNone: () => B,
+        onSome: (a: A) => B,
+    ) => (fa: Option<A>) => B
+    const fold: foldFn = (onNone, onSome) => (fa) => {
+        switch (fa._tag) {
+            case "Some":
+                return onSome(fa.value)
+            case "None":
+                return onNone()
+        }
+    }
 })
