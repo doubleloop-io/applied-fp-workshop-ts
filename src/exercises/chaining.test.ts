@@ -9,7 +9,7 @@ import { TaskEither } from "fp-ts/TaskEither"
 import * as TE from "fp-ts/TaskEither"
 
 // TODO - 1: remove skip marker
-describe("chaining", () => {
+describe.skip("chaining", () => {
     type ItemId = number
     type Item = { id: ItemId; qty: number }
 

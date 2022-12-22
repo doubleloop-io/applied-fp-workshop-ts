@@ -3,7 +3,7 @@ import * as O from "fp-ts/Option"
 import { pipe } from "fp-ts/function"
 
 // TODO - 1: remove skip marker
-describe.skip("combination phase", () => {
+describe.skip("combination phase - effectful", () => {
     type Item = {
         qty: number
     }
