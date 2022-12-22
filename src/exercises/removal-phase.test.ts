@@ -18,7 +18,7 @@ describe.skip("removal phase", () => {
     test("item creation", () => {
         const result = pipe(
             createItem("100"),
-            // TODO - 2: Use fold to produce a string (valid case)
+            // TODO - 2: use 'fold' to produce a string (valid case)
         )
 
         expect(result).toStrictEqual("100")
@@ -26,10 +26,30 @@ describe.skip("removal phase", () => {
 
     test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
         const result = pipe(
-            createItem("asd"),
-            // TODO - 3: Use fold to produce a string (invalid case)
+            createItem(x),
+            // TODO - 3: use 'fold' to produce a string (invalid case)
         )
 
         expect(result).toStrictEqual("alternative value")
+    })
+
+    test("get or default - valid", () => {
+        const result = pipe(
+            createItem("10"),
+            O.getOrElse(() => itemCtor(0)),
+        )
+
+        // TODO - 4: change expectation
+        expect(result).toStrictEqual(null)
+    })
+
+    test("get or default - invalid", () => {
+        const result = pipe(
+            createItem("asd"),
+            O.getOrElse(() => itemCtor(0)),
+        )
+
+        // TODO - 5: change expectation
+        expect(result).toStrictEqual(null)
     })
 })
