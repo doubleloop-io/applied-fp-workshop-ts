@@ -2,61 +2,61 @@ import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 
 describe.skip("creation phase", () => {
-    type Item = {
-        qty: number
-    }
+  type Item = {
+    qty: number
+  }
 
-    type itemCtorFn = (qty: number) => Item
-    const itemCtor: itemCtorFn = (qty): Item => ({ qty })
+  type itemCtorFn = (qty: number) => Item
+  const itemCtor: itemCtorFn = (qty): Item => ({ qty })
 
-    type OptionalItem = Invalid | Valid
-    type Invalid = {
-        readonly _tag: "Invalid"
-    }
-    type Valid = {
-        readonly _tag: "Valid"
-        readonly value: Item
-    }
-    type invalidFn = () => Invalid
-    const invalid: invalidFn = () => ({ _tag: "Invalid" })
+  type OptionalItem = Invalid | Valid
+  type Invalid = {
+    readonly _tag: "Invalid"
+  }
+  type Valid = {
+    readonly _tag: "Valid"
+    readonly value: Item
+  }
+  type invalidFn = () => Invalid
+  const invalid: invalidFn = () => ({ _tag: "Invalid" })
 
-    type validFn = (a: Item) => Valid
-    const valid: validFn = (a) => ({ _tag: "Valid", value: a })
+  type validFn = (a: Item) => Valid
+  const valid: validFn = (a) => ({ _tag: "Valid", value: a })
 
-    type createItemFn = (qty: string) => OptionalItem
-    const createItem: createItemFn = (qty) =>
-        qty.match(/^[0-9]+$/i) ? valid(itemCtor(parseInt(qty, 10))) : invalid()
+  type createItemFn = (qty: string) => OptionalItem
+  const createItem: createItemFn = (qty) =>
+    qty.match(/^[0-9]+$/i) ? valid(itemCtor(parseInt(qty, 10))) : invalid()
 
-    test("item creation", () => {
-        const result = createItem("10")
+  test("item creation", () => {
+    const result = createItem("10")
 
-        expect(result).toStrictEqual({
-            _tag: "Valid",
-            value: { qty: 10 },
-        })
+    expect(result).toStrictEqual({
+      _tag: "Valid",
+      value: { qty: 10 },
     })
+  })
 
-    test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
-        const result = createItem(x)
+  test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
+    const result = createItem(x)
 
-        expect(result).toStrictEqual({
-            _tag: "Invalid",
-        })
+    expect(result).toStrictEqual({
+      _tag: "Invalid",
     })
+  })
 
-    type createItemFpTsFn = (qty: string) => Option<Item>
-    const createItemFpTs: createItemFpTsFn = (qty) =>
-        qty.match(/^[0-9]+$/i) ? O.some({ qty: parseInt(qty, 10) }) : O.none
+  type createItemFpTsFn = (qty: string) => Option<Item>
+  const createItemFpTs: createItemFpTsFn = (qty) =>
+    qty.match(/^[0-9]+$/i) ? O.some({ qty: parseInt(qty, 10) }) : O.none
 
-    test("item creation", () => {
-        const result = createItemFpTs("10")
+  test("item creation", () => {
+    const result = createItemFpTs("10")
 
-        expect(result).toStrictEqual(O.some({ qty: 10 }))
-    })
+    expect(result).toStrictEqual(O.some({ qty: 10 }))
+  })
 
-    test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
-        const result = createItemFpTs(x)
+  test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
+    const result = createItemFpTs(x)
 
-        expect(result).toStrictEqual(O.none)
-    })
+    expect(result).toStrictEqual(O.none)
+  })
 })

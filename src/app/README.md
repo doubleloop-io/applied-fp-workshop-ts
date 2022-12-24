@@ -8,13 +8,13 @@ You’re part of the team that explores Mars by sending remotely controlled vehi
 
 ## Requirements
 
--   The planet is divided into a grid with x (width) and y (height) size.
--   There are many obstacles on the planet. An obstacle has a position expressed as x, y co-ordinates.
--   You are given the initial starting point (x,y) of a rover and the orientation (N,S,E,W) it is facing.
--   The rover receives a character array of commands.
--   Supported commands are: move the rover forward/backward (f,b) and turn the rover left/right (l,r).
--   Implement wrapping at edges (pacman effect). Connect the x edge to the other x edge, so (1,1) for x-1 to (5,1), but connect vertical edges towards themselves in inverted coordinates, so (1,1) for y-1 connects to (5,1).
--   Implement obstacle detection before each move to a new square. If a given sequence of commands encounters an obstacle, the rover moves up to the last possible point, **aborts** the sequence and reports the obstacle.
+- The planet is divided into a grid with x (width) and y (height) size.
+- There are many obstacles on the planet. An obstacle has a position expressed as x, y co-ordinates.
+- You are given the initial starting point (x,y) of a rover and the orientation (N,S,E,W) it is facing.
+- The rover receives a character array of commands.
+- Supported commands are: move the rover forward/backward (f,b) and turn the rover left/right (l,r).
+- Implement wrapping at edges (pacman effect). Connect the x edge to the other x edge, so (1,1) for x-1 to (5,1), but connect vertical edges towards themselves in inverted coordinates, so (1,1) for y-1 connects to (5,1).
+- Implement obstacle detection before each move to a new square. If a given sequence of commands encounters an obstacle, the rover moves up to the last possible point, **aborts** the sequence and reports the obstacle.
 
 ## Example
 
