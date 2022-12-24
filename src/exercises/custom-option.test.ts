@@ -64,40 +64,31 @@ describe.skip("custom option monad", () => {
     }
 
     // constructors
-    type noneFn = <A>() => Option<A>
-    const none: noneFn = () => ({ _tag: "None" })
+    const none = <A>(): Option<A> => ({ _tag: "None" })
 
-    type someFn = <A>(a: A) => Option<A>
-    const some: someFn = (a) => ({ _tag: "Some", value: a })
+    const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
 
-    type ofFn = <A>(a: A) => Option<A>
-    const of: ofFn = (a) => {
+    const of = <A>(a: A): Option<A> => {
         throw new Error("TODO")
     }
 
     // utilities
-    type IsSome = <A>(oa: Option<A>) => boolean
-    const isSome: IsSome = (oa) => oa._tag === "Some"
+    const isSome = <A>(fa: Option<A>): boolean => fa._tag === "Some"
 
     // combiners
-    type mapFn = <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B>
-    const map: mapFn = (f) => (fa) => {
+    // prettier-ignore
+    const map = <A, B>(f: (a: A) => B) => (fa: Option<A>): Option<B> => {
         throw new Error("TODO")
     }
 
-    type chainFn = <A, B>(
-        f: (a: A) => Option<B>,
-    ) => (fa: Option<A>) => Option<B>
-    const chain: chainFn = (f) => (fa) => {
+    // prettier-ignore
+    const chain = <A, B>(f: (a: A) => Option<B>) => (fa: Option<A>): Option<B> => {
         throw new Error("TODO")
     }
 
     // folders / runners
-    type foldFn = <A, B>(
-        onNone: () => B,
-        onSome: (a: A) => B,
-    ) => (fa: Option<A>) => B
-    const fold: foldFn = (onNone, onSome) => (fa) => {
+    // prettier-ignore
+    const fold = <A, B>(onNone: () => B, onSome: (a: A) => B) => (fa: Option<A>) : B => {
         throw new Error("TODO")
     }
 })

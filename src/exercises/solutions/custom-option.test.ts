@@ -59,48 +59,39 @@ describe.skip("custom option monad", () => {
     }
 
     // constructors
-    type noneFn = <A>() => Option<A>
-    const none: noneFn = () => ({ _tag: "None" })
+    const none = <A>(): Option<A> => ({ _tag: "None" })
 
-    type someFn = <A>(a: A) => Option<A>
-    const some: someFn = (a) => ({ _tag: "Some", value: a })
+    const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
 
-    type ofFn = <A>(a: A) => Option<A>
-    const of: ofFn = (a) => (a ? some(a) : none())
+    const of = <A>(a: A): Option<A> => (a ? some(a) : none())
 
     // utilities
-    type isSomeFn = <A>(oa: Option<A>) => boolean
-    const isSome: isSomeFn = (oa) => oa._tag === "Some"
+    const isSome = <A>(fa: Option<A>): boolean => fa._tag === "Some"
 
     // combiners
-    type mapFn = <A, B>(f: (a: A) => B) => (fa: Option<A>) => Option<B>
-    const map: mapFn = (f) => (fa) => {
-        switch (fa._tag) {
-            case "Some":
-                return some(f(fa.value))
-            case "None":
-                return none()
+    // prettier-ignore
+    const map = <A, B>(f: (a: A) => B) => (fa: Option<A>): Option<B> => {
+            switch (fa._tag) {
+                case "Some":
+                    return some(f(fa.value))
+                case "None":
+                    return none()
+            }
         }
-    }
 
-    type chainFn = <A, B>(
-        f: (a: A) => Option<B>,
-    ) => (fa: Option<A>) => Option<B>
-    const chain: chainFn = (f) => (fa) => {
-        switch (fa._tag) {
-            case "Some":
-                return f(fa.value)
-            case "None":
-                return none()
+    // prettier-ignore
+    const chain = <A, B>(f: (a: A) => Option<B>) => (fa: Option<A>): Option<B> => {
+            switch (fa._tag) {
+                case "Some":
+                    return f(fa.value)
+                case "None":
+                    return none()
+            }
         }
-    }
 
     // folders / runners
-    type foldFn = <A, B>(
-        onNone: () => B,
-        onSome: (a: A) => B,
-    ) => (fa: Option<A>) => B
-    const fold: foldFn = (onNone, onSome) => (fa) => {
+    // prettier-ignore
+    const fold = <A, B>(onNone: () => B, onSome: (a: A) => B) => (fa: Option<A>) : B => {
         switch (fa._tag) {
             case "Some":
                 return onSome(fa.value)

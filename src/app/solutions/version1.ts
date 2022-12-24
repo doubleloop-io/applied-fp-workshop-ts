@@ -9,13 +9,21 @@ type Delta = { x: number; y: number }
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Direction = "N" | "E" | "W" | "S"
 
-const execute = (planet: Planet, rover: Rover, command: Command): Rover =>
-    match(command)
-        .with("TurnRight", () => turnRight(rover))
-        .with("TurnLeft", () => turnLeft(rover))
-        .with("MoveForward", () => moveForward(planet, rover))
-        .with("MoveBackward", () => moveBackward(planet, rover))
-        .exhaustive()
+const executeAll = (
+    planet: Planet,
+    rover: Rover,
+    commands: ReadonlyArray<Command>,
+): Rover => commands.reduce(execute(planet), rover)
+
+const execute =
+    (planet: Planet) =>
+    (rover: Rover, command: Command): Rover =>
+        match(command)
+            .with("TurnRight", () => turnRight(rover))
+            .with("TurnLeft", () => turnLeft(rover))
+            .with("MoveForward", () => moveForward(planet, rover))
+            .with("MoveBackward", () => moveBackward(planet, rover))
+            .exhaustive()
 
 const turnRight = (rover: Rover): Rover => {
     const newDirection = match(rover.direction)
