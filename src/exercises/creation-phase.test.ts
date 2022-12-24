@@ -4,8 +4,7 @@ describe.skip("creation phase", () => {
     qty: number
   }
 
-  type itemCtorFn = (qty: number) => Item
-  const itemCtor: itemCtorFn = (qty): Item => ({ qty })
+  const itemCtor = (qty: number): Item => ({ qty })
 
   // TODO - 2: complete the sum type definition
   // type OptionalItem = Invalid | Valid

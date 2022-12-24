@@ -8,8 +8,7 @@ describe.skip("combination phase - effectful", () => {
     qty: number
   }
 
-  type itemCtorFn = (qty: number) => Item
-  const itemCtor: itemCtorFn = (qty): Item => ({ qty })
+  const itemCtor = (qty: number): Item => ({ qty })
 
   type createItemFn = (qty: string) => Option<Item>
   const createItem: createItemFn = (qty) =>

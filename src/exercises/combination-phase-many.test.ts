@@ -9,10 +9,9 @@ describe.skip("combination phase - many", () => {
     qty: number
   }
 
-  type itemCtorFn = (name: string) => (qty: number) => Item
-  const itemCtor: itemCtorFn =
-    (name) =>
-    (qty): Item => ({ name, qty })
+  const itemCtor =
+    (name: string) =>
+    (qty: number): Item => ({ name, qty })
 
   type checkNameFn = (qty: string) => Option<string>
   const checkName: checkNameFn = (value) => (value ? O.some(value) : O.none)
