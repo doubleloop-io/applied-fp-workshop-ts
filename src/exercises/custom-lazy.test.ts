@@ -56,25 +56,28 @@ describe.skip("custom lazy monad", () => {
     type Lazy<A> = () => A
 
     // constructors
-    type ofFn = <A>(a: A) => Lazy<A>
-    const of: ofFn = (a) => () => {
+    // prettier-ignore
+    const of = <A>(a: A): Lazy<A> => 
+      () => {
         throw new Error("TODO")
-    }
+      }
 
     // combiners
-    type mapFn = <A, B>(f: (a: A) => B) => (fa: Lazy<A>) => Lazy<B>
-    const map: mapFn = (f) => (fa) => () => {
+    // prettier-ignore
+    const map = <A, B>(f: (a: A) => B) => (fa: Lazy<A>) : Lazy<B> => 
+      () => {
         throw new Error("TODO")
-    }
+      }
 
-    type chainFn = <A, B>(f: (a: A) => Lazy<B>) => (fa: Lazy<A>) => Lazy<B>
-    const chain: chainFn = (f) => (fa) => () => {
+    // prettier-ignore
+    const chain = <A, B>(f: (a: A) => Lazy<B>) => (fa: Lazy<A>) : Lazy<B> =>
+      () => {
         throw new Error("TODO")
-    }
+      }
 
     // folders / runners
-    type runFn = <A>() => (fa: Lazy<A>) => A
-    const run: runFn = () => (fa) => {
+    // prettier-ignore
+    const run = <A>() => (fa: Lazy<A>): A => {
         throw new Error("TODO")
     }
 })

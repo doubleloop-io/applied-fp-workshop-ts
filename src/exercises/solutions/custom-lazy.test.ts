@@ -51,17 +51,21 @@ describe.skip("custom lazy monad", () => {
     type Lazy<A> = () => A
 
     // constructors
-    type ofFn = <A>(a: A) => Lazy<A>
-    const of: ofFn = (a) => () => a
+    // prettier-ignore
+    const of = <A>(a: A): Lazy<A> =>
+        () => a
 
     // combiners
-    type mapFn = <A, B>(f: (a: A) => B) => (fa: Lazy<A>) => Lazy<B>
-    const map: mapFn = (f) => (fa) => () => f(fa())
+    // prettier-ignore
+    const map = <A, B>(f: (a: A) => B) => (fa: Lazy<A>) : Lazy<B> => 
+      () => f(fa())
 
-    type chainFn = <A, B>(f: (a: A) => Lazy<B>) => (fa: Lazy<A>) => Lazy<B>
-    const chain: chainFn = (f) => (fa) => () => f(fa())()
+    // prettier-ignore
+    const chain = <A, B>(f: (a: A) => Lazy<B>) => (fa: Lazy<A>) : Lazy<B> =>
+      () => f(fa())()
 
     // folders / runners
-    type runFn = <A>() => (fa: Lazy<A>) => A
-    const run: runFn = () => (fa) => fa()
+    // prettier-ignore
+    const run = <A>() => (fa: Lazy<A>): A =>
+      fa()
 })
