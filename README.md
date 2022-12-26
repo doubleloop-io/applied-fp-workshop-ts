@@ -12,4 +12,5 @@ $ yarn test
 
 ## Documentation
 
-[FP-TS API](https://gcanti.github.io/fp-ts/modules/)
+[ts-pattern](https://github.com/gvergnaud/ts-pattern)
+[fp-ts](https://gcanti.github.io/fp-ts/modules/)
