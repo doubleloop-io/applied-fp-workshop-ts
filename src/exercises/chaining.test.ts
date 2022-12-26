@@ -13,11 +13,12 @@ describe.skip("chaining", () => {
   type ItemId = number
   type Item = { id: ItemId; qty: number }
 
-  type checkInFn = (value: number) => (item: Item) => Item
-  const checkIn: checkInFn = (value) => (item) => ({
-    ...item,
-    qty: item.qty + value,
-  })
+  const checkIn =
+    (value: number) =>
+    (item: Item): Item => ({
+      ...item,
+      qty: item.qty + value,
+    })
 
   const aItem: Item = { id: 123, qty: 10 }
 

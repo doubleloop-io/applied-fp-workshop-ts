@@ -16,14 +16,11 @@ describe.skip("creation phase", () => {
     readonly _tag: "Valid"
     readonly value: Item
   }
-  type invalidFn = () => Invalid
-  const invalid: invalidFn = () => ({ _tag: "Invalid" })
+  const invalid = (): Invalid => ({ _tag: "Invalid" })
 
-  type validFn = (a: Item) => Valid
-  const valid: validFn = (a) => ({ _tag: "Valid", value: a })
+  const valid = (item: Item): Valid => ({ _tag: "Valid", value: item })
 
-  type createItemFn = (qty: string) => OptionalItem
-  const createItem: createItemFn = (qty) =>
+  const createItem = (qty: string): OptionalItem =>
     qty.match(/^[0-9]+$/i) ? valid(itemCtor(parseInt(qty, 10))) : invalid()
 
   test("item creation", () => {
@@ -43,8 +40,7 @@ describe.skip("creation phase", () => {
     })
   })
 
-  type createItemFpTsFn = (qty: string) => Option<Item>
-  const createItemFpTs: createItemFpTsFn = (qty) =>
+  const createItemFpTs = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some({ qty: parseInt(qty, 10) }) : O.none
 
   test("item creation", () => {

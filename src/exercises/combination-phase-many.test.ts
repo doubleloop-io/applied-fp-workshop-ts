@@ -13,16 +13,13 @@ describe.skip("combination phase - many", () => {
     (name: string) =>
     (qty: number): Item => ({ name, qty })
 
-  type checkNameFn = (qty: string) => Option<string>
-  const checkName: checkNameFn = (value) => (value ? O.some(value) : O.none)
+  const checkName = (value: string): Option<string> => (value ? O.some(value) : O.none)
 
-  type checkQtyFn = (qty: string) => Option<number>
-  const checkQty: checkQtyFn = (value) =>
+  const checkQty = (value: string): Option<number> =>
     value.match(/^[0-9]+$/i) ? O.some(parseInt(value, 10)) : O.none
 
   // TODO - 2: create an item only if name and quantity are valid
-  type createItemFn = (name: string, qty: string) => Option<Item>
-  const createItem: createItemFn = (name, qty) => {
+  const createItem = (name: string, qty: string): Option<Item> => {
     throw new Error("TODO")
   }
 

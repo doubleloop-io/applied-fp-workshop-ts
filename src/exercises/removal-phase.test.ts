@@ -10,8 +10,7 @@ describe.skip("removal phase", () => {
 
   const itemCtor = (qty: number): Item => ({ qty })
 
-  type createItemFn = (qty: string) => Option<Item>
-  const createItem: createItemFn = (qty) =>
+  const createItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(itemCtor(parseInt(qty, 10))) : O.none
 
   test("item creation", () => {

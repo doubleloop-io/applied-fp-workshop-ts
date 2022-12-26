@@ -9,16 +9,18 @@ describe.skip("combination phase - effectful", () => {
 
   const itemCtor = (qty: number): Item => ({ qty })
 
-  type createItemFn = (qty: string) => Option<Item>
-  const createItem: createItemFn = (qty) =>
+  const createItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(itemCtor(parseInt(qty, 10))) : O.none
 
-  type checkInFn = (value: number) => (item: Item) => Item
-  const checkIn: checkInFn = (value) => (item) => itemCtor(item.qty + value)
+  const checkIn =
+    (value: number) =>
+    (item: Item): Item =>
+      itemCtor(item.qty + value)
 
-  type checkOutFn = (value: number) => (item: Item) => Option<Item>
-  const checkOut: checkOutFn = (value) => (item) =>
-    value <= item.qty ? O.some(itemCtor(item.qty - value)) : O.none
+  const checkOut =
+    (value: number) =>
+    (item: Item): Option<Item> =>
+      value <= item.qty ? O.some(itemCtor(item.qty - value)) : O.none
 
   test("checkOut after valid creation", () => {
     const result = pipe(createItem("100"), O.chain(checkOut(10)))

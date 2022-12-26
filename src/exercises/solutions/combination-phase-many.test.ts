@@ -12,25 +12,22 @@ describe.skip("combination phase - many", () => {
     (name: string) =>
     (qty: number): Item => ({ name, qty })
 
-  type checkNameFn = (qty: string) => Option<string>
-  const checkName: checkNameFn = (value) => (value ? O.some(value) : O.none)
+  const checkName = (value: string): Option<string> => (value ? O.some(value) : O.none)
 
-  type checkQtyFn = (qty: string) => Option<number>
-  const checkQty: checkQtyFn = (value) =>
+  const checkQty = (value: string): Option<number> =>
     value.match(/^[0-9]+$/i) ? O.some(parseInt(value, 10)) : O.none
 
-  type createItemFn = (name: string, qty: string) => Option<Item>
-  const createItem: createItemFn = (name, qty) =>
+  const createItem = (name: string, qty: string): Option<Item> =>
     pipe(O.of(itemCtor), O.ap(checkName(name)), O.ap(checkQty(qty)))
 
   // NOTE: different way, call the first effectful function,
   // map the pure function and then use 'ap' for each remaining parameter.
   // More idiomatic in Haskell.
-  const createItemDifferent: createItemFn = (name, qty) =>
+  const createItemDifferent = (name: string, qty: string): Option<Item> =>
     pipe(checkName(name), O.map(itemCtor), O.ap(checkQty(qty)))
 
   // NOTE: another different way with only Functor and Monad
-  const createItemNoAp: createItemFn = (name, qty) => {
+  const createItemNoAp = (name: string, qty: string): Option<Item> => {
     return pipe(
       checkName(name),
       O.chain((n) =>

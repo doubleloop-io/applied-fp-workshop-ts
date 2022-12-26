@@ -10,12 +10,13 @@ describe.skip("combination phase - normal", () => {
 
   const itemCtor = (qty: number): Item => ({ qty })
 
-  type createItemFn = (qty: string) => Option<Item>
-  const createItem: createItemFn = (qty) =>
+  const createItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(itemCtor(parseInt(qty, 10))) : O.none
 
-  type checkInFn = (value: number) => (item: Item) => Item
-  const checkIn: checkInFn = (value) => (item) => itemCtor(item.qty + value)
+  const checkIn =
+    (value: number) =>
+    (item: Item): Item =>
+      itemCtor(item.qty + value)
 
   test("checkIn after valid creation", () => {
     const result = pipe(
