@@ -36,7 +36,7 @@ describe.skip("combination phase - list", () => {
 
   test("all valid - summon result", () => {
     const values = ["1", "10", "100"]
-    const result = pipe(values, A.traverse(O.Applicative)(createItem))
+    const result = pipe(values, O.traverseArray(createItem))
 
     // TODO - 4: change expectation
     expect(result).toStrictEqual(null)
@@ -44,7 +44,7 @@ describe.skip("combination phase - list", () => {
 
   test("some invalid - summon result", () => {
     const values = ["1", "asd", "100"]
-    const result = pipe(values, A.traverse(O.Applicative)(createItem))
+    const result = pipe(values, O.traverseArray(createItem))
 
     // TODO - 5: change expectation
     expect(result).toStrictEqual(null)
