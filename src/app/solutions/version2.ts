@@ -16,6 +16,10 @@ const planetCtor =
   (size: Size) =>
   (obstacles: ReadonlyArray<Obstacle>): Planet => ({ size, obstacles })
 
+const roverCtor =
+  (position: Position) =>
+  (direction: Direction): Rover => ({ position, direction })
+
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Direction = "N" | "E" | "W" | "S"
 
@@ -24,11 +28,13 @@ type ParseError =
   | InvalidPlanetObstacle
   | InvalidRoverPosition
   | InvalidRoverDirection
+  | InvalidCommand
 
 type InvalidPlanetSize = { readonly _tag: "InvalidPlanetSize"; readonly error: Error }
 type InvalidPlanetObstacle = { readonly _tag: "InvalidPlanetObstacle"; readonly error: Error }
 type InvalidRoverPosition = { readonly _tag: "InvalidRoverPosition"; readonly error: Error }
 type InvalidRoverDirection = { readonly _tag: "InvalidRoverDirection"; readonly error: Error }
+type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
 
 export const invalidPlanetSize = (e: Error): ParseError => ({ _tag: "InvalidPlanetSize", error: e })
 const invalidPlanetObstacle = (e: Error): ParseError => ({
@@ -40,8 +46,29 @@ const invalidRoverDirection = (e: Error): ParseError => ({
   _tag: "InvalidRoverDirection",
   error: e,
 })
+const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
 
 // PARSING
+export const parseCommands = (input: string): Either<ParseError, ReadonlyArray<Command>> =>
+  E.traverseArray(parseCommand)(input.split(""))
+
+const parseCommand = (input: string): Either<ParseError, Command> =>
+  match(input.toLocaleUpperCase())
+    .with("R", () => E.right<ParseError, Command>("TurnRight"))
+    .with("L", () => E.right<ParseError, Command>("TurnLeft"))
+    .with("F", () => E.right<ParseError, Command>("MoveForward"))
+    .with("B", () => E.right<ParseError, Command>("MoveBackward"))
+    .otherwise(() => E.left(invalidCommand(new Error(`Cannot parse command: ${input}`))))
+
+const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
+  pipe(E.of(roverCtor), E.ap(parsePosition(input.first)), E.ap(parseDirection(input.second)))
+
+const parsePosition = (input: string): Either<ParseError, Position> =>
+  pipe(
+    parseInts("x", input),
+    E.mapLeft(invalidPosition),
+    E.map((tuple) => ({ x: tuple.first, y: tuple.second })),
+  )
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
   match(input.toLocaleUpperCase())
@@ -51,17 +78,10 @@ const parseDirection = (input: string): Either<ParseError, Direction> =>
     .with("S", () => E.right<ParseError, Direction>("S"))
     .otherwise(() => E.left(invalidRoverDirection(new Error(`Cannot parse direction: ${input}`))))
 
-const parsePosition = (input: string): Either<ParseError, Position> =>
-  pipe(
-    parseInts("x", input),
-    E.mapLeft(invalidPosition),
-    E.map((tuple) => ({ x: tuple.first, y: tuple.second })),
-  )
-
 const parsePlanet = (input: Tuple<string, string>): Either<ParseError, Planet> =>
   pipe(E.of(planetCtor), E.ap(parseSize(input.first)), E.ap(parseObstacles(input.second)))
 
-export const parseSize = (input: string): Either<ParseError, Size> =>
+const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
     parseInts("x", input),
     E.mapLeft(invalidPlanetSize),
