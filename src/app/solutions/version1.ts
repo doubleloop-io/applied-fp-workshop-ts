@@ -1,18 +1,18 @@
 import { match } from "ts-pattern"
 
-type Rover = { position: Position; direction: Direction }
-type Planet = { size: Size }
+export type Rover = { position: Position; direction: Direction }
+export type Planet = { size: Size }
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
 
-type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Direction = "N" | "E" | "W" | "S"
 
-const executeAll = (planet: Planet, rover: Rover, commands: ReadonlyArray<Command>): Rover =>
+export const executeAll = (planet: Planet, rover: Rover, commands: ReadonlyArray<Command>): Rover =>
   commands.reduce(execute(planet), rover)
 
-const execute =
+export const execute =
   (planet: Planet) =>
   (rover: Rover, command: Command): Rover =>
     match(command)
@@ -83,15 +83,15 @@ const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit
 
 const updatePosition =
-  (params: Partial<Position>) =>
-  (p: Position): Position => ({
-    x: params.x || p.x,
-    y: params.y || p.y,
+  (values: Partial<Position>) =>
+  (actual: Position): Position => ({
+    x: values.x != null ? values.x : actual.x,
+    y: values.y != null ? values.y : actual.y,
   })
 
 const updateRover =
-  (params: Partial<Rover>) =>
-  (r: Rover): Rover => ({
-    position: params.position || r.position,
-    direction: params.direction || r.direction,
+  (values: Partial<Rover>) =>
+  (actual: Rover): Rover => ({
+    position: values.position != null ? values.position : actual.position,
+    direction: values.direction != null ? values.direction : actual.direction,
   })
