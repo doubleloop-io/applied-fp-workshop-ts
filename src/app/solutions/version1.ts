@@ -2,11 +2,10 @@ import { match } from "ts-pattern"
 
 export type Rover = { position: Position; direction: Direction }
 export type Planet = { size: Size }
+export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
-
-export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Direction = "N" | "E" | "W" | "S"
 
 export const executeAll = (planet: Planet, rover: Rover, commands: ReadonlyArray<Command>): Rover =>

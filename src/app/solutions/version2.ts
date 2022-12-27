@@ -1,16 +1,17 @@
 import { match } from "ts-pattern"
+import { pipe } from "fp-ts/function"
 import { Either } from "fp-ts/Either"
 import * as E from "fp-ts/Either"
-import { pipe } from "fp-ts/lib/function"
 
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
+type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Obstacle = { position: Position }
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
-
 type Tuple<A, B> = { first: A; second: B }
+type Direction = "N" | "E" | "W" | "S"
 
 const planetCtor =
   (size: Size) =>
@@ -20,33 +21,39 @@ const roverCtor =
   (position: Position) =>
   (direction: Direction): Rover => ({ position, direction })
 
-type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
-type Direction = "N" | "E" | "W" | "S"
-
 type ParseError =
-  | InvalidPlanetSize
-  | InvalidPlanetObstacle
-  | InvalidRoverPosition
-  | InvalidRoverDirection
+  | InvalidSize
+  | InvalidObstacle
+  | InvalidPosition
+  | InvalidDirection
   | InvalidCommand
 
-type InvalidPlanetSize = { readonly _tag: "InvalidPlanetSize"; readonly error: Error }
-type InvalidPlanetObstacle = { readonly _tag: "InvalidPlanetObstacle"; readonly error: Error }
-type InvalidRoverPosition = { readonly _tag: "InvalidRoverPosition"; readonly error: Error }
-type InvalidRoverDirection = { readonly _tag: "InvalidRoverDirection"; readonly error: Error }
+type InvalidSize = { readonly _tag: "InvalidSize"; readonly error: Error }
+type InvalidObstacle = { readonly _tag: "InvalidObstacle"; readonly error: Error }
+type InvalidPosition = { readonly _tag: "InvalidPosition"; readonly error: Error }
+type InvalidDirection = { readonly _tag: "InvalidDirection"; readonly error: Error }
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
 
-export const invalidPlanetSize = (e: Error): ParseError => ({ _tag: "InvalidPlanetSize", error: e })
-const invalidPlanetObstacle = (e: Error): ParseError => ({
-  _tag: "InvalidPlanetObstacle",
-  error: e,
-})
-const invalidPosition = (e: Error): ParseError => ({ _tag: "InvalidRoverPosition", error: e })
-const invalidRoverDirection = (e: Error): ParseError => ({
-  _tag: "InvalidRoverDirection",
-  error: e,
-})
+const invalidPlanetSize = (e: Error): ParseError => ({ _tag: "InvalidSize", error: e })
+const invalidPlanetObstacle = (e: Error): ParseError => ({ _tag: "InvalidObstacle", error: e })
+const invalidPosition = (e: Error): ParseError => ({ _tag: "InvalidPosition", error: e })
+const invalidRoverDirection = (e: Error): ParseError => ({ _tag: "InvalidDirection", error: e })
 const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
+
+const runMission = (
+  inputPlanet: Tuple<string, string>,
+  inputRover: Tuple<string, string>,
+  inputCommands: string,
+): Either<ParseError, string> =>
+  pipe(
+    pipe(
+      E.of(executeAll),
+      E.ap(parsePlanet(inputPlanet)),
+      E.ap(parseRover(inputRover)),
+      E.ap(parseCommands(inputCommands)),
+    ),
+    E.map(render),
+  )
 
 // PARSING
 export const parseCommands = (input: string): Either<ParseError, ReadonlyArray<Command>> =>
@@ -118,8 +125,11 @@ const render = (rover: Rover): string =>
 
 // DOMAIN
 
-const executeAll = (planet: Planet, rover: Rover, commands: ReadonlyArray<Command>): Rover =>
-  commands.reduce(execute(planet), rover)
+const executeAll =
+  (planet: Planet) =>
+  (rover: Rover) =>
+  (commands: ReadonlyArray<Command>): Rover =>
+    commands.reduce(execute(planet), rover)
 
 const execute =
   (planet: Planet) =>
