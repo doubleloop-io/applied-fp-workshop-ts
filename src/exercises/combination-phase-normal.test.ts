@@ -11,7 +11,7 @@ describe.skip("combination phase - normal", () => {
   const itemCtor = (qty: number): Item => ({ qty })
 
   const createItem = (qty: string): Option<Item> =>
-    qty.match(/^[0-9]+$/i) ? O.some(itemCtor(parseInt(qty, 10))) : O.none
+    qty.match(/^[0-9]+$/i) ? O.some(itemCtor(Number(qty))) : O.none
 
   const checkIn =
     (value: number) =>

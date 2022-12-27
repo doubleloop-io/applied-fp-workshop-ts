@@ -15,7 +15,7 @@ describe.skip("combination phase - many", () => {
   const checkName = (value: string): Option<string> => (value ? O.some(value) : O.none)
 
   const checkQty = (value: string): Option<number> =>
-    value.match(/^[0-9]+$/i) ? O.some(parseInt(value, 10)) : O.none
+    value.match(/^[0-9]+$/i) ? O.some(Number(value)) : O.none
 
   const createItem = (name: string, qty: string): Option<Item> =>
     pipe(O.of(itemCtor), O.ap(checkName(name)), O.ap(checkQty(qty)))

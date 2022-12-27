@@ -11,7 +11,7 @@ describe.skip("creation phase", () => {
 
   // TODO - 3: use OptionalItem as return type and remove throw
   const createItem = (qty: string): Item => {
-    if (qty.match(/^[0-9]+$/i)) return itemCtor(parseInt(qty, 10))
+    if (qty.match(/^[0-9]+$/i)) return itemCtor(Number(qty))
     else throw new Error("invalid item") // or return null | undefined
   }
 

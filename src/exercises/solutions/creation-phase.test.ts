@@ -21,7 +21,7 @@ describe.skip("creation phase", () => {
   const valid = (item: Item): Valid => ({ _tag: "Valid", value: item })
 
   const createItem = (qty: string): OptionalItem =>
-    qty.match(/^[0-9]+$/i) ? valid(itemCtor(parseInt(qty, 10))) : invalid()
+    qty.match(/^[0-9]+$/i) ? valid(itemCtor(Number(qty))) : invalid()
 
   test("item creation", () => {
     const result = createItem("10")
@@ -41,7 +41,7 @@ describe.skip("creation phase", () => {
   })
 
   const createItemFpTs = (qty: string): Option<Item> =>
-    qty.match(/^[0-9]+$/i) ? O.some({ qty: parseInt(qty, 10) }) : O.none
+    qty.match(/^[0-9]+$/i) ? O.some({ qty: Number(qty) }) : O.none
 
   test("item creation", () => {
     const result = createItemFpTs("10")
