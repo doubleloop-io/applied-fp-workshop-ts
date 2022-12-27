@@ -1,7 +1,7 @@
 import { match } from "ts-pattern"
 import { Either } from "fp-ts/Either"
 import * as E from "fp-ts/Either"
-import { pipe, tuple } from "fp-ts/lib/function"
+import { pipe } from "fp-ts/lib/function"
 
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
@@ -23,21 +23,24 @@ export const invalidPlanet = (e: Error): ParseError => ({ _tag: "InvalidPlanet",
 export const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
     parseInts("x", input),
-    E.map((tuple) => ({ width: tuple[0]!, height: tuple[1]! })),
+    E.map((tuple) => ({ width: tuple.first, height: tuple.second })),
     E.mapLeft(invalidPlanet),
   )
 
-const parseInts = (separator: string, input: string): Either<Error, number[]> =>
+const parseInts = (
+  separator: string,
+  input: string,
+): Either<Error, { first: number; second: number }> =>
   E.tryCatch(() => unsafeParseInts(separator, input), E.toError)
 
-const unsafeParseInts = (separator: string, input: string): number[] => {
+const unsafeParseInts = (separator: string, input: string): { first: number; second: number } => {
   const parts = input.split(separator)
   const first = Number(parts[0])
   const second = Number(parts[1])
 
   if (!first || !second) throw new Error(`Cannot parse ints (${separator}): ${input}`)
 
-  return tuple(first, second)
+  return { first, second }
 }
 
 // RENDERING

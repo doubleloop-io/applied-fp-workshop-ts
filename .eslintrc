@@ -11,5 +11,7 @@
   "env": {
     "node": true
   },
-  "rules": {}
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off"
+  }
 }
