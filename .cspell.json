@@ -13,11 +13,5 @@
     "**/yarn-error.log",
     ".vscode"
   ],
-  "words": [
-    "effectful",
-    "fpts",
-    "kata",
-    "pacman",
-    "uncurry"
-  ]
+  "words": ["effectful", "fpts", "kata", "pacman", "uncurry"]
 }
