@@ -13,6 +13,8 @@ type Delta = { x: number; y: number }
 type Tuple<A, B> = { first: A; second: B }
 type Direction = "N" | "E" | "W" | "S"
 
+export const tuple = <A, B>(first: A, second: B): Tuple<A, B> => ({ first, second })
+
 const planetCtor =
   (size: Size) =>
   (obstacles: ReadonlyArray<Obstacle>): Planet => ({ size, obstacles })
@@ -34,13 +36,19 @@ type InvalidPosition = { readonly _tag: "InvalidPosition"; readonly error: Error
 type InvalidDirection = { readonly _tag: "InvalidDirection"; readonly error: Error }
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
 
-const invalidPlanetSize = (e: Error): ParseError => ({ _tag: "InvalidSize", error: e })
-const invalidPlanetObstacle = (e: Error): ParseError => ({ _tag: "InvalidObstacle", error: e })
-const invalidPosition = (e: Error): ParseError => ({ _tag: "InvalidPosition", error: e })
-const invalidRoverDirection = (e: Error): ParseError => ({ _tag: "InvalidDirection", error: e })
-const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
+export const invalidSize = (e: Error): ParseError => ({ _tag: "InvalidSize", error: e })
+export const invalidObstacle = (e: Error): ParseError => ({
+  _tag: "InvalidObstacle",
+  error: e,
+})
+export const invalidPosition = (e: Error): ParseError => ({ _tag: "InvalidPosition", error: e })
+export const invalidDirection = (e: Error): ParseError => ({
+  _tag: "InvalidDirection",
+  error: e,
+})
+export const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
 
-const runMission = (
+export const runMission = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
   inputCommands: string,
@@ -65,14 +73,14 @@ const parseCommand = (input: string): Either<ParseError, Command> =>
     .with("L", () => E.right<ParseError, Command>("TurnLeft"))
     .with("F", () => E.right<ParseError, Command>("MoveForward"))
     .with("B", () => E.right<ParseError, Command>("MoveBackward"))
-    .otherwise(() => E.left(invalidCommand(new Error(`Cannot parse command: ${input}`))))
+    .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
 const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
   pipe(E.of(roverCtor), E.ap(parsePosition(input.first)), E.ap(parseDirection(input.second)))
 
 const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
-    parseInts("x", input),
+    parseTuple(",", input),
     E.mapLeft(invalidPosition),
     E.map((tuple) => ({ x: tuple.first, y: tuple.second })),
   )
@@ -83,15 +91,15 @@ const parseDirection = (input: string): Either<ParseError, Direction> =>
     .with("E", () => E.right<ParseError, Direction>("E"))
     .with("W", () => E.right<ParseError, Direction>("W"))
     .with("S", () => E.right<ParseError, Direction>("S"))
-    .otherwise(() => E.left(invalidRoverDirection(new Error(`Cannot parse direction: ${input}`))))
+    .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
 const parsePlanet = (input: Tuple<string, string>): Either<ParseError, Planet> =>
   pipe(E.of(planetCtor), E.ap(parseSize(input.first)), E.ap(parseObstacles(input.second)))
 
 const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
-    parseInts("x", input),
-    E.mapLeft(invalidPlanetSize),
+    parseTuple("x", input),
+    E.mapLeft(invalidSize),
     E.map((tuple) => ({ width: tuple.first, height: tuple.second })),
   )
 
@@ -100,22 +108,22 @@ const parseObstacles = (input: string): Either<ParseError, ReadonlyArray<Obstacl
 
 const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
   pipe(
-    parseInts("x", input),
-    E.mapLeft(invalidPlanetObstacle),
+    parseTuple(",", input),
+    E.mapLeft(invalidObstacle),
     E.map((tuple) => ({ position: { x: tuple.first, y: tuple.second } })),
   )
 
-const parseInts = (separator: string, input: string): Either<Error, Tuple<number, number>> =>
-  E.tryCatch(() => unsafeParseInts(separator, input), E.toError)
+const parseTuple = (separator: string, input: string): Either<Error, Tuple<number, number>> =>
+  E.tryCatch(() => unsafeParseTuple(separator, input), E.toError)
 
-const unsafeParseInts = (separator: string, input: string): Tuple<number, number> => {
+const unsafeParseTuple = (separator: string, input: string): Tuple<number, number> => {
   const parts = input.split(separator)
   const first = Number(parts[0])
   const second = Number(parts[1])
 
-  if (!first || !second) throw new Error(`Cannot parse ints (${separator}): ${input}`)
+  if (Number.isNaN(first) || Number.isNaN(second)) throw new Error(`Input: ${input}`)
 
-  return { first, second }
+  return tuple(first, second)
 }
 
 // RENDERING
