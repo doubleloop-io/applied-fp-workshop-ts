@@ -1,5 +1,5 @@
 import { match } from "ts-pattern"
-import { pipe } from "fp-ts/function"
+import { pipe, flip } from "fp-ts/function"
 import { Either } from "fp-ts/Either"
 import * as E from "fp-ts/Either"
 import { tuple, Tuple } from "../tuple"
@@ -70,7 +70,7 @@ export const runMission = (
       E.ap(parseRover(inputRover)),
       E.ap(parseCommands(inputCommands)),
     ),
-    E.map(renderComplete),
+    E.map(E.fold(renderObstacle, renderComplete)),
   )
 
 // PARSING
@@ -142,20 +142,27 @@ const unsafeParseTuple = (separator: string, input: string): Tuple<number, numbe
 const renderComplete = (rover: Rover): string =>
   `${rover.position.x}:${rover.position.y}:${rover.direction}`
 
+const renderObstacle = (rover: Rover): string =>
+  `O:${rover.position.x}:${rover.position.y}:${rover.direction}`
+
 // DOMAIN
 
 const executeAll =
   (planet: Planet) =>
   (rover: Rover) =>
-  (commands: ReadonlyArray<Command>): Rover =>
-    commands.reduce(execute(planet), rover)
+  (commands: ReadonlyArray<Command>): Either<Rover, Rover> =>
+    commands.reduce(
+      (prev, cmd) => pipe(prev, E.chain(flip(execute(planet))(cmd))),
+      E.of<Rover, Rover>(rover),
+    )
 
 const execute =
   (planet: Planet) =>
-  (rover: Rover, command: Command): Rover =>
+  (rover: Rover) =>
+  (command: Command): Either<Rover, Rover> =>
     match(command)
-      .with("TurnRight", () => turnRight(rover))
-      .with("TurnLeft", () => turnLeft(rover))
+      .with("TurnRight", () => E.of(turnRight(rover)))
+      .with("TurnLeft", () => E.of(turnLeft(rover)))
       .with("MoveForward", () => moveForward(planet, rover))
       .with("MoveBackward", () => moveBackward(planet, rover))
       .exhaustive()
@@ -182,15 +189,17 @@ const turnLeft = (rover: Rover): Rover => {
   return updateRover({ direction: newDirection })(rover)
 }
 
-const moveForward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = next(planet, rover, delta(rover.direction))
-  return updateRover({ position: newPosition })(rover)
-}
+const moveForward = (planet: Planet, rover: Rover): Either<Rover, Rover> =>
+  pipe(
+    next(planet, rover, delta(rover.direction)),
+    E.map((position) => updateRover({ position })(rover)),
+  )
 
-const moveBackward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = next(planet, rover, delta(opposite(rover.direction)))
-  return updateRover({ position: newPosition })(rover)
-}
+const moveBackward = (planet: Planet, rover: Rover): Either<Rover, Rover> =>
+  pipe(
+    next(planet, rover, delta(opposite(rover.direction))),
+    E.map((position) => updateRover({ position })(rover)),
+  )
 
 const opposite = (direction: Direction): Direction => {
   return match(direction)
@@ -210,12 +219,17 @@ const delta = (direction: Direction): Delta => {
     .exhaustive()
 }
 
-const next = (planet: Planet, rover: Rover, delta: Delta): Position => {
+const next = (planet: Planet, rover: Rover, delta: Delta): Either<Rover, Position> => {
   const position = rover.position
   const newX = wrap(position.x, planet.size.width, delta.x)
   const newY = wrap(position.y, planet.size.height, delta.y)
   const candidate = positionCtor(newX)(newY)
-  return updatePosition(candidate)(position)
+
+  const hitObstacle = planet.obstacles.findIndex(
+    (x) => x.position.x == newX && x.position.y == newY,
+  )
+
+  return hitObstacle ? E.left(rover) : E.right(updatePosition(candidate)(position))
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>

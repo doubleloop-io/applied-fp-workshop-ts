@@ -17,6 +17,7 @@
     "effectful",
     "fpts",
     "kata",
-    "pacman"
+    "pacman",
+    "uncurry"
   ]
 }
