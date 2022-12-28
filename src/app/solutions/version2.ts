@@ -21,6 +21,18 @@ const roverCtor =
   (position: Position) =>
   (direction: Direction): Rover => ({ position, direction })
 
+const positionCtor =
+  (x: number) =>
+  (y: number): Position => ({ x, y })
+
+const sizeCtor =
+  (width: number) =>
+  (height: number): Size => ({ width, height })
+
+const obstacleCtor =
+  (x: number) =>
+  (y: number): Obstacle => ({ position: { x, y } })
+
 type ParseError =
   | InvalidSize
   | InvalidObstacle
@@ -80,7 +92,7 @@ const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
     parseTuple(",", input),
     E.mapLeft(invalidPosition),
-    E.map((tuple) => ({ x: tuple.first, y: tuple.second })),
+    E.map((tuple) => positionCtor(tuple.first)(tuple.second)),
   )
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
@@ -98,7 +110,7 @@ const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
     parseTuple("x", input),
     E.mapLeft(invalidSize),
-    E.map((tuple) => ({ width: tuple.first, height: tuple.second })),
+    E.map((tuple) => sizeCtor(tuple.first)(tuple.second)),
   )
 
 const parseObstacles = (input: string): Either<ParseError, ReadonlyArray<Obstacle>> =>
@@ -108,7 +120,7 @@ const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
   pipe(
     parseTuple(",", input),
     E.mapLeft(invalidObstacle),
-    E.map((tuple) => ({ position: { x: tuple.first, y: tuple.second } })),
+    E.map((tuple) => obstacleCtor(tuple.first)(tuple.second)),
   )
 
 const parseTuple = (separator: string, input: string): Either<Error, Tuple<number, number>> =>
