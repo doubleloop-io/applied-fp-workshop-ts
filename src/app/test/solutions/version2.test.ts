@@ -1,6 +1,5 @@
 import {
   runMission,
-  tuple,
   invalidSize,
   invalidDirection,
   invalidCommand,
@@ -8,6 +7,7 @@ import {
   invalidPosition,
 } from "../../solutions/version2"
 import * as E from "fp-ts/Either"
+import { tuple } from "../../tuple"
 
 describe("version 2", () => {
   test("go to opposite angle", () => {

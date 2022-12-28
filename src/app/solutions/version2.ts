@@ -2,6 +2,7 @@ import { match } from "ts-pattern"
 import { pipe } from "fp-ts/function"
 import { Either } from "fp-ts/Either"
 import * as E from "fp-ts/Either"
+import { tuple, Tuple } from "../tuple"
 
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
@@ -10,10 +11,7 @@ type Obstacle = { position: Position }
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
-type Tuple<A, B> = { first: A; second: B }
 type Direction = "N" | "E" | "W" | "S"
-
-export const tuple = <A, B>(first: A, second: B): Tuple<A, B> => ({ first, second })
 
 const planetCtor =
   (size: Size) =>
