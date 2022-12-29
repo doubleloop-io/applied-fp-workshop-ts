@@ -12,6 +12,7 @@ type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
 type Direction = "N" | "E" | "W" | "S"
+type ObstacleDetected = Rover
 
 const planetCtor =
   (size: Size) =>
@@ -150,7 +151,7 @@ const renderObstacle = (rover: Rover): string =>
 const executeAll =
   (planet: Planet) =>
   (rover: Rover) =>
-  (commands: ReadonlyArray<Command>): Either<Rover, Rover> =>
+  (commands: ReadonlyArray<Command>): Either<ObstacleDetected, Rover> =>
     commands.reduce(
       (prev, cmd) => pipe(prev, E.chain(flip(execute(planet))(cmd))),
       E.of<Rover, Rover>(rover),
@@ -159,7 +160,7 @@ const executeAll =
 const execute =
   (planet: Planet) =>
   (rover: Rover) =>
-  (command: Command): Either<Rover, Rover> =>
+  (command: Command): Either<ObstacleDetected, Rover> =>
     match(command)
       .with("TurnRight", () => E.of(turnRight(rover)))
       .with("TurnLeft", () => E.of(turnLeft(rover)))
@@ -189,13 +190,13 @@ const turnLeft = (rover: Rover): Rover => {
   return updateRover({ direction: newDirection })(rover)
 }
 
-const moveForward = (planet: Planet, rover: Rover): Either<Rover, Rover> =>
+const moveForward = (planet: Planet, rover: Rover): Either<ObstacleDetected, Rover> =>
   pipe(
     next(planet, rover, delta(rover.direction)),
     E.map((position) => updateRover({ position })(rover)),
   )
 
-const moveBackward = (planet: Planet, rover: Rover): Either<Rover, Rover> =>
+const moveBackward = (planet: Planet, rover: Rover): Either<ObstacleDetected, Rover> =>
   pipe(
     next(planet, rover, delta(opposite(rover.direction))),
     E.map((position) => updateRover({ position })(rover)),
@@ -219,7 +220,7 @@ const delta = (direction: Direction): Delta => {
     .exhaustive()
 }
 
-const next = (planet: Planet, rover: Rover, delta: Delta): Either<Rover, Position> => {
+const next = (planet: Planet, rover: Rover, delta: Delta): Either<ObstacleDetected, Position> => {
   const position = rover.position
   const newX = wrap(position.x, planet.size.width, delta.x)
   const newY = wrap(position.y, planet.size.height, delta.y)
