@@ -3,7 +3,6 @@
   "homepage": "https://github.com/doubleloop-io/applied-fp-workshop-ts",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "type": "module",
   "license": "MIT",
   "peerDependencies": {
     "fp-ts": "2.13.1"
