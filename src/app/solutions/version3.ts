@@ -1,8 +1,8 @@
 import { match } from "ts-pattern"
-import { pipe, flip } from "fp-ts/function"
-import { Either } from "fp-ts/Either"
+import { flip, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
-import { tuple, Tuple } from "../tuple"
+import { Either } from "fp-ts/Either"
+import { Tuple, unsafeParse } from "../tuple"
 
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
@@ -126,17 +126,7 @@ const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
   )
 
 const parseTuple = (separator: string, input: string): Either<Error, Tuple<number, number>> =>
-  E.tryCatch(() => unsafeParseTuple(separator, input), E.toError)
-
-const unsafeParseTuple = (separator: string, input: string): Tuple<number, number> => {
-  const parts = input.split(separator)
-  const first = Number(parts[0])
-  const second = Number(parts[1])
-
-  if (Number.isNaN(first) || Number.isNaN(second)) throw new Error(`Input: ${input}`)
-
-  return tuple(first, second)
-}
+  E.tryCatch(() => unsafeParse(separator, input), E.toError)
 
 // RENDERING
 
