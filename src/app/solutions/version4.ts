@@ -70,7 +70,7 @@ const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", erro
 const invalidPlanetFile = (e: Error): ParseError => ({ _tag: "InvalidPlanetFile", error: e })
 const invalidRoverFile = (e: Error): ParseError => ({ _tag: "InvalidRoverFile", error: e })
 
-const runMission = (pathPlanet: string, pathRover: string): Task<void> =>
+export const runMission = (pathPlanet: string, pathRover: string): Task<void> =>
   pipe(
     pipe(
       TE.of(executeAll),
@@ -84,13 +84,13 @@ const runMission = (pathPlanet: string, pathRover: string): Task<void> =>
   )
 
 // INFRASTRUCTURE
-const loadPlanet = (path: string): TaskEither<ParseError, Planet> =>
+export const loadPlanet = (path: string): TaskEither<ParseError, Planet> =>
   pipe(loadTuple(path), TE.mapLeft(invalidPlanetFile), TE.chain(flow(parsePlanet, TE.fromEither)))
 
-const loadRover = (path: string): TaskEither<ParseError, Rover> =>
+export const loadRover = (path: string): TaskEither<ParseError, Rover> =>
   pipe(loadTuple(path), TE.mapLeft(invalidRoverFile), TE.chain(flow(parseRover, TE.fromEither)))
 
-const loadCommands = (): TaskEither<ParseError, ReadonlyArray<Command>> =>
+export const loadCommands = (): TaskEither<ParseError, ReadonlyArray<Command>> =>
   pipe(ask("Waiting commands..."), TE.fromTask, TE.chain(flow(parseCommands, TE.fromEither)))
 
 const writeSequenceCompleted = (rover: Rover): Task<void> => pipe(renderComplete(rover), logInfo)

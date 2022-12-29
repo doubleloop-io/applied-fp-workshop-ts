@@ -14,7 +14,7 @@ export const logInfo = (message: string): Task<void> => puts(green(message))
 
 export const logError = (message: string): Task<void> => puts(red(message))
 
-const reads = (): Task<string> => () =>
+export const reads = (): Task<string> => () =>
   new Promise((resolve) => {
     const rl = createInterface({
       input: process.stdin,
@@ -26,7 +26,7 @@ const reads = (): Task<string> => () =>
     })
   })
 
-const puts = (message: string): Task<void> => T.fromIO(C.log(message))
+export const puts = (message: string): Task<void> => T.fromIO(C.log(message))
 
 const green = (message: string): string => `${GREEN}${message}${RESET}`
 const red = (message: string): string => `${RED}${message}${RESET}`
