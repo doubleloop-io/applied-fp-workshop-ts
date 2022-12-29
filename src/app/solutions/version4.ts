@@ -7,6 +7,7 @@ import { Either } from "fp-ts/Either"
 import { Task } from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
 import { TaskEither } from "fp-ts/TaskEither"
+import { loadTuple } from "../infra-file"
 
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
@@ -44,12 +45,16 @@ type ParseError =
   | InvalidPosition
   | InvalidDirection
   | InvalidCommand
+  | InvalidPlanetFile
+  | InvalidRoverFile
 
 type InvalidSize = { readonly _tag: "InvalidSize"; readonly error: Error }
 type InvalidObstacle = { readonly _tag: "InvalidObstacle"; readonly error: Error }
 type InvalidPosition = { readonly _tag: "InvalidPosition"; readonly error: Error }
 type InvalidDirection = { readonly _tag: "InvalidDirection"; readonly error: Error }
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
+type InvalidPlanetFile = { readonly _tag: "InvalidPlanetFile"; readonly error: Error }
+type InvalidRoverFile = { readonly _tag: "InvalidRoverFile"; readonly error: Error }
 
 export const invalidSize = (e: Error): ParseError => ({ _tag: "InvalidSize", error: e })
 const invalidObstacle = (e: Error): ParseError => ({
@@ -62,32 +67,31 @@ const invalidDirection = (e: Error): ParseError => ({
   error: e,
 })
 const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
+const invalidPlanetFile = (e: Error): ParseError => ({ _tag: "InvalidPlanetFile", error: e })
+const invalidRoverFile = (e: Error): ParseError => ({ _tag: "InvalidRoverFile", error: e })
 
-export const runMission = (
-  inputPlanet: Tuple<string, string>,
-  inputRover: Tuple<string, string>,
-  inputCommands: string,
-): Either<ParseError, string> =>
+const runMission = (pathPlanet: string, pathRover: string): Task<void> =>
   pipe(
     pipe(
-      E.of(executeAll),
-      E.ap(parsePlanet(inputPlanet)),
-      E.ap(parseRover(inputRover)),
-      E.ap(parseCommands(inputCommands)),
+      TE.of(executeAll),
+      TE.ap(loadPlanet(pathPlanet)),
+      TE.ap(loadRover(pathRover)),
+      TE.ap(loadCommands()),
     ),
-    E.map(E.fold(renderObstacle, renderComplete)),
+    TE.map(E.fold(writeObstacleDetected, writeSequenceCompleted)),
+    TE.chain((t) => TE.fromTask(t)),
+    TE.getOrElse(writeError),
   )
 
 // INFRASTRUCTURE
+const loadPlanet = (path: string): TaskEither<ParseError, Planet> =>
+  pipe(loadTuple(path), TE.mapLeft(invalidPlanetFile), TE.chain(flow(parsePlanet, TE.fromEither)))
+
+const loadRover = (path: string): TaskEither<ParseError, Rover> =>
+  pipe(loadTuple(path), TE.mapLeft(invalidRoverFile), TE.chain(flow(parseRover, TE.fromEither)))
 
 const loadCommands = (): TaskEither<ParseError, ReadonlyArray<Command>> =>
-  pipe(
-    ask("Waiting commands..."),
-    TE.fromTask,
-    TE.chain(flow(parseCommands, TE.fromEither)),
-    // NOTE: native utility to chain an Either after a TaskEither
-    // TE.chainEitherK(parseCommands)
-  )
+  pipe(ask("Waiting commands..."), TE.fromTask, TE.chain(flow(parseCommands, TE.fromEither)))
 
 const writeSequenceCompleted = (rover: Rover): Task<void> => pipe(renderComplete(rover), logInfo)
 
@@ -158,6 +162,8 @@ const renderError = (error: ParseError): string =>
     .with({ _tag: "InvalidObstacle" }, (e) => `Invalid obstacle: ${e.error.message}`)
     .with({ _tag: "InvalidPosition" }, (e) => `Invalid position: ${e.error.message}`)
     .with({ _tag: "InvalidSize" }, (e) => `Invalid size: ${e.error.message}`)
+    .with({ _tag: "InvalidPlanetFile" }, (e) => `Invalid planet file: ${e.error.message}`)
+    .with({ _tag: "InvalidRoverFile" }, (e) => `Invalid rover file: ${e.error.message}`)
     .exhaustive()
 
 const renderComplete = (rover: Rover): string =>
