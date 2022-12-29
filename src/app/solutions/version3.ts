@@ -47,16 +47,16 @@ type InvalidDirection = { readonly _tag: "InvalidDirection"; readonly error: Err
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
 
 export const invalidSize = (e: Error): ParseError => ({ _tag: "InvalidSize", error: e })
-export const invalidObstacle = (e: Error): ParseError => ({
+const invalidObstacle = (e: Error): ParseError => ({
   _tag: "InvalidObstacle",
   error: e,
 })
-export const invalidPosition = (e: Error): ParseError => ({ _tag: "InvalidPosition", error: e })
-export const invalidDirection = (e: Error): ParseError => ({
+const invalidPosition = (e: Error): ParseError => ({ _tag: "InvalidPosition", error: e })
+const invalidDirection = (e: Error): ParseError => ({
   _tag: "InvalidDirection",
   error: e,
 })
-export const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
+const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
 
 export const runMission = (
   inputPlanet: Tuple<string, string>,
@@ -229,7 +229,7 @@ const next = (planet: Planet, rover: Rover, delta: Delta): Either<Rover, Positio
     (x) => x.position.x == newX && x.position.y == newY,
   )
 
-  return hitObstacle ? E.left(rover) : E.right(updatePosition(candidate)(position))
+  return hitObstacle != -1 ? E.left(rover) : E.right(updatePosition(candidate)(position))
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>
