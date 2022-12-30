@@ -1,5 +1,5 @@
 import {
-  runMission,
+  runApp,
   invalidSize,
   invalidDirection,
   invalidCommand,
@@ -15,7 +15,7 @@ describe("version 2", () => {
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(E.right("4:3:E"))
   })
@@ -25,7 +25,7 @@ describe("version 2", () => {
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(E.left(invalidSize(new Error("Input: ax4"))))
   })
@@ -35,7 +35,7 @@ describe("version 2", () => {
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(
       E.left(invalidObstacle(new Error("Input: 03"))),
@@ -47,7 +47,7 @@ describe("version 2", () => {
     const rover = tuple("asd", "N")
     const commands = "RBBLBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(
       E.left(invalidPosition(new Error("Input: asd"))),
@@ -59,7 +59,7 @@ describe("version 2", () => {
     const rover = tuple("0,0", "X")
     const commands = "RBBLBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(
       E.left(invalidDirection(new Error("Input: X"))),
@@ -71,7 +71,7 @@ describe("version 2", () => {
     const rover = tuple("0,0", "N")
     const commands = "RBBGBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(E.left(invalidCommand(new Error("Input: G"))))
   })

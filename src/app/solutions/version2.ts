@@ -77,19 +77,28 @@ export const invalidCommand = (e: Error): ParseError => ({
   error: e,
 })
 
-export const runMission = (
+// ENTRY POINT
+
+export const runApp = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
   inputCommands: string,
 ): Either<ParseError, string> =>
   pipe(
-    pipe(
-      E.of(executeAll),
-      E.ap(parsePlanet(inputPlanet)),
-      E.ap(parseRover(inputRover)),
-      E.ap(parseCommands(inputCommands)),
-    ),
+    runMission(inputPlanet, inputRover, inputCommands),
     E.map(renderComplete),
+  )
+
+const runMission = (
+  inputPlanet: Tuple<string, string>,
+  inputRover: Tuple<string, string>,
+  inputCommands: string,
+): Either<ParseError, Rover> =>
+  pipe(
+    E.of(executeAll),
+    E.ap(parsePlanet(inputPlanet)),
+    E.ap(parseRover(inputRover)),
+    E.ap(parseCommands(inputCommands)),
   )
 
 // PARSING

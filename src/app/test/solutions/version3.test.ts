@@ -1,4 +1,4 @@
-import { invalidSize, runMission } from "../../solutions/version3"
+import { invalidSize, runApp } from "../../solutions/version3"
 import * as E from "fp-ts/Either"
 import { tuple } from "../../tuple"
 
@@ -8,7 +8,7 @@ describe("version 3", () => {
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(E.right("4:3:E"))
   })
@@ -18,7 +18,7 @@ describe("version 3", () => {
     const rover = tuple("0,0", "N")
     const commands = "RFF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(E.right("O:1:0:E"))
   })
@@ -28,7 +28,7 @@ describe("version 3", () => {
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
 
-    const result = runMission(planet, rover, commands)
+    const result = runApp(planet, rover, commands)
 
     expect(result).toStrictEqual(E.left(invalidSize(new Error("Input: ax4"))))
   })
