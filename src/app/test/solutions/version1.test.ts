@@ -1,11 +1,4 @@
-import {
-  Command,
-  Commands,
-  execute,
-  executeAll,
-  Planet,
-  Rover,
-} from "../../solutions/version1"
+import { execute, executeAll } from "../../solutions/version1"
 
 describe("version 1", () => {
   // Planet layout
@@ -20,9 +13,9 @@ describe("version 1", () => {
   // +-----+-----+-----+-----+-----+
 
   test("turn right command", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" }
-    const command: Command = "TurnRight"
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const command = "TurnRight"
 
     const result = execute(planet)(rover, command)
 
@@ -30,9 +23,9 @@ describe("version 1", () => {
   })
 
   test("turn left command", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" }
-    const command: Command = "TurnLeft"
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const command = "TurnLeft"
 
     const result = execute(planet)(rover, command)
 
@@ -40,9 +33,9 @@ describe("version 1", () => {
   })
 
   test("move forward command", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "N" }
-    const command: Command = "MoveForward"
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 1 }, direction: "N" as const }
+    const command = "MoveForward"
 
     const result = execute(planet)(rover, command)
 
@@ -50,9 +43,9 @@ describe("version 1", () => {
   })
 
   test("move forward command, opposite direction", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "S" }
-    const command: Command = "MoveForward"
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 1 }, direction: "S" as const }
+    const command = "MoveForward"
 
     const result = execute(planet)(rover, command)
 
@@ -60,9 +53,9 @@ describe("version 1", () => {
   })
 
   test("move backward command", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "N" }
-    const command: Command = "MoveBackward"
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 1 }, direction: "N" as const }
+    const command = "MoveBackward"
 
     const result = execute(planet)(rover, command)
 
@@ -70,9 +63,9 @@ describe("version 1", () => {
   })
 
   test("move forward command, opposite direction", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "S" }
-    const command: Command = "MoveBackward"
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 1 }, direction: "S" as const }
+    const command = "MoveBackward"
 
     const result = execute(planet)(rover, command)
 
@@ -80,9 +73,9 @@ describe("version 1", () => {
   })
 
   test("wrap on North", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 3 }, direction: "N" }
-    const command: Command = "MoveForward"
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 3 }, direction: "N" as const }
+    const command = "MoveForward"
 
     const result = execute(planet)(rover, command)
 
@@ -90,13 +83,13 @@ describe("version 1", () => {
   })
 
   test("go to opposite angle", () => {
-    const planet: Planet = { size: { width: 5, height: 4 } }
-    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" }
-    const commands: Commands = [
-      "TurnLeft",
-      "MoveForward",
-      "TurnRight",
-      "MoveBackward",
+    const planet = { size: { width: 5, height: 4 } }
+    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const commands = [
+      "TurnLeft" as const,
+      "MoveForward" as const,
+      "TurnRight" as const,
+      "MoveBackward" as const,
     ]
 
     const result = executeAll(planet, rover, commands)

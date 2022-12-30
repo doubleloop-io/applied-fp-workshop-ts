@@ -1,9 +1,9 @@
 import { match } from "ts-pattern"
 
-export type Rover = { position: Position; direction: Direction }
-export type Planet = { size: Size }
-export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
-export type Commands = ReadonlyArray<Command>
+type Rover = { position: Position; direction: Direction }
+type Planet = { size: Size }
+type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+type Commands = ReadonlyArray<Command>
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
