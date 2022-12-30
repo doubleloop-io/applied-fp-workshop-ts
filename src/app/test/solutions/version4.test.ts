@@ -1,4 +1,9 @@
-import { loadCommands, loadPlanet, loadRover, runApp } from "../../solutions/version4"
+import {
+  loadCommands,
+  loadPlanet,
+  loadRover,
+  runApp,
+} from "../../solutions/version4"
 import * as E from "fp-ts/Either"
 import { constVoid } from "fp-ts/function"
 import { green, red } from "../../infra-console"
@@ -7,7 +12,9 @@ let stdinCommands = ""
 
 jest.mock("readline", () => ({
   createInterface: jest.fn().mockReturnValue({
-    question: jest.fn().mockImplementation((_questionTest, cb) => cb(stdinCommands)),
+    question: jest
+      .fn()
+      .mockImplementation((_questionTest, cb) => cb(stdinCommands)),
     close: jest.fn().mockImplementation(() => undefined),
   }),
 }))
@@ -15,7 +22,7 @@ jest.mock("readline", () => ({
 describe("version 4", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let consoleLogSpy: any
-  const lastStdout = () => consoleLogSpy.mock.calls[1][0];
+  const lastStdout = () => consoleLogSpy.mock.calls[1][0]
 
   beforeEach(() => {
     consoleLogSpy = jest.spyOn(global.console, "log").mockImplementation()
@@ -24,7 +31,6 @@ describe("version 4", () => {
   afterEach(() => {
     consoleLogSpy.mockRestore()
   })
-
 
   test("load planet (integration test)", async () => {
     const load = loadPlanet("data/planet.txt")
@@ -58,7 +64,9 @@ describe("version 4", () => {
 
     const result = await load()
 
-    expect(result).toEqual(E.right(["TurnRight", "MoveBackward", "MoveBackward"]))
+    expect(result).toEqual(
+      E.right(["TurnRight", "MoveBackward", "MoveBackward"]),
+    )
   })
 
   test("go to opposite angle (integration test)", async () => {
@@ -97,7 +105,9 @@ describe("version 4", () => {
 
     expect(result).toStrictEqual(constVoid())
     expect(lastStdout()).toStrictEqual(
-      red("[ERROR] Invalid planet file. Invalid file content: data/planet_invalid_content.txt"),
+      red(
+        "[ERROR] Invalid planet file. Invalid file content: data/planet_invalid_content.txt",
+      ),
     )
   })
 })

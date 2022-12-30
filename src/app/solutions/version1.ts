@@ -8,8 +8,11 @@ type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
 type Direction = "N" | "E" | "W" | "S"
 
-export const executeAll = (planet: Planet, rover: Rover, commands: ReadonlyArray<Command>): Rover =>
-  commands.reduce(execute(planet), rover)
+export const executeAll = (
+  planet: Planet,
+  rover: Rover,
+  commands: ReadonlyArray<Command>,
+): Rover => commands.reduce(execute(planet), rover)
 
 export const execute =
   (planet: Planet) =>

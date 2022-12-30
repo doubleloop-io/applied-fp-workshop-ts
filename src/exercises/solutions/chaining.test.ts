@@ -25,7 +25,11 @@ describe.skip("chaining", () => {
     const load = (id: ItemId): Option<Item> => O.of(aItem)
     const save = (item: Item): Option<void> => O.of(constVoid())
 
-    const program: Option<void> = pipe(load(123), O.map(checkIn(10)), O.chain(save))
+    const program: Option<void> = pipe(
+      load(123),
+      O.map(checkIn(10)),
+      O.chain(save),
+    )
   })
 
   test("chaining w/ Either Monad", () => {
@@ -33,14 +37,22 @@ describe.skip("chaining", () => {
     const load = (id: ItemId): Either<Error, Item> => E.of(aItem)
     const save = (item: Item): Either<Error, Item> => E.of(item)
 
-    const program: Either<Error, Item> = pipe(load(123), E.map(checkIn(10)), E.chain(save))
+    const program: Either<Error, Item> = pipe(
+      load(123),
+      E.map(checkIn(10)),
+      E.chain(save),
+    )
   })
 
   test("chaining w/ Task Monad", () => {
     const load = (id: ItemId): Task<Item> => T.of(aItem)
     const save = (item: Item): Task<Item> => T.of(item)
 
-    const program: Task<Item> = pipe(load(123), T.map(checkIn(10)), T.chain(save))
+    const program: Task<Item> = pipe(
+      load(123),
+      T.map(checkIn(10)),
+      T.chain(save),
+    )
   })
 
   test("chaining w/ TaskEither Monad", () => {
@@ -48,6 +60,10 @@ describe.skip("chaining", () => {
     const load = (id: ItemId): TaskEither<Error, Item> => TE.of(aItem)
     const save = (item: Item): TaskEither<Error, Item> => TE.of(item)
 
-    const program: TaskEither<Error, Item> = pipe(load(123), TE.map(checkIn(10)), TE.chain(save))
+    const program: TaskEither<Error, Item> = pipe(
+      load(123),
+      TE.map(checkIn(10)),
+      TE.chain(save),
+    )
   })
 })

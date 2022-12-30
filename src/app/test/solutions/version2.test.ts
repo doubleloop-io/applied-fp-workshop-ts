@@ -37,7 +37,9 @@ describe("version 2", () => {
 
     const result = runMission(planet, rover, commands)
 
-    expect(result).toStrictEqual(E.left(invalidObstacle(new Error("Input: 03"))))
+    expect(result).toStrictEqual(
+      E.left(invalidObstacle(new Error("Input: 03"))),
+    )
   })
 
   test("invalid rover position", () => {
@@ -47,7 +49,9 @@ describe("version 2", () => {
 
     const result = runMission(planet, rover, commands)
 
-    expect(result).toStrictEqual(E.left(invalidPosition(new Error("Input: asd"))))
+    expect(result).toStrictEqual(
+      E.left(invalidPosition(new Error("Input: asd"))),
+    )
   })
 
   test("invalid rover direction", () => {
@@ -57,7 +61,9 @@ describe("version 2", () => {
 
     const result = runMission(planet, rover, commands)
 
-    expect(result).toStrictEqual(E.left(invalidDirection(new Error("Input: X"))))
+    expect(result).toStrictEqual(
+      E.left(invalidDirection(new Error("Input: X"))),
+    )
   })
 
   test("invalid command", () => {

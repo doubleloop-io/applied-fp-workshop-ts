@@ -12,7 +12,8 @@ describe.skip("combination phase - many", () => {
     (name: string) =>
     (qty: number): Item => ({ name, qty })
 
-  const checkName = (value: string): Option<string> => (value ? O.some(value) : O.none)
+  const checkName = (value: string): Option<string> =>
+    value ? O.some(value) : O.none
 
   const checkQty = (value: string): Option<number> =>
     value.match(/^[0-9]+$/i) ? O.some(Number(value)) : O.none

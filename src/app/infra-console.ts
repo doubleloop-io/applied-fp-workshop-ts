@@ -8,11 +8,14 @@ const RESET = "\x1b[0m"
 const GREEN = "\x1b[32m"
 const RED = "\x1b[31m"
 
-export const ask = (question: string): Task<string> => pipe(puts(question), T.chain(reads))
+export const ask = (question: string): Task<string> =>
+  pipe(puts(question), T.chain(reads))
 
-export const logInfo = (message: string): Task<void> => puts(green(`[OK] ${message}`))
+export const logInfo = (message: string): Task<void> =>
+  puts(green(`[OK] ${message}`))
 
-export const logError = (message: string): Task<void> => puts(red(`[ERROR] ${message}`))
+export const logError = (message: string): Task<void> =>
+  puts(red(`[ERROR] ${message}`))
 
 export const reads = (): Task<string> => () =>
   new Promise((resolve) => {

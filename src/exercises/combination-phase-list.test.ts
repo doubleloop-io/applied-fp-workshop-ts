@@ -21,7 +21,11 @@ describe.skip("combination phase - list", () => {
       // TODO - 2: map over values and create items
     )
 
-    expect(result).toStrictEqual([O.some({ qty: 1 }), O.some({ qty: 10 }), O.some({ qty: 100 })])
+    expect(result).toStrictEqual([
+      O.some({ qty: 1 }),
+      O.some({ qty: 10 }),
+      O.some({ qty: 100 }),
+    ])
   })
 
   test("some invalid - individual results", () => {
@@ -31,7 +35,11 @@ describe.skip("combination phase - list", () => {
       // TODO - 3: map over values and create items
     )
 
-    expect(result).toStrictEqual([O.some({ qty: 1 }), O.none, O.some({ qty: 100 })])
+    expect(result).toStrictEqual([
+      O.some({ qty: 1 }),
+      O.none,
+      O.some({ qty: 100 }),
+    ])
   })
 
   test("all valid - summon result", () => {

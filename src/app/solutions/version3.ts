@@ -42,22 +42,40 @@ type ParseError =
   | InvalidCommand
 
 type InvalidSize = { readonly _tag: "InvalidSize"; readonly error: Error }
-type InvalidObstacle = { readonly _tag: "InvalidObstacle"; readonly error: Error }
-type InvalidPosition = { readonly _tag: "InvalidPosition"; readonly error: Error }
-type InvalidDirection = { readonly _tag: "InvalidDirection"; readonly error: Error }
+type InvalidObstacle = {
+  readonly _tag: "InvalidObstacle"
+  readonly error: Error
+}
+type InvalidPosition = {
+  readonly _tag: "InvalidPosition"
+  readonly error: Error
+}
+type InvalidDirection = {
+  readonly _tag: "InvalidDirection"
+  readonly error: Error
+}
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
 
-export const invalidSize = (e: Error): ParseError => ({ _tag: "InvalidSize", error: e })
+export const invalidSize = (e: Error): ParseError => ({
+  _tag: "InvalidSize",
+  error: e,
+})
 const invalidObstacle = (e: Error): ParseError => ({
   _tag: "InvalidObstacle",
   error: e,
 })
-const invalidPosition = (e: Error): ParseError => ({ _tag: "InvalidPosition", error: e })
+const invalidPosition = (e: Error): ParseError => ({
+  _tag: "InvalidPosition",
+  error: e,
+})
 const invalidDirection = (e: Error): ParseError => ({
   _tag: "InvalidDirection",
   error: e,
 })
-const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", error: e })
+const invalidCommand = (e: Error): ParseError => ({
+  _tag: "InvalidCommand",
+  error: e,
+})
 
 export const runMission = (
   inputPlanet: Tuple<string, string>,
@@ -76,7 +94,9 @@ export const runMission = (
 
 // PARSING
 
-export const parseCommands = (input: string): Either<ParseError, ReadonlyArray<Command>> =>
+export const parseCommands = (
+  input: string,
+): Either<ParseError, ReadonlyArray<Command>> =>
   E.traverseArray(parseCommand)(input.split(""))
 
 const parseCommand = (input: string): Either<ParseError, Command> =>
@@ -88,7 +108,11 @@ const parseCommand = (input: string): Either<ParseError, Command> =>
     .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
 const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
-  pipe(E.of(roverCtor), E.ap(parsePosition(input.first)), E.ap(parseDirection(input.second)))
+  pipe(
+    E.of(roverCtor),
+    E.ap(parsePosition(input.first)),
+    E.ap(parseDirection(input.second)),
+  )
 
 const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
@@ -105,8 +129,14 @@ const parseDirection = (input: string): Either<ParseError, Direction> =>
     .with("S", () => E.right<ParseError, Direction>("S"))
     .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
-const parsePlanet = (input: Tuple<string, string>): Either<ParseError, Planet> =>
-  pipe(E.of(planetCtor), E.ap(parseSize(input.first)), E.ap(parseObstacles(input.second)))
+const parsePlanet = (
+  input: Tuple<string, string>,
+): Either<ParseError, Planet> =>
+  pipe(
+    E.of(planetCtor),
+    E.ap(parseSize(input.first)),
+    E.ap(parseObstacles(input.second)),
+  )
 
 const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
@@ -115,7 +145,9 @@ const parseSize = (input: string): Either<ParseError, Size> =>
     E.map((tuple) => sizeCtor(tuple.first)(tuple.second)),
   )
 
-const parseObstacles = (input: string): Either<ParseError, ReadonlyArray<Obstacle>> =>
+const parseObstacles = (
+  input: string,
+): Either<ParseError, ReadonlyArray<Obstacle>> =>
   E.traverseArray(parseObstacle)(input.split(" "))
 
 const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
@@ -125,7 +157,10 @@ const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
     E.map((tuple) => obstacleCtor(tuple.first)(tuple.second)),
   )
 
-const parseTuple = (separator: string, input: string): Either<Error, Tuple<number, number>> =>
+const parseTuple = (
+  separator: string,
+  input: string,
+): Either<Error, Tuple<number, number>> =>
   E.tryCatch(() => unsafeParse(separator, input), E.toError)
 
 // RENDERING
@@ -180,13 +215,19 @@ const turnLeft = (rover: Rover): Rover => {
   return updateRover({ direction: newDirection })(rover)
 }
 
-const moveForward = (planet: Planet, rover: Rover): Either<ObstacleDetected, Rover> =>
+const moveForward = (
+  planet: Planet,
+  rover: Rover,
+): Either<ObstacleDetected, Rover> =>
   pipe(
     next(planet, rover, delta(rover.direction)),
     E.map((position) => updateRover({ position })(rover)),
   )
 
-const moveBackward = (planet: Planet, rover: Rover): Either<ObstacleDetected, Rover> =>
+const moveBackward = (
+  planet: Planet,
+  rover: Rover,
+): Either<ObstacleDetected, Rover> =>
   pipe(
     next(planet, rover, delta(opposite(rover.direction))),
     E.map((position) => updateRover({ position })(rover)),
@@ -210,7 +251,11 @@ const delta = (direction: Direction): Delta => {
     .exhaustive()
 }
 
-const next = (planet: Planet, rover: Rover, delta: Delta): Either<ObstacleDetected, Position> => {
+const next = (
+  planet: Planet,
+  rover: Rover,
+  delta: Delta,
+): Either<ObstacleDetected, Position> => {
   const position = rover.position
   const newX = wrap(position.x, planet.size.width, delta.x)
   const newY = wrap(position.y, planet.size.height, delta.y)
@@ -220,7 +265,9 @@ const next = (planet: Planet, rover: Rover, delta: Delta): Either<ObstacleDetect
     (x) => x.position.x == newX && x.position.y == newY,
   )
 
-  return hitObstacle != -1 ? E.left(rover) : E.right(updatePosition(candidate)(position))
+  return hitObstacle != -1
+    ? E.left(rover)
+    : E.right(updatePosition(candidate)(position))
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>

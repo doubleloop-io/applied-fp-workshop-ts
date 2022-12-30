@@ -1,4 +1,10 @@
-import { Command, execute, executeAll, Planet, Rover } from "../../solutions/version1"
+import {
+  Command,
+  execute,
+  executeAll,
+  Planet,
+  Rover,
+} from "../../solutions/version1"
 
 describe("version 1", () => {
   // Planet layout

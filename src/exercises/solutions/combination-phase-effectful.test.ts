@@ -35,7 +35,11 @@ describe.skip("combination phase - effectful", () => {
   })
 
   test("checkIn and checkOut after valid creation", () => {
-    const result = pipe(createItem("100"), O.map(checkIn(10)), O.chain(checkOut(20)))
+    const result = pipe(
+      createItem("100"),
+      O.map(checkIn(10)),
+      O.chain(checkOut(20)),
+    )
 
     expect(result).toStrictEqual(O.some({ qty: 90 }))
   })
