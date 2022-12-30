@@ -83,12 +83,14 @@ const invalidCommand = (e: Error): ParseError => ({
   error: e,
 })
 
+// ENTRY POINT
+
 export const runApp = (pathPlanet: string, pathRover: string): Task<void> =>
   pipe(
     runMission(pathPlanet, pathRover),
     TE.map(E.fold(writeObstacleDetected, writeSequenceCompleted)),
     TE.chain((t) => TE.fromTask(t)),
-    TE.getOrElse(writeError),
+    TE.getOrElse(writeMissionFailed),
   )
 
 const runMission = (
@@ -131,7 +133,7 @@ const writeSequenceCompleted = (rover: Rover): Task<void> =>
 const writeObstacleDetected = (rover: Rover): Task<void> =>
   pipe(renderObstacle(rover), logInfo)
 
-const writeError = (error: Error): Task<void> =>
+const writeMissionFailed = (error: Error): Task<void> =>
   pipe(renderError(error), logError)
 
 // PARSING

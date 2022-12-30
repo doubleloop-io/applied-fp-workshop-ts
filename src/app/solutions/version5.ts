@@ -46,8 +46,6 @@ type ParseError =
   | InvalidPosition
   | InvalidDirection
   | InvalidCommand
-  | InvalidPlanetFile
-  | InvalidRoverFile
 
 type InvalidSize = { readonly _tag: "InvalidSize"; readonly error: Error }
 type InvalidObstacle = {
@@ -63,14 +61,6 @@ type InvalidDirection = {
   readonly error: Error
 }
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
-type InvalidPlanetFile = {
-  readonly _tag: "InvalidPlanetFile"
-  readonly error: Error
-}
-type InvalidRoverFile = {
-  readonly _tag: "InvalidRoverFile"
-  readonly error: Error
-}
 
 const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",
@@ -92,63 +82,114 @@ const invalidCommand = (e: Error): ParseError => ({
   _tag: "InvalidCommand",
   error: e,
 })
-const invalidPlanetFile = (e: Error): ParseError => ({
-  _tag: "InvalidPlanetFile",
-  error: e,
-})
-const invalidRoverFile = (e: Error): ParseError => ({
-  _tag: "InvalidRoverFile",
-  error: e,
-})
+
+// PORTS
 
 type PlanetReader = {
-  read: () => TaskEither<ParseError, Planet>
+  read: () => TaskEither<Error, Planet>
 }
 type RoverReader = {
-  read: () => TaskEither<ParseError, Rover>
+  read: () => TaskEither<Error, Rover>
 }
 type CommandsReader = {
-  read: () => TaskEither<ParseError, ReadonlyArray<Command>>
+  read: () => TaskEither<Error, ReadonlyArray<Command>>
+}
+type DisplayWriter = {
+  sequenceCompleted: (_: Rover) => Task<void>
+  obstacleDetected: (_: ObstacleDetected) => Task<void>
+  missionFailed: (_: Error) => Task<void>
 }
 
-const runApp = (pathPlanet: string, pathRover: string): Task<void> =>
+// ADAPTERS
+
+const createFilePlanetReader = (pathPlanet: string): PlanetReader => ({
+  read: () => loadPlanet(pathPlanet),
+})
+const createFileRoverReader = (pathRover: string): RoverReader => ({
+  read: () => loadRover(pathRover),
+})
+const createStdinCommandsReader = (): CommandsReader => ({
+  read: loadCommands,
+})
+const createStdoutDisplayWriter = (): DisplayWriter => ({
+  sequenceCompleted: writeSequenceCompleted,
+  obstacleDetected: writeObstacleDetected,
+  missionFailed: writeError,
+})
+
+// ENTRY POINT
+const runAppWired = (pathPlanet: string, pathRover: string): Task<void> =>
+  runApp(
+    createFilePlanetReader(pathPlanet),
+    createFileRoverReader(pathRover),
+    createStdinCommandsReader(),
+    createStdoutDisplayWriter(),
+  )
+
+const runApp = (
+  planetReader: PlanetReader,
+  roverReader: RoverReader,
+  commandsReader: CommandsReader,
+  displayWriter: DisplayWriter,
+): Task<void> =>
   pipe(
-    runMission(pathPlanet, pathRover),
-    TE.map(E.fold(writeObstacleDetected, writeSequenceCompleted)),
+    runMission(planetReader, roverReader, commandsReader),
+    TE.map(
+      E.fold(displayWriter.obstacleDetected, displayWriter.sequenceCompleted),
+    ),
     TE.chain((t) => TE.fromTask(t)),
-    TE.getOrElse(writeError),
+    TE.getOrElse(displayWriter.missionFailed),
   )
 
 const runMission = (
-  pathPlanet: string,
-  pathRover: string,
-): TaskEither<ParseError, Either<ObstacleDetected, Rover>> =>
+  planetReader: PlanetReader,
+  roverReader: RoverReader,
+  commandsReader: CommandsReader,
+): TaskEither<Error, Either<ObstacleDetected, Rover>> =>
   pipe(
     TE.of(executeAll),
-    TE.ap(loadPlanet(pathPlanet)),
-    TE.ap(loadRover(pathRover)),
-    TE.ap(loadCommands()),
+    TE.ap(planetReader.read()),
+    TE.ap(roverReader.read()),
+    TE.ap(commandsReader.read()),
   )
 
 // INFRASTRUCTURE
-const loadPlanet = (path: string): TaskEither<ParseError, Planet> =>
-  pipe(loadTuple(path), TE.mapLeft(invalidPlanetFile), TE.chain(flow(parsePlanet, TE.fromEither)))
 
-const loadRover = (path: string): TaskEither<ParseError, Rover> =>
-  pipe(loadTuple(path), TE.mapLeft(invalidRoverFile), TE.chain(flow(parseRover, TE.fromEither)))
+const toError = (error: ParseError): Error => new Error(renderParseError(error))
 
-const loadCommands = (): TaskEither<ParseError, ReadonlyArray<Command>> =>
-  pipe(ask("Waiting commands..."), TE.fromTask, TE.chain(flow(parseCommands, TE.fromEither)))
+const loadPlanet = (path: string): TaskEither<Error, Planet> =>
+  pipe(
+    loadTuple(path),
+    TE.chain(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
+  )
 
-const writeSequenceCompleted = (rover: Rover): Task<void> => pipe(renderComplete(rover), logInfo)
+const loadRover = (path: string): TaskEither<Error, Rover> =>
+  pipe(
+    loadTuple(path),
+    TE.chain(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
+  )
 
-const writeObstacleDetected = (rover: Rover): Task<void> => pipe(renderObstacle(rover), logInfo)
+const loadCommands = (): TaskEither<Error, Commands> =>
+  pipe(
+    ask("Waiting commands..."),
+    TE.fromTask,
+    TE.chain(flow(parseCommands, E.mapLeft(toError), TE.fromEither)),
+  )
 
-const writeError = (error: ParseError): Task<void> => pipe(renderError(error), logError)
+const writeSequenceCompleted = (rover: Rover): Task<void> =>
+  pipe(renderComplete(rover), logInfo)
+
+const writeObstacleDetected = (rover: Rover): Task<void> =>
+  pipe(renderObstacle(rover), logInfo)
+
+const writeError = (error: Error): Task<void> =>
+  pipe(renderError(error), logError)
 
 // PARSING
 
-const parseCommands = (input: string): Either<ParseError, ReadonlyArray<Command>> =>
+const parseCommands = (
+  input: string,
+): Either<ParseError, ReadonlyArray<Command>> =>
   E.traverseArray(parseCommand)(input.split(""))
 
 const parseCommand = (input: string): Either<ParseError, Command> =>
@@ -160,7 +201,11 @@ const parseCommand = (input: string): Either<ParseError, Command> =>
     .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
 const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
-  pipe(E.of(roverCtor), E.ap(parsePosition(input.first)), E.ap(parseDirection(input.second)))
+  pipe(
+    E.of(roverCtor),
+    E.ap(parsePosition(input.first)),
+    E.ap(parseDirection(input.second)),
+  )
 
 const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
@@ -177,8 +222,14 @@ const parseDirection = (input: string): Either<ParseError, Direction> =>
     .with("S", () => E.right<ParseError, Direction>("S"))
     .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
-const parsePlanet = (input: Tuple<string, string>): Either<ParseError, Planet> =>
-  pipe(E.of(planetCtor), E.ap(parseSize(input.first)), E.ap(parseObstacles(input.second)))
+const parsePlanet = (
+  input: Tuple<string, string>,
+): Either<ParseError, Planet> =>
+  pipe(
+    E.of(planetCtor),
+    E.ap(parseSize(input.first)),
+    E.ap(parseObstacles(input.second)),
+  )
 
 const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
@@ -187,7 +238,9 @@ const parseSize = (input: string): Either<ParseError, Size> =>
     E.map((tuple) => sizeCtor(tuple.first)(tuple.second)),
   )
 
-const parseObstacles = (input: string): Either<ParseError, ReadonlyArray<Obstacle>> =>
+const parseObstacles = (
+  input: string,
+): Either<ParseError, ReadonlyArray<Obstacle>> =>
   E.traverseArray(parseObstacle)(input.split(" "))
 
 const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
@@ -197,20 +250,35 @@ const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
     E.map((tuple) => obstacleCtor(tuple.first)(tuple.second)),
   )
 
-const parseTuple = (separator: string, input: string): Either<Error, Tuple<number, number>> =>
+const parseTuple = (
+  separator: string,
+  input: string,
+): Either<Error, Tuple<number, number>> =>
   E.tryCatch(() => unsafeParse(separator, input), E.toError)
 
 // RENDERING
 
-const renderError = (error: ParseError): string =>
+const renderError = (error: Error): string => error.message
+
+const renderParseError = (error: ParseError): string =>
   match(error)
-    .with({ _tag: "InvalidCommand" }, (e) => `Invalid command. ${e.error.message}`)
-    .with({ _tag: "InvalidDirection" }, (e) => `Invalid direction. ${e.error.message}`)
-    .with({ _tag: "InvalidObstacle" }, (e) => `Invalid obstacle. ${e.error.message}`)
-    .with({ _tag: "InvalidPosition" }, (e) => `Invalid position. ${e.error.message}`)
+    .with(
+      { _tag: "InvalidCommand" },
+      (e) => `Invalid command. ${e.error.message}`,
+    )
+    .with(
+      { _tag: "InvalidDirection" },
+      (e) => `Invalid direction. ${e.error.message}`,
+    )
+    .with(
+      { _tag: "InvalidObstacle" },
+      (e) => `Invalid obstacle. ${e.error.message}`,
+    )
+    .with(
+      { _tag: "InvalidPosition" },
+      (e) => `Invalid position. ${e.error.message}`,
+    )
     .with({ _tag: "InvalidSize" }, (e) => `Invalid size. ${e.error.message}`)
-    .with({ _tag: "InvalidPlanetFile" }, (e) => `Invalid planet file. ${e.error.message}`)
-    .with({ _tag: "InvalidRoverFile" }, (e) => `Invalid rover file. ${e.error.message}`)
     .exhaustive()
 
 const renderComplete = (rover: Rover): string =>
@@ -263,13 +331,19 @@ const turnLeft = (rover: Rover): Rover => {
   return updateRover({ direction: newDirection })(rover)
 }
 
-const moveForward = (planet: Planet, rover: Rover): Either<ObstacleDetected, Rover> =>
+const moveForward = (
+  planet: Planet,
+  rover: Rover,
+): Either<ObstacleDetected, Rover> =>
   pipe(
     next(planet, rover, delta(rover.direction)),
     E.map((position) => updateRover({ position })(rover)),
   )
 
-const moveBackward = (planet: Planet, rover: Rover): Either<ObstacleDetected, Rover> =>
+const moveBackward = (
+  planet: Planet,
+  rover: Rover,
+): Either<ObstacleDetected, Rover> =>
   pipe(
     next(planet, rover, delta(opposite(rover.direction))),
     E.map((position) => updateRover({ position })(rover)),
@@ -293,7 +367,11 @@ const delta = (direction: Direction): Delta => {
     .exhaustive()
 }
 
-const next = (planet: Planet, rover: Rover, delta: Delta): Either<ObstacleDetected, Position> => {
+const next = (
+  planet: Planet,
+  rover: Rover,
+  delta: Delta,
+): Either<ObstacleDetected, Position> => {
   const position = rover.position
   const newX = wrap(position.x, planet.size.width, delta.x)
   const newY = wrap(position.y, planet.size.height, delta.y)
@@ -303,7 +381,9 @@ const next = (planet: Planet, rover: Rover, delta: Delta): Either<ObstacleDetect
     (x) => x.position.x == newX && x.position.y == newY,
   )
 
-  return hitObstacle != -1 ? E.left(rover) : E.right(updatePosition(candidate)(position))
+  return hitObstacle != -1
+    ? E.left(rover)
+    : E.right(updatePosition(candidate)(position))
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>

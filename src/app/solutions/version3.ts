@@ -78,6 +78,8 @@ const invalidCommand = (e: Error): ParseError => ({
   error: e,
 })
 
+// ENTRY POINT
+
 export const runMission = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
