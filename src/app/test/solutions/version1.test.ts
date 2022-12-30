@@ -1,5 +1,6 @@
 import {
   Command,
+  Commands,
   execute,
   executeAll,
   Planet,
@@ -91,7 +92,7 @@ describe("version 1", () => {
   test("go to opposite angle", () => {
     const planet: Planet = { size: { width: 5, height: 4 } }
     const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" }
-    const commands: ReadonlyArray<Command> = [
+    const commands: Commands = [
       "TurnLeft",
       "MoveForward",
       "TurnRight",

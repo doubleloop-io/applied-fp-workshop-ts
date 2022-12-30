@@ -12,6 +12,7 @@ import { loadTuple } from "../infra-file"
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+type Commands = ReadonlyArray<Command>
 type Obstacle = { position: Position }
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
@@ -71,7 +72,7 @@ type InvalidRoverFile = {
   readonly error: Error
 }
 
-export const invalidSize = (e: Error): ParseError => ({
+const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",
   error: e,
 })
@@ -136,7 +137,7 @@ export const loadRover = (path: string): TaskEither<ParseError, Rover> =>
 
 export const loadCommands = (): TaskEither<
   ParseError,
-  ReadonlyArray<Command>
+  Commands
 > =>
   pipe(
     ask("Waiting commands..."),
@@ -155,7 +156,7 @@ const writeError = (error: ParseError): Task<void> =>
 
 // PARSING
 
-export const parseCommands = (
+const parseCommands = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Command>> =>
   E.traverseArray(parseCommand)(input.split(""))
@@ -266,7 +267,7 @@ const renderObstacle = (rover: Rover): string =>
 const executeAll =
   (planet: Planet) =>
   (rover: Rover) =>
-  (commands: ReadonlyArray<Command>): Either<ObstacleDetected, Rover> =>
+  (commands: Commands): Either<ObstacleDetected, Rover> =>
     commands.reduce(
       (prev, cmd) => pipe(prev, E.chain(flip(execute(planet))(cmd))),
       E.of<Rover, Rover>(rover),

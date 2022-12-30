@@ -3,6 +3,7 @@ import { match } from "ts-pattern"
 export type Rover = { position: Position; direction: Direction }
 export type Planet = { size: Size }
 export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+export type Commands = ReadonlyArray<Command>
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
@@ -11,7 +12,7 @@ type Direction = "N" | "E" | "W" | "S"
 export const executeAll = (
   planet: Planet,
   rover: Rover,
-  commands: ReadonlyArray<Command>,
+  commands: Commands,
 ): Rover => commands.reduce(execute(planet), rover)
 
 export const execute =

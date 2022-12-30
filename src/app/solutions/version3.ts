@@ -7,6 +7,7 @@ import { Tuple, unsafeParse } from "../tuple"
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+type Commands = ReadonlyArray<Command>
 type Obstacle = { position: Position }
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
@@ -176,7 +177,7 @@ const renderObstacle = (rover: Rover): string =>
 const executeAll =
   (planet: Planet) =>
   (rover: Rover) =>
-  (commands: ReadonlyArray<Command>): Either<ObstacleDetected, Rover> =>
+  (commands: Commands): Either<ObstacleDetected, Rover> =>
     commands.reduce(
       (prev, cmd) => pipe(prev, E.chain(flip(execute(planet))(cmd))),
       E.of<Rover, Rover>(rover),
