@@ -106,7 +106,7 @@ describe("version 4", () => {
     expect(result).toStrictEqual(constVoid())
     expect(lastStdout()).toStrictEqual(
       red(
-        "[ERROR] Invalid planet file. Invalid file content: data/planet_invalid_content.txt",
+        "[ERROR] Invalid file content: data/planet_invalid_content.txt",
       ),
     )
   })
