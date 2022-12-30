@@ -79,7 +79,7 @@ describe("version 4", () => {
     expect(lastStdout()).toStrictEqual(green("[OK] 4:3:E"))
   })
 
-  test("hit obstacle during commands execution (integration test)", async () => {
+  test("hit an obstacle (integration test)", async () => {
     stdinCommands = "RFF"
     const run = runApp("data/planet.txt", "data/rover.txt")
 

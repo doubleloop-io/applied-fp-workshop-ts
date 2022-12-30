@@ -9,16 +9,16 @@ import * as TE from "fp-ts/TaskEither"
 import { TaskEither } from "fp-ts/TaskEither"
 import { loadTuple } from "../infra-file"
 
-type Rover = { position: Position; direction: Direction }
-type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
+export type Rover = { position: Position; direction: Direction }
+export type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
-type Commands = ReadonlyArray<Command>
+export type Commands = ReadonlyArray<Command>
 type Obstacle = { position: Position }
 type Position = { x: number; y: number }
 type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
 type Direction = "N" | "E" | "W" | "S"
-type ObstacleDetected = Rover
+export type ObstacleDetected = Rover
 
 const planetCtor =
   (size: Size) =>
@@ -85,16 +85,16 @@ const invalidCommand = (e: Error): ParseError => ({
 
 // PORTS
 
-type PlanetReader = {
+export type PlanetReader = {
   read: () => TaskEither<Error, Planet>
 }
-type RoverReader = {
+export type RoverReader = {
   read: () => TaskEither<Error, Rover>
 }
-type CommandsReader = {
+export type CommandsReader = {
   read: () => TaskEither<Error, ReadonlyArray<Command>>
 }
-type DisplayWriter = {
+export type DisplayWriter = {
   sequenceCompleted: (_: Rover) => Task<void>
   obstacleDetected: (_: ObstacleDetected) => Task<void>
   missionFailed: (_: Error) => Task<void>
@@ -118,7 +118,7 @@ const createStdoutDisplayWriter = (): DisplayWriter => ({
 })
 
 // ENTRY POINT
-const runAppWired = (pathPlanet: string, pathRover: string): Task<void> =>
+export const runAppWired = (pathPlanet: string, pathRover: string): Task<void> =>
   runApp(
     createFilePlanetReader(pathPlanet),
     createFileRoverReader(pathRover),
@@ -126,7 +126,7 @@ const runAppWired = (pathPlanet: string, pathRover: string): Task<void> =>
     createStdoutDisplayWriter(),
   )
 
-const runApp = (
+export const runApp = (
   planetReader: PlanetReader,
   roverReader: RoverReader,
   commandsReader: CommandsReader,
@@ -258,7 +258,7 @@ const parseTuple = (
 
 // RENDERING
 
-const renderError = (error: Error): string => error.message
+export const renderError = (error: Error): string => error.message
 
 const renderParseError = (error: ParseError): string =>
   match(error)
@@ -281,10 +281,10 @@ const renderParseError = (error: ParseError): string =>
     .with({ _tag: "InvalidSize" }, (e) => `Invalid size. ${e.error.message}`)
     .exhaustive()
 
-const renderComplete = (rover: Rover): string =>
+export const renderComplete = (rover: Rover): string =>
   `${rover.position.x}:${rover.position.y}:${rover.direction}`
 
-const renderObstacle = (rover: Rover): string =>
+export const renderObstacle = (rover: Rover): string =>
   `O:${rover.position.x}:${rover.position.y}:${rover.direction}`
 
 // DOMAIN

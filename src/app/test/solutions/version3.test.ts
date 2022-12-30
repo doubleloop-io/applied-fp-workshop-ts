@@ -13,7 +13,7 @@ describe("version 3", () => {
     expect(result).toStrictEqual(E.right("4:3:E"))
   })
 
-  test("hit obstacle during commands execution", () => {
+  test("hit an obstacle", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")
     const rover = tuple("0,0", "N")
     const commands = "RFF"
