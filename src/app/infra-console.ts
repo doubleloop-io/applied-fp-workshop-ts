@@ -10,9 +10,9 @@ const RED = "\x1b[31m"
 
 export const ask = (question: string): Task<string> => pipe(puts(question), T.chain(reads))
 
-export const logInfo = (message: string): Task<void> => puts(green(message))
+export const logInfo = (message: string): Task<void> => puts(green(`[OK] ${message}`))
 
-export const logError = (message: string): Task<void> => puts(red(message))
+export const logError = (message: string): Task<void> => puts(red(`[ERROR] ${message}`))
 
 export const reads = (): Task<string> => () =>
   new Promise((resolve) => {
@@ -28,5 +28,5 @@ export const reads = (): Task<string> => () =>
 
 export const puts = (message: string): Task<void> => T.fromIO(C.log(message))
 
-const green = (message: string): string => `${GREEN}${message}${RESET}`
-const red = (message: string): string => `${RED}${message}${RESET}`
+export const green = (message: string): string => `${GREEN}${message}${RESET}`
+export const red = (message: string): string => `${RED}${message}${RESET}`

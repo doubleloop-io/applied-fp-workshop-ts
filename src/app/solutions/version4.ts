@@ -70,17 +70,23 @@ const invalidCommand = (e: Error): ParseError => ({ _tag: "InvalidCommand", erro
 const invalidPlanetFile = (e: Error): ParseError => ({ _tag: "InvalidPlanetFile", error: e })
 const invalidRoverFile = (e: Error): ParseError => ({ _tag: "InvalidRoverFile", error: e })
 
-export const runMission = (pathPlanet: string, pathRover: string): Task<void> =>
+export const runApp = (pathPlanet: string, pathRover: string): Task<void> =>
   pipe(
-    pipe(
-      TE.of(executeAll),
-      TE.ap(loadPlanet(pathPlanet)),
-      TE.ap(loadRover(pathRover)),
-      TE.ap(loadCommands()),
-    ),
+    runMission(pathPlanet, pathRover),
     TE.map(E.fold(writeObstacleDetected, writeSequenceCompleted)),
     TE.chain((t) => TE.fromTask(t)),
     TE.getOrElse(writeError),
+  )
+
+const runMission = (
+  pathPlanet: string,
+  pathRover: string,
+): TaskEither<ParseError, Either<ObstacleDetected, Rover>> =>
+  pipe(
+    TE.of(executeAll),
+    TE.ap(loadPlanet(pathPlanet)),
+    TE.ap(loadRover(pathRover)),
+    TE.ap(loadCommands()),
   )
 
 // INFRASTRUCTURE
@@ -157,13 +163,13 @@ const parseTuple = (separator: string, input: string): Either<Error, Tuple<numbe
 
 const renderError = (error: ParseError): string =>
   match(error)
-    .with({ _tag: "InvalidCommand" }, (e) => `Invalid command: ${e.error.message}`)
-    .with({ _tag: "InvalidDirection" }, (e) => `Invalid direction: ${e.error.message}`)
-    .with({ _tag: "InvalidObstacle" }, (e) => `Invalid obstacle: ${e.error.message}`)
-    .with({ _tag: "InvalidPosition" }, (e) => `Invalid position: ${e.error.message}`)
-    .with({ _tag: "InvalidSize" }, (e) => `Invalid size: ${e.error.message}`)
-    .with({ _tag: "InvalidPlanetFile" }, (e) => `Invalid planet file: ${e.error.message}`)
-    .with({ _tag: "InvalidRoverFile" }, (e) => `Invalid rover file: ${e.error.message}`)
+    .with({ _tag: "InvalidCommand" }, (e) => `Invalid command. ${e.error.message}`)
+    .with({ _tag: "InvalidDirection" }, (e) => `Invalid direction. ${e.error.message}`)
+    .with({ _tag: "InvalidObstacle" }, (e) => `Invalid obstacle. ${e.error.message}`)
+    .with({ _tag: "InvalidPosition" }, (e) => `Invalid position. ${e.error.message}`)
+    .with({ _tag: "InvalidSize" }, (e) => `Invalid size. ${e.error.message}`)
+    .with({ _tag: "InvalidPlanetFile" }, (e) => `Invalid planet file. ${e.error.message}`)
+    .with({ _tag: "InvalidRoverFile" }, (e) => `Invalid rover file. ${e.error.message}`)
     .exhaustive()
 
 const renderComplete = (rover: Rover): string =>
