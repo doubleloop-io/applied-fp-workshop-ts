@@ -1,13 +1,16 @@
-import { Tuple, unsafeParse } from "../tuple"
+import { tuple, Tuple, unsafeParse } from "../tuple"
 import { ask, logError, logInfo } from "../infra-console"
 import { match } from "ts-pattern"
-import { flip, flow, pipe } from "fp-ts/function"
+import { constVoid, flip, flow, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
+import * as T from "fp-ts/Task"
 import { Task } from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
 import { TaskEither } from "fp-ts/TaskEither"
 import { loadTuple } from "../infra-file"
+import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 export type Rover = { position: Position; direction: Direction }
 export type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
@@ -83,78 +86,210 @@ const invalidCommand = (e: Error): ParseError => ({
   error: e,
 })
 
-// PORTS
+// ELM ARCHITECTURE
 
-export type PlanetReader = {
-  read: () => TaskEither<Error, Planet>
+type AppState = AppLoading | AppReady | AppFailed
+type AppLoading = { readonly _tag: "AppLoading" }
+type AppReady = {
+  readonly _tag: "AppReady"
+  readonly planet: Planet
+  readonly rover: Rover
 }
-export type RoverReader = {
-  read: () => TaskEither<Error, Rover>
-}
-export type CommandsReader = {
-  read: () => TaskEither<Error, ReadonlyArray<Command>>
-}
-export type DisplayWriter = {
-  sequenceCompleted: (_: Rover) => Task<void>
-  obstacleDetected: (_: ObstacleDetected) => Task<void>
-  missionFailed: (_: Error) => Task<void>
+type AppFailed = {
+  readonly _tag: "AppFailed"
 }
 
-// ADAPTERS
+const appLoading = (): AppState => ({ _tag: "AppLoading" })
+const appReady = (planet: Planet, rover: Rover): AppState => ({
+  _tag: "AppReady",
+  planet,
+  rover,
+})
+const appFailed = (): AppState => ({ _tag: "AppFailed" })
 
-const createFilePlanetReader = (pathPlanet: string): PlanetReader => ({
-  read: () => loadPlanet(pathPlanet),
+type Effect =
+  | LoadMissionEffect
+  | AskCommandsEffect
+  | ReportObstacleDetectedEffect
+  | ReportSequenceCompletedEffect
+  | ReportErrorEffect
+type LoadMissionEffect = {
+  readonly _tag: "LoadMissionEffect"
+  readonly pathPlanet: string
+  readonly pathRover: string
+}
+type AskCommandsEffect = { readonly _tag: "AskCommandsEffect" }
+type ReportObstacleDetectedEffect = {
+  readonly _tag: "ReportObstacleDetectedEffect"
+  readonly rover: ObstacleDetected
+}
+type ReportSequenceCompletedEffect = {
+  readonly _tag: "ReportSequenceCompletedEffect"
+
+  readonly rover: Rover
+}
+type ReportErrorEffect = {
+  readonly _tag: "ReportErrorEffect"
+  readonly error: Error
+}
+
+const loadMission = (pathPlanet: string, pathRover: string): Effect => ({
+  _tag: "LoadMissionEffect",
+  pathPlanet,
+  pathRover,
 })
-const createFileRoverReader = (pathRover: string): RoverReader => ({
-  read: () => loadRover(pathRover),
+const askCommands = (): Effect => ({
+  _tag: "AskCommandsEffect",
 })
-const createStdinCommandsReader = (): CommandsReader => ({
-  read: loadCommands,
+const reportObstacleDetected = (rover: ObstacleDetected): Effect => ({
+  _tag: "ReportObstacleDetectedEffect",
+  rover,
 })
-const createStdoutDisplayWriter = (): DisplayWriter => ({
-  sequenceCompleted: writeSequenceCompleted,
-  obstacleDetected: writeObstacleDetected,
-  missionFailed: writeError,
+const reportSequenceCompleted = (rover: Rover): Effect => ({
+  _tag: "ReportSequenceCompletedEffect",
+  rover,
 })
+const reportError = (error: Error): Effect => ({
+  _tag: "ReportErrorEffect",
+  error,
+})
+
+type Event =
+  | LoadMissionSuccessfulEvent
+  | LoadMissionFailedEvent
+  | CommandsReceivedEvent
+type LoadMissionSuccessfulEvent = {
+  readonly _tag: "LoadMissionSuccessfulEvent"
+  readonly planet: Planet
+  readonly rover: Rover
+}
+type LoadMissionFailedEvent = {
+  readonly _tag: "LoadMissionFailedEvent"
+  readonly error: Error
+}
+type CommandsReceivedEvent = {
+  readonly _tag: "CommandsReceivedEvent"
+  readonly commands: Commands
+}
+
+const loadMissionSuccessful = (planet: Planet, rover: Rover): Event => ({
+  _tag: "LoadMissionSuccessfulEvent",
+  planet,
+  rover,
+})
+const loadMissionFailed = (error: Error): Event => ({
+  _tag: "LoadMissionFailedEvent",
+  error,
+})
+const commandsReceived = (commands: Commands): Event => ({
+  _tag: "CommandsReceivedEvent",
+  commands,
+})
+
+const start = <M, EV, EF>(
+  init: () => Tuple<M, EF>,
+  update: (model: M, event: EV) => Tuple<M, EF>,
+  infrastructure: (effect: EF) => Task<Option<EV>>,
+): Task<void> => {
+  const loop = (model: M, effect: EF): Task<void> =>
+    pipe(
+      infrastructure(effect),
+      T.chain((wishToContinue) =>
+        match(wishToContinue)
+          .with({ _tag: "Some" }, (ev) => {
+            const { first: nextModel, second: nextEffect } = update(
+              model,
+              ev.value,
+            )
+            return loop(nextModel, nextEffect)
+          })
+          .otherwise(() => T.of(constVoid())),
+      ),
+    )
+
+  const { first: iniModel, second: initEffect } = init()
+  return loop(iniModel, initEffect)
+}
+
+const keepGoing = (ev: Event): Option<Event> => O.some(ev)
+const stop = (_: void): Option<Event> => O.none
 
 // ENTRY POINT
-export const runAppWired = (
-  pathPlanet: string,
-  pathRover: string,
-): Task<void> =>
-  runApp(
-    createFilePlanetReader(pathPlanet),
-    createFileRoverReader(pathRover),
-    createStdinCommandsReader(),
-    createStdoutDisplayWriter(),
-  )
 
-export const runApp = (
-  planetReader: PlanetReader,
-  roverReader: RoverReader,
-  commandsReader: CommandsReader,
-  displayWriter: DisplayWriter,
-): Task<void> =>
-  pipe(
-    runMission(planetReader, roverReader, commandsReader),
-    TE.map(
-      E.fold(displayWriter.obstacleDetected, displayWriter.sequenceCompleted),
-    ),
-    TE.chain((t) => TE.fromTask(t)),
-    TE.getOrElse(displayWriter.missionFailed),
-  )
+const init =
+  (pathPlanet: string, pathRover: string) => (): Tuple<AppState, Effect> =>
+    tuple(appLoading(), loadMission(pathPlanet, pathRover))
 
-const runMission = (
-  planetReader: PlanetReader,
-  roverReader: RoverReader,
-  commandsReader: CommandsReader,
-): TaskEither<Error, Either<ObstacleDetected, Rover>> =>
-  pipe(
-    TE.of(executeAll),
-    TE.ap(planetReader.read()),
-    TE.ap(roverReader.read()),
-    TE.ap(commandsReader.read()),
-  )
+const update = (model: AppState, event: Event): Tuple<AppState, Effect> =>
+  match<[AppState, Event], Tuple<AppState, Effect>>([model, event])
+    .with(
+      [{ _tag: "AppLoading" }, { _tag: "LoadMissionSuccessfulEvent" }],
+      ([_, ev]) => tuple(appReady(ev.planet, ev.rover), askCommands()),
+    )
+    .with(
+      [{ _tag: "AppLoading" }, { _tag: "LoadMissionFailedEvent" }],
+      ([_, ev]) => tuple(appFailed(), reportError(ev.error)),
+    )
+    .with(
+      [{ _tag: "AppReady" }, { _tag: "CommandsReceivedEvent" }],
+      ([m, ev]) =>
+        pipe(
+          executeAll(m.planet)(m.rover)(ev.commands),
+          E.fold(
+            (ob) => tuple(appReady(m.planet, ob), reportObstacleDetected(ob)),
+            (r) => tuple(appReady(m.planet, r), reportSequenceCompleted(r)),
+          ),
+        ),
+    )
+    .otherwise(() =>
+      tuple(
+        appFailed(),
+        reportError(
+          new Error(`Cannot handle ${event} event in ${model} state.`),
+        ),
+      ),
+    )
+
+const infrastructure = (effect: Effect): Task<Option<Event>> => {
+  return match(effect)
+    .with({ _tag: "LoadMissionEffect" }, (eff) => {
+      const loadMission =
+        (p: Planet) =>
+        (r: Rover): Event =>
+          loadMissionSuccessful(p, r)
+
+      return pipe(
+        pipe(
+          TE.of(loadMission),
+          TE.ap(loadPlanet(eff.pathPlanet)),
+          TE.ap(loadRover(eff.pathRover)),
+        ),
+        TE.getOrElse(flow(loadMissionFailed, T.of)),
+        T.map(keepGoing),
+      )
+    })
+    .with({ _tag: "AskCommandsEffect" }, () =>
+      pipe(
+        loadCommands(),
+        TE.map(commandsReceived),
+        TE.getOrElse(flow(loadMissionFailed, T.of)),
+        T.map(keepGoing),
+      ),
+    )
+    .with({ _tag: "ReportObstacleDetectedEffect" }, (eff) =>
+      pipe(writeObstacleDetected(eff.rover), T.map(stop)),
+    )
+    .with({ _tag: "ReportSequenceCompletedEffect" }, (eff) =>
+      pipe(writeSequenceCompleted(eff.rover), T.map(stop)),
+    )
+    .with({ _tag: "ReportErrorEffect" }, (eff) =>
+      pipe(writeError(eff.error), T.map(stop)),
+    )
+    .exhaustive()
+}
+
+const runApp = (pathPlanet: string, pathRover: string): Task<void> =>
+  start(init(pathPlanet, pathRover), update, infrastructure)
 
 // INFRASTRUCTURE
 
