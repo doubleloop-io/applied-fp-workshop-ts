@@ -99,13 +99,13 @@ type AppFailed = {
   readonly _tag: "AppFailed"
 }
 
-const appLoading = (): AppState => ({ _tag: "AppLoading" })
-const appReady = (planet: Planet, rover: Rover): AppState => ({
+export const appLoading = (): AppState => ({ _tag: "AppLoading" })
+export const appReady = (planet: Planet, rover: Rover): AppState => ({
   _tag: "AppReady",
   planet,
   rover,
 })
-const appFailed = (): AppState => ({ _tag: "AppFailed" })
+export const appFailed = (): AppState => ({ _tag: "AppFailed" })
 
 type Effect =
   | LoadMissionEffect
@@ -133,23 +133,23 @@ type ReportErrorEffect = {
   readonly error: Error
 }
 
-const loadMission = (pathPlanet: string, pathRover: string): Effect => ({
+export const loadMission = (pathPlanet: string, pathRover: string): Effect => ({
   _tag: "LoadMissionEffect",
   pathPlanet,
   pathRover,
 })
-const askCommands = (): Effect => ({
+export const askCommands = (): Effect => ({
   _tag: "AskCommandsEffect",
 })
-const reportObstacleDetected = (rover: ObstacleDetected): Effect => ({
+export const reportObstacleDetected = (rover: ObstacleDetected): Effect => ({
   _tag: "ReportObstacleDetectedEffect",
   rover,
 })
-const reportSequenceCompleted = (rover: Rover): Effect => ({
+export const reportSequenceCompleted = (rover: Rover): Effect => ({
   _tag: "ReportSequenceCompletedEffect",
   rover,
 })
-const reportError = (error: Error): Effect => ({
+export const reportError = (error: Error): Effect => ({
   _tag: "ReportErrorEffect",
   error,
 })
@@ -172,16 +172,16 @@ type CommandsReceivedEvent = {
   readonly commands: Commands
 }
 
-const loadMissionSuccessful = (planet: Planet, rover: Rover): Event => ({
+export const loadMissionSuccessful = (planet: Planet, rover: Rover): Event => ({
   _tag: "LoadMissionSuccessfulEvent",
   planet,
   rover,
 })
-const loadMissionFailed = (error: Error): Event => ({
+export const loadMissionFailed = (error: Error): Event => ({
   _tag: "LoadMissionFailedEvent",
   error,
 })
-const commandsReceived = (commands: Commands): Event => ({
+export const commandsReceived = (commands: Commands): Event => ({
   _tag: "CommandsReceivedEvent",
   commands,
 })
@@ -216,11 +216,11 @@ const stop = (_: void): Option<Event> => O.none
 
 // ENTRY POINT
 
-const init =
+export const init =
   (pathPlanet: string, pathRover: string) => (): Tuple<AppState, Effect> =>
     tuple(appLoading(), loadMission(pathPlanet, pathRover))
 
-const update = (model: AppState, event: Event): Tuple<AppState, Effect> =>
+export const update = (model: AppState, event: Event): Tuple<AppState, Effect> =>
   match<[AppState, Event], Tuple<AppState, Effect>>([model, event])
     .with(
       [{ _tag: "AppLoading" }, { _tag: "LoadMissionSuccessfulEvent" }],
@@ -250,7 +250,7 @@ const update = (model: AppState, event: Event): Tuple<AppState, Effect> =>
       ),
     )
 
-const infrastructure = (effect: Effect): Task<Option<Event>> => {
+export const infrastructure = (effect: Effect): Task<Option<Event>> => {
   return match(effect)
     .with({ _tag: "LoadMissionEffect" }, (eff) => {
       const loadMission =
