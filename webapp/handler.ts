@@ -7,22 +7,7 @@ import { TaskEither } from "fp-ts/TaskEither"
 import { Either } from "fp-ts/Either"
 import { ObstacleDetected, Rover } from "./core"
 import { CommandsChannel, MissionReport, MissionSource } from "./ports"
-import {
-  createFileMissionSource,
-  createStdinCommandsChannel,
-  createStdoutMissionReport,
-} from "./adapterts"
 import { executeAll } from "./domain"
-
-export const runAppWired = (
-  pathPlanet: string,
-  pathRover: string,
-): Task<void> =>
-  runApp(
-    createFileMissionSource(pathPlanet, pathRover),
-    createStdinCommandsChannel(),
-    createStdoutMissionReport(),
-  )
 
 export const runApp = (
   missionSource: MissionSource,

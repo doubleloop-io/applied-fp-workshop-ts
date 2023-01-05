@@ -32,6 +32,6 @@
     "test:watch": "jest --watch",
     "spell": "cspell '**/*.*'",
     "eval": "ts-node",
-    "web": "node dist/webapp/index.js"
+    "web": "yarn build && node dist/webapp/index.js"
   }
 }
