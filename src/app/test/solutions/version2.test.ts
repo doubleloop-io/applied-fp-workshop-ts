@@ -7,7 +7,7 @@ import {
   invalidPosition,
 } from "../../solutions/version2"
 import * as E from "fp-ts/Either"
-import { tuple } from "../../tuple"
+import { tuple } from "../../utils/tuple"
 
 describe("version 2", () => {
   test("go to opposite angle", () => {

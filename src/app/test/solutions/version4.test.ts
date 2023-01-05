@@ -6,7 +6,7 @@ import {
 } from "../../solutions/version4"
 import * as E from "fp-ts/Either"
 import { constVoid } from "fp-ts/function"
-import { green, red } from "../../infra-console"
+import { green, red } from "../../utils/infra-console"
 
 let stdinCommands = ""
 

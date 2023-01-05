@@ -1,5 +1,5 @@
-import { Tuple, unsafeParse } from "../tuple"
-import { ask, logError, logInfo } from "../infra-console"
+import { Tuple, unsafeParse } from "../utils/tuple"
+import { ask, logError, logInfo } from "../utils/infra-console"
 import { match } from "ts-pattern"
 import { flip, flow, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
@@ -7,7 +7,7 @@ import { Either } from "fp-ts/Either"
 import { Task } from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
 import { TaskEither } from "fp-ts/TaskEither"
-import { loadTuple } from "../infra-file"
+import { loadTuple } from "../utils/infra-file"
 
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }

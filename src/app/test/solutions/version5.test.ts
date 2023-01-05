@@ -16,7 +16,7 @@ import {
 import * as TE from "fp-ts/TaskEither"
 import * as T from "fp-ts/Task"
 import { constVoid, pipe } from "fp-ts/function"
-import { green } from "../../infra-console"
+import { green } from "../../utils/infra-console"
 import * as IR from "fp-ts/IORef"
 import { IORef } from "fp-ts/IORef"
 

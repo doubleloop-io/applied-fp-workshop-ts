@@ -14,7 +14,7 @@ import {
   reportSequenceCompleted,
   update,
 } from "../../solutions/version6"
-import { tuple } from "../../tuple"
+import { tuple } from "../../utils/tuple"
 import * as O from "fp-ts/Option"
 import * as E from "fp-ts/Either"
 

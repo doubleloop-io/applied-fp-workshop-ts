@@ -1,6 +1,6 @@
 import { invalidSize, runApp } from "../../solutions/version3"
 import * as E from "fp-ts/Either"
-import { tuple } from "../../tuple"
+import { tuple } from "../../utils/tuple"
 
 describe("version 3", () => {
   test("go to opposite angle", () => {

@@ -2,7 +2,7 @@ import { match } from "ts-pattern"
 import { flip, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
-import { Tuple, unsafeParse } from "../tuple"
+import { Tuple, unsafeParse } from "../utils/tuple"
 
 type Rover = { position: Position; direction: Direction }
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
