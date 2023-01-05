@@ -2,8 +2,8 @@ import { pipe } from "fp-ts/function"
 import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 
-// TODO - 1: remove skip marker
-describe.skip("combination phase - many", () => {
+// TODO - 1: for each test, remove the skip marker and make it green
+describe("combination phase - many", () => {
   type Item = {
     name: string
     qty: number
@@ -24,19 +24,19 @@ describe.skip("combination phase - many", () => {
     throw new Error("TODO")
   }
 
-  test("creation with valid parameters", () => {
+  test.skip("creation with valid parameters", () => {
     const result = createItem("foo", "100")
 
     expect(result).toStrictEqual(O.some({ name: "foo", qty: 100 }))
   })
 
-  test("creation with invalid name", () => {
+  test.skip("creation with invalid name", () => {
     const result = createItem("", "100")
 
     expect(result).toStrictEqual(O.none)
   })
 
-  test("creation with invalid quantity", () => {
+  test.skip("creation with invalid quantity", () => {
     const result = createItem("foo", "")
 
     expect(result).toStrictEqual(O.none)

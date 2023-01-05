@@ -2,8 +2,8 @@ import { pipe } from "fp-ts/function"
 import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 
-// TODO - 1: remove skip marker
-describe.skip("combination phase - effectful", () => {
+// TODO - 1: for each test, remove the skip marker and make it green
+describe("combination phase - effectful", () => {
   type Item = {
     qty: number
   }
@@ -23,7 +23,7 @@ describe.skip("combination phase - effectful", () => {
     (item: Item): Option<Item> =>
       value <= item.qty ? O.some(itemCtor(item.qty - value)) : O.none
 
-  test("checkOut after valid creation", () => {
+  test.skip("checkOut after valid creation", () => {
     const result = pipe(
       createItem("100"),
       // TODO - 2: use 'chain' to check out 10
@@ -33,7 +33,7 @@ describe.skip("combination phase - effectful", () => {
     expect(result).toStrictEqual(null)
   })
 
-  test("checkOut after invalid creation", () => {
+  test.skip("checkOut after invalid creation", () => {
     const result = pipe(
       createItem("asd"),
       // TODO - 4: check out 10
@@ -43,7 +43,7 @@ describe.skip("combination phase - effectful", () => {
     expect(result).toStrictEqual(null)
   })
 
-  test("checkIn and checkOut after valid creation", () => {
+  test.skip("checkIn and checkOut after valid creation", () => {
     const result = pipe(
       createItem("100"),
       // TODO - 6: check in 10

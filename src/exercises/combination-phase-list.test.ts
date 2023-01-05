@@ -3,8 +3,8 @@ import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 import * as A from "fp-ts/Array"
 
-// TODO - 1: remove skip marker
-describe.skip("combination phase - list", () => {
+// TODO - 1: for each test, remove the skip marker and make it green
+describe("combination phase - list", () => {
   type Item = {
     qty: number
   }
@@ -14,7 +14,7 @@ describe.skip("combination phase - list", () => {
   const createItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(itemCtor(Number(qty))) : O.none
 
-  test("all valid - individual results", () => {
+  test.skip("all valid - individual results", () => {
     const values = ["1", "10", "100"]
     const result = pipe(
       values,
@@ -28,7 +28,7 @@ describe.skip("combination phase - list", () => {
     ])
   })
 
-  test("some invalid - individual results", () => {
+  test.skip("some invalid - individual results", () => {
     const values = ["1", "asd", "100"]
     const result = pipe(
       values,
@@ -42,7 +42,7 @@ describe.skip("combination phase - list", () => {
     ])
   })
 
-  test("all valid - summon result", () => {
+  test.skip("all valid - summon result", () => {
     const values = ["1", "10", "100"]
     const result = pipe(values, O.traverseArray(createItem))
 
@@ -50,7 +50,7 @@ describe.skip("combination phase - list", () => {
     expect(result).toStrictEqual(null)
   })
 
-  test("some invalid - summon result", () => {
+  test.skip("some invalid - summon result", () => {
     const values = ["1", "asd", "100"]
     const result = pipe(values, O.traverseArray(createItem))
 

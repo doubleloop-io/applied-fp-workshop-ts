@@ -8,8 +8,8 @@ import * as T from "fp-ts/Task"
 import { TaskEither } from "fp-ts/TaskEither"
 import * as TE from "fp-ts/TaskEither"
 
-// TODO - 1: remove skip marker
-describe.skip("chaining", () => {
+// TODO - 1: for each test, remove the skip marker and make it green
+describe("chaining", () => {
   type ItemId = number
   type Item = { id: ItemId; qty: number }
 
@@ -22,7 +22,7 @@ describe.skip("chaining", () => {
 
   const aItem: Item = { id: 123, qty: 10 }
 
-  test("chaining w/ Option Monad", () => {
+  test.skip("chaining w/ Option Monad", () => {
     const load = (id: ItemId): Option<Item> => O.of(aItem)
     const save = (item: Item): Option<void> => O.of(constVoid())
 
@@ -34,7 +34,7 @@ describe.skip("chaining", () => {
     )
   })
 
-  test("chaining w/ Either Monad", () => {
+  test.skip("chaining w/ Either Monad", () => {
     type Error = string
     const load = (id: ItemId): Either<Error, Item> => E.of(aItem)
     const save = (item: Item): Either<Error, Item> => E.of(item)
@@ -47,7 +47,7 @@ describe.skip("chaining", () => {
     )
   })
 
-  test("chaining w/ Task Monad", () => {
+  test.skip("chaining w/ Task Monad", () => {
     const load = (id: ItemId): Task<Item> => T.of(aItem)
     const save = (item: Item): Task<Item> => T.of(item)
 
@@ -59,7 +59,7 @@ describe.skip("chaining", () => {
     )
   })
 
-  test("chaining w/ TaskEither Monad", () => {
+  test.skip("chaining w/ TaskEither Monad", () => {
     type Error = string
     const load = (id: ItemId): TaskEither<Error, Item> => TE.of(aItem)
     const save = (item: Item): TaskEither<Error, Item> => TE.of(item)

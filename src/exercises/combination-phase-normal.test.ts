@@ -2,8 +2,8 @@ import { pipe } from "fp-ts/function"
 import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 
-// TODO - 1: remove skip marker
-describe.skip("combination phase - normal", () => {
+// TODO - 1: for each test, remove the skip marker and make it green
+describe("combination phase - normal", () => {
   type Item = {
     qty: number
   }
@@ -18,7 +18,7 @@ describe.skip("combination phase - normal", () => {
     (item: Item): Item =>
       itemCtor(item.qty + value)
 
-  test("checkIn after valid creation", () => {
+  test.skip("checkIn after valid creation", () => {
     const result = pipe(
       createItem("100"),
       // TODO - 2: use 'map' to check in 10
@@ -28,7 +28,7 @@ describe.skip("combination phase - normal", () => {
     expect(result).toStrictEqual(null)
   })
 
-  test("checkIn after invalid creation", () => {
+  test.skip("checkIn after invalid creation", () => {
     const result = pipe(
       createItem("asd"),
       // TODO - 4: check in 10

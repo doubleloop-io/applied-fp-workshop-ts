@@ -1,5 +1,5 @@
-// TODO - 1: remove skip marker
-describe.skip("creation phase", () => {
+// TODO - 1: for each test, remove the skip marker and make it green
+describe("creation phase", () => {
   type Item = {
     qty: number
   }
@@ -15,7 +15,7 @@ describe.skip("creation phase", () => {
     else throw new Error("invalid item") // or return null | undefined
   }
 
-  test("item creation", () => {
+  test.skip("item creation", () => {
     const result = createItem("10")
 
     // TODO - 4: change test expectation

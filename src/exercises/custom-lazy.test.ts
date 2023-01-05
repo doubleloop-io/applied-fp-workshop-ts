@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/function"
 
-// TODO - 1: remove skip marker
-describe.skip("custom lazy monad", () => {
+// TODO - 1: for each test, remove the skip marker and make it green
+describe("custom lazy monad", () => {
   let logs: string[] = []
 
   beforeEach(() => {
@@ -20,14 +20,14 @@ describe.skip("custom lazy monad", () => {
     return of(x.toString().split("").reverse().join(""))
   }
 
-  test("creation phase", () => {
+  test.skip("creation phase", () => {
     // TODO - 2: implement 'of' function
     const result = of(10)
 
     expect(result()).toStrictEqual(10)
   })
 
-  test("combination phase - normal", () => {
+  test.skip("combination phase - normal", () => {
     // TODO - 3: implement 'map' function
     const result = pipe(of(10), map(increment))
 
@@ -36,7 +36,7 @@ describe.skip("custom lazy monad", () => {
     expect(logs).toStrictEqual(["increment"])
   })
 
-  test("combination phase - effectful", () => {
+  test.skip("combination phase - effectful", () => {
     // TODO - 4: implement 'chain' function
     const result = pipe(of(10), chain(reverseString))
 
@@ -45,7 +45,7 @@ describe.skip("custom lazy monad", () => {
     expect(logs).toStrictEqual(["reverseString"])
   })
 
-  test("removal phase - value", () => {
+  test.skip("removal phase - value", () => {
     // TODO - 5: implement 'fold' function
     const result = pipe(of(10), run())
 
