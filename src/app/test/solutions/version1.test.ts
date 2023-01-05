@@ -13,7 +13,7 @@ describe("version 1", () => {
   // +-----+-----+-----+-----+-----+
 
   test("turn right command", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
     const command = "TurnRight"
 
@@ -23,7 +23,7 @@ describe("version 1", () => {
   })
 
   test("turn left command", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
     const command = "TurnLeft"
 
@@ -33,7 +33,7 @@ describe("version 1", () => {
   })
 
   test("move forward command", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 1 }, direction: "N" as const }
     const command = "MoveForward"
 
@@ -43,7 +43,7 @@ describe("version 1", () => {
   })
 
   test("move forward command, opposite direction", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 1 }, direction: "S" as const }
     const command = "MoveForward"
 
@@ -53,7 +53,7 @@ describe("version 1", () => {
   })
 
   test("move backward command", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 1 }, direction: "N" as const }
     const command = "MoveBackward"
 
@@ -63,7 +63,7 @@ describe("version 1", () => {
   })
 
   test("move forward command, opposite direction", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 1 }, direction: "S" as const }
     const command = "MoveBackward"
 
@@ -73,7 +73,7 @@ describe("version 1", () => {
   })
 
   test("wrap on North", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 3 }, direction: "N" as const }
     const command = "MoveForward"
 
@@ -83,7 +83,7 @@ describe("version 1", () => {
   })
 
   test("go to opposite angle", () => {
-    const planet = { size: { width: 5, height: 4 } }
+    const planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
     const commands = [
       "TurnLeft" as const,
