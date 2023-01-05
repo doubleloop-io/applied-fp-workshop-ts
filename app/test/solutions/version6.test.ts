@@ -13,7 +13,7 @@ import {
   reportObstacleDetected,
   reportSequenceCompleted,
   update,
-} from "../../solutions/version6"
+} from "../../src/solutions/version6"
 import { tuple } from "../../utils/tuple"
 import * as O from "fp-ts/Option"
 

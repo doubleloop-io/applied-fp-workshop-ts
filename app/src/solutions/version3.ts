@@ -1,13 +1,8 @@
-import { Tuple, unsafeParse } from "../utils/tuple"
-import { ask, logError, logInfo } from "../utils/infra-console"
 import { match } from "ts-pattern"
-import { flip, flow, pipe } from "fp-ts/function"
+import { flip, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
-import { Task } from "fp-ts/Task"
-import * as TE from "fp-ts/TaskEither"
-import { TaskEither } from "fp-ts/TaskEither"
-import { loadTuple } from "../utils/infra-file"
+import { Tuple, unsafeParse } from "../../utils/tuple"
 
 type Rover = { position: Position; direction: Direction }
 type Position = { x: number; y: number }
@@ -62,7 +57,7 @@ type InvalidDirection = {
 }
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
 
-const invalidSize = (e: Error): ParseError => ({
+export const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",
   error: e,
 })
@@ -85,60 +80,31 @@ const invalidCommand = (e: Error): ParseError => ({
 
 // ENTRY POINT
 
-export const runApp = (pathPlanet: string, pathRover: string): Task<void> =>
+export const runApp = (
+  inputPlanet: Tuple<string, string>,
+  inputRover: Tuple<string, string>,
+  inputCommands: string,
+): Either<ParseError, string> =>
   pipe(
-    runMission(pathPlanet, pathRover),
-    TE.map(E.fold(writeObstacleDetected, writeSequenceCompleted)),
-    TE.chain((t) => TE.fromTask(t)),
-    TE.getOrElse(writeMissionFailed),
+    runMission(inputPlanet, inputRover, inputCommands),
+    E.map(E.fold(renderObstacle, renderComplete)),
   )
 
 const runMission = (
-  pathPlanet: string,
-  pathRover: string,
-): TaskEither<Error, Either<ObstacleDetected, Rover>> =>
+  inputPlanet: Tuple<string, string>,
+  inputRover: Tuple<string, string>,
+  inputCommands: string,
+): Either<ParseError, Either<ObstacleDetected, Rover>> =>
   pipe(
-    TE.of(executeAll),
-    TE.ap(loadPlanet(pathPlanet)),
-    TE.ap(loadRover(pathRover)),
-    TE.ap(loadCommands()),
+    E.of(executeAll),
+    E.ap(parsePlanet(inputPlanet)),
+    E.ap(parseRover(inputRover)),
+    E.ap(parseCommands(inputCommands)),
   )
-
-// INFRASTRUCTURE
-
-const toError = (error: ParseError): Error => new Error(renderParseError(error))
-
-export const loadPlanet = (path: string): TaskEither<Error, Planet> =>
-  pipe(
-    loadTuple(path),
-    TE.chain(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
-  )
-
-export const loadRover = (path: string): TaskEither<Error, Rover> =>
-  pipe(
-    loadTuple(path),
-    TE.chain(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
-  )
-
-export const loadCommands = (): TaskEither<Error, Commands> =>
-  pipe(
-    ask("Waiting commands..."),
-    TE.fromTask,
-    TE.chain(flow(parseCommands, E.mapLeft(toError), TE.fromEither)),
-  )
-
-const writeSequenceCompleted = (rover: Rover): Task<void> =>
-  pipe(renderComplete(rover), logInfo)
-
-const writeObstacleDetected = (rover: Rover): Task<void> =>
-  pipe(renderObstacle(rover), logInfo)
-
-const writeMissionFailed = (error: Error): Task<void> =>
-  pipe(renderError(error), logError)
 
 // PARSING
 
-const parseCommands = (
+export const parseCommands = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Command>> =>
   E.traverseArray(parseCommand)(input.split(""))
@@ -208,29 +174,6 @@ const parseTuple = (
   E.tryCatch(() => unsafeParse(separator, input), E.toError)
 
 // RENDERING
-
-const renderError = (error: Error): string => error.message
-
-const renderParseError = (error: ParseError): string =>
-  match(error)
-    .with(
-      { _tag: "InvalidCommand" },
-      (e) => `Invalid command. ${e.error.message}`,
-    )
-    .with(
-      { _tag: "InvalidDirection" },
-      (e) => `Invalid direction. ${e.error.message}`,
-    )
-    .with(
-      { _tag: "InvalidObstacle" },
-      (e) => `Invalid obstacle. ${e.error.message}`,
-    )
-    .with(
-      { _tag: "InvalidPosition" },
-      (e) => `Invalid position. ${e.error.message}`,
-    )
-    .with({ _tag: "InvalidSize" }, (e) => `Invalid size. ${e.error.message}`)
-    .exhaustive()
 
 const renderComplete = (rover: Rover): string =>
   `${rover.position.x}:${rover.position.y}:${rover.direction}`

@@ -1,4 +1,4 @@
-import { execute, executeAll } from "../version1"
+import { execute, executeAll } from "../src/version1"
 
 // TODO 1: gradually eliminate the "skip marker" and check that the test is green
 describe.skip("version 1", () => {

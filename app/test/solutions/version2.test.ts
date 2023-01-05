@@ -5,7 +5,7 @@ import {
   invalidCommand,
   invalidObstacle,
   invalidPosition,
-} from "../../solutions/version2"
+} from "../../src/solutions/version2"
 import * as E from "fp-ts/Either"
 import { tuple } from "../../utils/tuple"
 

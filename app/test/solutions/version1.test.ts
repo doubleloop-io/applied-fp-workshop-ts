@@ -1,4 +1,4 @@
-import { execute, executeAll } from "../../solutions/version1"
+import { execute, executeAll } from "../../src/solutions/version1"
 
 describe.skip("version 1", () => {
   // Planet layout

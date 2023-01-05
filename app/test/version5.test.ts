@@ -11,7 +11,7 @@ import {
   Rover,
   runApp,
   runAppWired,
-} from "../version5"
+} from "../src/version5"
 import * as TE from "fp-ts/TaskEither"
 import * as T from "fp-ts/Task"
 import { constVoid, pipe } from "fp-ts/function"

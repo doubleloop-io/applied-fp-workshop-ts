@@ -1,8 +1,27 @@
+/*
+    ## V4 - Focus on infrastructure (compose I/O operations)
+
+    Extend the pure way of work also to the infrastructural layer
+    - Read planet data from file into IO (size and obstacles)
+    - Read rover from file into IO (position and orientation)
+    - Ask and read commands from console into IO
+    - Implement an entrypoint that:
+      - orchestrate domain, infrastructure, parsing and error handling
+      - run the whole app lifted in the IO monad
+      - print final rover output to the console if everything is ok
+      - recover from any unhandled error and print it
+ */
+
+import { Tuple, unsafeParse } from "../utils/tuple"
+import { ask, logError, logInfo } from "../utils/infra-console"
 import { match } from "ts-pattern"
-import { flip, pipe } from "fp-ts/function"
+import { flip, flow, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
-import { Tuple, unsafeParse } from "../utils/tuple"
+import { Task } from "fp-ts/Task"
+import * as TE from "fp-ts/TaskEither"
+import { TaskEither } from "fp-ts/TaskEither"
+import { loadTuple } from "../utils/infra-file"
 
 type Rover = { position: Position; direction: Direction }
 type Position = { x: number; y: number }
@@ -57,7 +76,7 @@ type InvalidDirection = {
 }
 type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
 
-export const invalidSize = (e: Error): ParseError => ({
+const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",
   error: e,
 })
@@ -80,31 +99,69 @@ const invalidCommand = (e: Error): ParseError => ({
 
 // ENTRY POINT
 
-export const runApp = (
-  inputPlanet: Tuple<string, string>,
-  inputRover: Tuple<string, string>,
-  inputCommands: string,
-): Either<ParseError, string> =>
-  pipe(
-    runMission(inputPlanet, inputRover, inputCommands),
-    E.map(E.fold(renderObstacle, renderComplete)),
-  )
+// TODO 1: runMission, writeSequenceCompleted or writeObstacleDetected and
+//  then resolve any Error just by writeMissionFailed
+// HINT: runMission returns TaskEither but runApp only Task
+// HINT: combine phase normal and then removal phase
+export const runApp = (pathPlanet: string, pathRover: string): Task<void> => {
+  throw new Error("TODO")
+}
 
 const runMission = (
-  inputPlanet: Tuple<string, string>,
-  inputRover: Tuple<string, string>,
-  inputCommands: string,
-): Either<ParseError, Either<ObstacleDetected, Rover>> =>
+  pathPlanet: string,
+  pathRover: string,
+): TaskEither<Error, Either<ObstacleDetected, Rover>> =>
   pipe(
-    E.of(executeAll),
-    E.ap(parsePlanet(inputPlanet)),
-    E.ap(parseRover(inputRover)),
-    E.ap(parseCommands(inputCommands)),
+    TE.of(executeAll),
+    TE.ap(loadPlanet(pathPlanet)),
+    TE.ap(loadRover(pathRover)),
+    TE.ap(loadCommands()),
   )
+
+// INFRASTRUCTURE
+
+// NOTE: utility function to convert ParseError in Error
+const toError = (error: ParseError): Error => new Error(renderParseError(error))
+
+// TODO 2: load file as tuple (see infra-file) and then parse to a rover
+// HINT: combination phase effectful
+// HINT: align error and effect types
+export const loadPlanet = (path: string): TaskEither<Error, Planet> => {
+  throw new Error("TODO")
+}
+
+// TODO 3: load file as tuple (see infra-file) and then parse to a planet
+// HINT: combination phase effectful
+// HINT: align error and effect types
+export const loadRover = (path: string): TaskEither<Error, Rover> => {
+  throw new Error("TODO")
+}
+
+// TODO 4: ask for commands string (see infra-console) and then parse to commands
+// HINT: combination phase effectful
+// HINT: align error and effect types
+export const loadCommands = (): TaskEither<Error, Commands> => {
+  throw new Error("TODO")
+}
+
+// TODO 5: render the rover and log it as info (see infra-console)
+const writeSequenceCompleted = (rover: Rover): Task<void> => {
+  throw new Error("TODO")
+}
+
+// TODO 6: render the rover and log it as info (see infra-console)
+const writeObstacleDetected = (rover: Rover): Task<void> => {
+  throw new Error("TODO")
+}
+
+// TODO 7: render the error and log it as error (see infra-console)
+const writeMissionFailed = (error: Error): Task<void> => {
+  throw new Error("TODO")
+}
 
 // PARSING
 
-export const parseCommands = (
+const parseCommands = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Command>> =>
   E.traverseArray(parseCommand)(input.split(""))
@@ -174,6 +231,29 @@ const parseTuple = (
   E.tryCatch(() => unsafeParse(separator, input), E.toError)
 
 // RENDERING
+
+const renderError = (error: Error): string => error.message
+
+const renderParseError = (error: ParseError): string =>
+  match(error)
+    .with(
+      { _tag: "InvalidCommand" },
+      (e) => `Invalid command. ${e.error.message}`,
+    )
+    .with(
+      { _tag: "InvalidDirection" },
+      (e) => `Invalid direction. ${e.error.message}`,
+    )
+    .with(
+      { _tag: "InvalidObstacle" },
+      (e) => `Invalid obstacle. ${e.error.message}`,
+    )
+    .with(
+      { _tag: "InvalidPosition" },
+      (e) => `Invalid position. ${e.error.message}`,
+    )
+    .with({ _tag: "InvalidSize" }, (e) => `Invalid size. ${e.error.message}`)
+    .exhaustive()
 
 const renderComplete = (rover: Rover): string =>
   `${rover.position.x}:${rover.position.y}:${rover.direction}`

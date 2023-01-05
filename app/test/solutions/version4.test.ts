@@ -3,7 +3,7 @@ import {
   loadPlanet,
   loadRover,
   runApp,
-} from "../../solutions/version4"
+} from "../../src/solutions/version4"
 import * as E from "fp-ts/Either"
 import { constVoid } from "fp-ts/function"
 import { green, red } from "../../utils/infra-console"

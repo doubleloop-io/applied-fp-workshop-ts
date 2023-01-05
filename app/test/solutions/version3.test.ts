@@ -1,4 +1,4 @@
-import { invalidSize, runApp } from "../../solutions/version3"
+import { invalidSize, runApp } from "../../src/solutions/version3"
 import * as E from "fp-ts/Either"
 import { tuple } from "../../utils/tuple"
 

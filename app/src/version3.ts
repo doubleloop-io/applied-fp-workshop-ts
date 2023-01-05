@@ -1,20 +1,20 @@
 /*
-    ## V2 - Focus on boundaries (from primitive to domain types and vice versa)
+    ## V3 - More domain logic (handle obstacles w/ effects)
 
-    Our domain is declared with rich types but inputs/outputs are should be primitive types
-    - Write a parser for input planet data (size, obstacles)
-    - Write a parser for input rover data (position, orientation)
-    - Write a parser for input commands
-    - Render the final result as string: "positionX:positionY:orientation"
+    Extend the API to handle the obstacle detection logic:
+    - Implement obstacle detection before move to a new position.
+    - If the rover encounters an obstacle, rest in the same position and aborts the sequence.
+    - Render the final result as string:
+      - sequence completed: "positionX:positionY:orientation"
+      - obstacle detected: "O:positionX:positionY:orientation"
  */
 
 import { match } from "ts-pattern"
-import { pipe } from "fp-ts/function"
+import { flip, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
-import { Tuple, unsafeParse } from "./utils/tuple"
+import { Tuple, unsafeParse } from "../utils/tuple"
 
-// TODO 1: get familiar with domain types and constructors
 type Rover = { position: Position; direction: Direction }
 type Position = { x: number; y: number }
 type Direction = "N" | "E" | "W" | "S"
@@ -24,6 +24,7 @@ type Obstacle = { position: Position }
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Commands = ReadonlyArray<Command>
 type Delta = { x: number; y: number }
+type ObstacleDetected = Rover
 
 const planetCtor =
   (size: Size) =>
@@ -45,7 +46,6 @@ const obstacleCtor =
   (x: number) =>
   (y: number): Obstacle => ({ position: { x, y } })
 
-// TODO 2: get familiar with parsing types and constructors
 type ParseError =
   | InvalidSize
   | InvalidObstacle
@@ -72,119 +72,118 @@ export const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",
   error: e,
 })
-export const invalidObstacle = (e: Error): ParseError => ({
+const invalidObstacle = (e: Error): ParseError => ({
   _tag: "InvalidObstacle",
   error: e,
 })
-export const invalidPosition = (e: Error): ParseError => ({
+const invalidPosition = (e: Error): ParseError => ({
   _tag: "InvalidPosition",
   error: e,
 })
-export const invalidDirection = (e: Error): ParseError => ({
+const invalidDirection = (e: Error): ParseError => ({
   _tag: "InvalidDirection",
   error: e,
 })
-export const invalidCommand = (e: Error): ParseError => ({
+const invalidCommand = (e: Error): ParseError => ({
   _tag: "InvalidCommand",
   error: e,
 })
 
 // ENTRY POINT
 
-// TODO 3: runMission and then render final rover
-// HINT: removal phase
+// TODO 8: fix the implementation in order to consume the domain Either
+// HINT: keep the parsing Either
+// HINT: use proper renderObstacle or renderComplete to produce the final string
+// HINT: combine phase normal and then removal phase
 export const runApp = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
   inputCommands: string,
-): Either<ParseError, string> => {
-  throw new Error("TODO")
-}
+): Either<ParseError, string> =>
+  pipe(
+    runMission(inputPlanet, inputRover, inputCommands),
+    E.map(renderComplete),
+  )
 
-// TODO 4: executeAll with parsed planet, rover and commands
-// HINT: combination phase many (Applicative)
+// TODO 7: fix return type in order to propagate the domain Either
+// HINT: function implementation should not change
 const runMission = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
   inputCommands: string,
-): Either<ParseError, Rover> => {
-  throw new Error("TODO")
-}
+): Either<ParseError, Rover> =>
+  pipe(
+    E.of(executeAll),
+    E.ap(parsePlanet(inputPlanet)),
+    E.ap(parseRover(inputRover)),
+    E.ap(parseCommands(inputCommands)),
+  )
 
 // PARSING
 
-// TODO 5: parse each char in a command and combine in one result
-// HINT: combination phase list (Traversal)
-// INPUT EXAMPLE: "BFFLLR"
 export const parseCommands = (
   input: string,
-): Either<ParseError, ReadonlyArray<Command>> => {
-  throw new Error("TODO")
-}
+): Either<ParseError, ReadonlyArray<Command>> =>
+  E.traverseArray(parseCommand)(input.split(""))
 
-// TODO 6: parse string in a command or returns an error
-// HINT: creation phase
-// INPUT EXAMPLE: "B"
-const parseCommand = (input: string): Either<ParseError, Command> => {
-  throw new Error("TODO")
-}
+const parseCommand = (input: string): Either<ParseError, Command> =>
+  match(input.toLocaleUpperCase())
+    .with("R", () => E.right<ParseError, Command>("TurnRight"))
+    .with("L", () => E.right<ParseError, Command>("TurnLeft"))
+    .with("F", () => E.right<ParseError, Command>("MoveForward"))
+    .with("B", () => E.right<ParseError, Command>("MoveBackward"))
+    .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
-// TODO 7: parse the tuple in a rover
-// HINT: combine many value...what abstraction is needed?
-// INPUT EXAMPLE: ("2,0", "N")
-const parseRover = (
-  input: Tuple<string, string>,
-): Either<ParseError, Rover> => {
-  throw new Error("TODO")
-}
+const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
+  pipe(
+    E.of(roverCtor),
+    E.ap(parsePosition(input.first)),
+    E.ap(parseDirection(input.second)),
+  )
 
-// TODO 8: first parse string in a tuple and then in a position
-// HINT: combination phase normal (Functor)
-// INPUT EXAMPLE: "2,0"
-const parsePosition = (input: string): Either<ParseError, Position> => {
-  throw new Error("TODO")
-}
+const parsePosition = (input: string): Either<ParseError, Position> =>
+  pipe(
+    parseTuple(",", input),
+    E.mapLeft(invalidPosition),
+    E.map((tuple) => positionCtor(tuple.first)(tuple.second)),
+  )
 
-// TODO 9: parse string in a direction
-// HINT: creation phase
-// INPUT EXAMPLE: "N"
-const parseDirection = (input: string): Either<ParseError, Direction> => {
-  throw new Error("TODO")
-}
+const parseDirection = (input: string): Either<ParseError, Direction> =>
+  match(input.toLocaleUpperCase())
+    .with("N", () => E.right<ParseError, Direction>("N"))
+    .with("E", () => E.right<ParseError, Direction>("E"))
+    .with("W", () => E.right<ParseError, Direction>("W"))
+    .with("S", () => E.right<ParseError, Direction>("S"))
+    .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
-// TODO 10: parse tuple in a planet
-// HINT: combination phase many...what abstraction is needed?
-// INPUT EXAMPLE: ("5x4", "2,0 0,3")
 const parsePlanet = (
   input: Tuple<string, string>,
-): Either<ParseError, Planet> => {
-  throw new Error("TODO")
-}
+): Either<ParseError, Planet> =>
+  pipe(
+    E.of(planetCtor),
+    E.ap(parseSize(input.first)),
+    E.ap(parseObstacles(input.second)),
+  )
 
-// TODO 11: parse string in a size
-// HINT: combination phase normal...what abstraction is needed?
-// INPUT EXAMPLE: "5x4"
-const parseSize = (input: string): Either<ParseError, Size> => {
-  throw new Error("TODO")
-}
+const parseSize = (input: string): Either<ParseError, Size> =>
+  pipe(
+    parseTuple("x", input),
+    E.mapLeft(invalidSize),
+    E.map((tuple) => sizeCtor(tuple.first)(tuple.second)),
+  )
 
-// TODO 12: parse each string part in an obstacle
-// HINT: combination phase list...what abstraction is needed?
-// INPUT EXAMPLE: "2,0 0,3"
 const parseObstacles = (
   input: string,
-): Either<ParseError, ReadonlyArray<Obstacle>> => {
-  throw new Error("TODO")
-}
+): Either<ParseError, ReadonlyArray<Obstacle>> =>
+  E.traverseArray(parseObstacle)(input.split(" "))
 
-// TODO 13: first parse the string in a tuple and then in an obstacle
-// HINT: combination phase normal...what abstraction is needed?
-// INPUT EXAMPLE: "2,0"
-const parseObstacle = (input: string): Either<ParseError, Obstacle> => {
-  throw new Error("TODO")
-}
+const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
+  pipe(
+    parseTuple(",", input),
+    E.mapLeft(invalidObstacle),
+    E.map((tuple) => obstacleCtor(tuple.first)(tuple.second)),
+  )
 
-// NOTE: utility function to split a string in a pair of numbers
 const parseTuple = (
   separator: string,
   input: string,
@@ -193,20 +192,26 @@ const parseTuple = (
 
 // RENDERING
 
-// TODO 14: convert a rover in a string
-// OUTPUT EXAMPLE: "3:2:S"
-const renderComplete = (rover: Rover): string => {
-  throw new Error("TODO")
-}
+const renderComplete = (rover: Rover): string =>
+  `${rover.position.x}:${rover.position.y}:${rover.direction}`
+
+const renderObstacle = (rover: Rover): string =>
+  `O:${rover.position.x}:${rover.position.y}:${rover.direction}`
 
 // DOMAIN
 
+// TODO 6: fix the implementation in order to propagate the domain Either
+// HINT: lift initial value
+// HINT: combine previous execute result with the current one
+// HINT: combination phase effectful (Monad)
 const executeAll =
   (planet: Planet) =>
   (rover: Rover) =>
   (commands: Commands): Rover =>
     commands.reduce(execute(planet), rover)
 
+// TODO 5: fix the implementation in order to propagate the domain Either
+// HINT: lift pure values to align return types
 const execute =
   (planet: Planet) =>
   (rover: Rover, command: Command): Rover =>
@@ -239,11 +244,15 @@ const turnLeft = (rover: Rover): Rover => {
   return updateRover({ direction: newDirection })(rover)
 }
 
+// TODO 4: fix the implementation in order to propagate the domain Either
+// HINT: combination phase normal
 const moveForward = (planet: Planet, rover: Rover): Rover => {
   const newPosition = next(planet, rover, delta(rover.direction))
   return updateRover({ position: newPosition })(rover)
 }
 
+// TODO 3: fix the implementation in order to propagate the domain Either
+// HINT: combination phase normal
 const moveBackward = (planet: Planet, rover: Rover): Rover => {
   const newPosition = next(planet, rover, delta(opposite(rover.direction)))
   return updateRover({ position: newPosition })(rover)
@@ -267,12 +276,24 @@ const delta = (direction: Direction): Delta => {
     .exhaustive()
 }
 
+// TODO 2: change return type (follow result type) in the domain Either
+// HINT: the result should be either a Rover or ObstacleDetected
 const next = (planet: Planet, rover: Rover, delta: Delta): Position => {
   const position = rover.position
   const newX = wrap(position.x, planet.size.width, delta.x)
   const newY = wrap(position.y, planet.size.height, delta.y)
   const candidate = positionCtor(newX)(newY)
+
   return updatePosition(candidate)(position)
+  // TODO 1: remove previous line and uncomment the following to produce a domain Either
+  // HINT: get familiar with following code
+  // const hitObstacle = planet.obstacles.findIndex(
+  //   (x) => x.position.x == newX && x.position.y == newY,
+  // )
+  //
+  // return hitObstacle != -1
+  //   ? E.left(rover)
+  //   : E.right(updatePosition(candidate)(position))
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>
