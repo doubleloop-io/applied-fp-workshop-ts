@@ -20,16 +20,16 @@ import { loadTuple } from "./utils/infra-file"
 import * as O from "fp-ts/Option"
 import { Option } from "fp-ts/Option"
 
-export type Rover = { position: Position; direction: Direction }
-export type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
-type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
-export type Commands = ReadonlyArray<Command>
-type Obstacle = { position: Position }
+type Rover = { position: Position; direction: Direction }
 type Position = { x: number; y: number }
-type Size = { width: number; height: number }
-type Delta = { x: number; y: number }
 type Direction = "N" | "E" | "W" | "S"
-export type ObstacleDetected = Rover
+type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
+type Size = { width: number; height: number }
+type Obstacle = { position: Position }
+type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+type Commands = ReadonlyArray<Command>
+type Delta = { x: number; y: number }
+type ObstacleDetected = Rover
 
 const planetCtor =
   (size: Size) =>

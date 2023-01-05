@@ -16,14 +16,14 @@ import { Tuple, unsafeParse } from "./utils/tuple"
 
 // TODO 1: get familiar with domain types and constructors
 type Rover = { position: Position; direction: Direction }
+type Position = { x: number; y: number }
+type Direction = "N" | "E" | "W" | "S"
 type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
+type Size = { width: number; height: number }
+type Obstacle = { position: Position }
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Commands = ReadonlyArray<Command>
-type Obstacle = { position: Position }
-type Position = { x: number; y: number }
-type Size = { width: number; height: number }
 type Delta = { x: number; y: number }
-type Direction = "N" | "E" | "W" | "S"
 
 const planetCtor =
   (size: Size) =>

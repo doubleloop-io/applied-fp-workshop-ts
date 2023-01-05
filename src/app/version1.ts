@@ -13,11 +13,13 @@ import { match } from "ts-pattern"
 // TODO 1: Those type alias are only placeholders,
 //  use correct type definitions and feel free to add more...
 type Rover = string
+type Position = string
+type Direction = string
 type Planet = string
+type Size = string
+type Obstacle = string
 type Command = string
 type Commands = string
-type Obstacle = string
-type Direction = string
 
 // TODO 2: Execute all commands and return final rover state
 export const executeAll = (
