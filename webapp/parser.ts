@@ -37,7 +37,9 @@ const parseCommand = (input: string): Either<ParseError, Command> =>
     .with("B", () => E.right<ParseError, Command>("MoveBackward"))
     .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
-export const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
+export const parseRover = (
+  input: Tuple<string, string>,
+): Either<ParseError, Rover> =>
   pipe(
     E.of(roverCtor),
     E.ap(parsePosition(input.first)),

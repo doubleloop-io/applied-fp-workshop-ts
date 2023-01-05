@@ -11,38 +11,37 @@ export type ObstacleDetected = Rover
 
 export const planetCtor =
   (size: Size) =>
-    (obstacles: ReadonlyArray<Obstacle>): Planet => ({ size, obstacles })
+  (obstacles: ReadonlyArray<Obstacle>): Planet => ({ size, obstacles })
 
 export const roverCtor =
   (position: Position) =>
-    (direction: Direction): Rover => ({ position, direction })
+  (direction: Direction): Rover => ({ position, direction })
 
 export const positionCtor =
   (x: number) =>
-    (y: number): Position => ({ x, y })
+  (y: number): Position => ({ x, y })
 
 export const sizeCtor =
   (width: number) =>
-    (height: number): Size => ({ width, height })
+  (height: number): Size => ({ width, height })
 
 export const obstacleCtor =
   (x: number) =>
-    (y: number): Obstacle => ({ position: { x, y } })
-
+  (y: number): Obstacle => ({ position: { x, y } })
 
 export const updatePosition =
   (values: Partial<Position>) =>
-    (actual: Position): Position => ({
-      x: values.x != null ? values.x : actual.x,
-      y: values.y != null ? values.y : actual.y,
-    })
+  (actual: Position): Position => ({
+    x: values.x != null ? values.x : actual.x,
+    y: values.y != null ? values.y : actual.y,
+  })
 
 export const updateRover =
   (values: Partial<Rover>) =>
-    (actual: Rover): Rover => ({
-      position: values.position != null ? values.position : actual.position,
-      direction: values.direction != null ? values.direction : actual.direction,
-    })
+  (actual: Rover): Rover => ({
+    position: values.position != null ? values.position : actual.position,
+    direction: values.direction != null ? values.direction : actual.direction,
+  })
 
 export type ParseError =
   | InvalidSize

@@ -40,7 +40,6 @@ export const createFileMissionSource = (
     ),
 })
 
-
 interface MissionResult {
   result: string
 }
@@ -56,7 +55,9 @@ export type MissionResponse = FastifyReply<
   Mission
 >
 
-export const createRequestCommandsChannel = (params: Mission['Params']): CommandsChannel => ({
+export const createRequestCommandsChannel = (
+  params: Mission["Params"],
+): CommandsChannel => ({
   read: () =>
     pipe(params.commands, parseCommands, E.mapLeft(toError), TE.fromEither),
 })
@@ -83,4 +84,3 @@ export const createResponseMissionReport = (reply: {
     // 422 Unprocessable Entity
     pipe(renderError(error), setReply(422, reply)),
 })
-
