@@ -8,7 +8,7 @@ import * as T from "fp-ts/Task"
 import { TaskEither } from "fp-ts/TaskEither"
 import * as TE from "fp-ts/TaskEither"
 
-// TODO - 1: for each test, remove the skip marker and make it green
+// TODO  1: for each test, remove the skip marker and make it green
 describe("chaining", () => {
   type ItemId = number
   type Item = { id: ItemId; qty: number }
@@ -26,7 +26,7 @@ describe("chaining", () => {
     const load = (id: ItemId): Option<Item> => O.of(aItem)
     const save = (item: Item): Option<void> => O.of(constVoid())
 
-    // TODO - 1: write a program that load an item, check in 10 and finally save the item
+    // TODO  1: write a program that load an item, check in 10 and finally save the item
     const program: Option<void> = pipe(
       load(123),
       O.map(checkIn(10)),
@@ -39,7 +39,7 @@ describe("chaining", () => {
     const load = (id: ItemId): Either<Error, Item> => E.of(aItem)
     const save = (item: Item): Either<Error, Item> => E.of(item)
 
-    // TODO - 2: write a program that load an item, check in 10 and finally save the item
+    // TODO  2: write a program that load an item, check in 10 and finally save the item
     const program: Either<Error, Item> = pipe(
       load(123),
       E.map(checkIn(10)),
@@ -51,7 +51,7 @@ describe("chaining", () => {
     const load = (id: ItemId): Task<Item> => T.of(aItem)
     const save = (item: Item): Task<Item> => T.of(item)
 
-    // TODO - 3: write a program that load an item, check in 10 and finally save the item
+    // TODO  3: write a program that load an item, check in 10 and finally save the item
     const program: Task<Item> = pipe(
       load(123),
       T.map(checkIn(10)),
@@ -64,7 +64,7 @@ describe("chaining", () => {
     const load = (id: ItemId): TaskEither<Error, Item> => TE.of(aItem)
     const save = (item: Item): TaskEither<Error, Item> => TE.of(item)
 
-    // TODO - 4: write a program that load an item, check in 10 and finally save the item
+    // TODO  4: write a program that load an item, check in 10 and finally save the item
     const program: TaskEither<Error, Item> = pipe(
       load(123),
       TE.map(checkIn(10)),

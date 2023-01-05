@@ -106,13 +106,9 @@ const runMission = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
   inputCommands: string,
-): Either<ParseError, Rover> =>
-  pipe(
-    E.of(executeAll),
-    E.ap(parsePlanet(inputPlanet)),
-    E.ap(parseRover(inputRover)),
-    E.ap(parseCommands(inputCommands)),
-  )
+): Either<ParseError, Rover> => {
+  throw new Error("TODO")
+}
 
 // PARSING
 

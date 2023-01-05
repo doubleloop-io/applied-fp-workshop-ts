@@ -9,7 +9,7 @@ import {
 import * as E from "fp-ts/Either"
 import { tuple } from "../utils/tuple"
 
-// TODO - 1: remove the skip marker
+// TODO 1: remove the skip marker and check that all tests are green
 describe.skip("version 2", () => {
   test("go to opposite angle", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")

@@ -3,7 +3,7 @@ import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 import * as A from "fp-ts/Array"
 
-// TODO - 1: for each test, remove the skip marker and make it green
+// TODO  1: for each test, remove the skip marker and make it green
 describe("combination phase - list", () => {
   type Item = {
     qty: number
@@ -18,7 +18,7 @@ describe("combination phase - list", () => {
     const values = ["1", "10", "100"]
     const result = pipe(
       values,
-      // TODO - 2: map over values and create items
+      // TODO  2: map over values and create items
     )
 
     expect(result).toStrictEqual([
@@ -32,7 +32,7 @@ describe("combination phase - list", () => {
     const values = ["1", "asd", "100"]
     const result = pipe(
       values,
-      // TODO - 3: map over values and create items
+      // TODO  3: map over values and create items
     )
 
     expect(result).toStrictEqual([
@@ -46,7 +46,7 @@ describe("combination phase - list", () => {
     const values = ["1", "10", "100"]
     const result = pipe(values, O.traverseArray(createItem))
 
-    // TODO - 4: change expectation
+    // TODO  4: change expectation
     expect(result).toStrictEqual(null)
   })
 
@@ -54,7 +54,7 @@ describe("combination phase - list", () => {
     const values = ["1", "asd", "100"]
     const result = pipe(values, O.traverseArray(createItem))
 
-    // TODO - 5: change expectation
+    // TODO  5: change expectation
     expect(result).toStrictEqual(null)
   })
 })
