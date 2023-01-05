@@ -58,4 +58,3 @@ const moveBackward = (planet: Planet, rover: Rover): Rover => {
 // NOTE: utility function for the pacman effect
 const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit
-

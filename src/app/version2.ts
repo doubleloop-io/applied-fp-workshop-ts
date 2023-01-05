@@ -132,7 +132,9 @@ const parseCommand = (input: string): Either<ParseError, Command> => {
 // TODO 7: parse the tuple in a rover
 // HINT: combine many value...what abstraction is needed?
 // INPUT EXAMPLE: ("2,0", "N")
-const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> => {
+const parseRover = (
+  input: Tuple<string, string>,
+): Either<ParseError, Rover> => {
   throw new Error("TODO")
 }
 

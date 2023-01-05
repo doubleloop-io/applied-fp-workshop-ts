@@ -206,21 +206,21 @@ const renderObstacle = (rover: Rover): string =>
 // HINT: combination phase effectful (Monad)
 const executeAll =
   (planet: Planet) =>
-    (rover: Rover) =>
-      (commands: Commands): Rover =>
-        commands.reduce(execute(planet), rover)
+  (rover: Rover) =>
+  (commands: Commands): Rover =>
+    commands.reduce(execute(planet), rover)
 
 // TODO 5: fix the implementation in order to propagate the domain Either
 // HINT: lift pure values to align return types
 const execute =
   (planet: Planet) =>
-    (rover: Rover, command: Command): Rover =>
-      match(command)
-        .with("TurnRight", () => turnRight(rover))
-        .with("TurnLeft", () => turnLeft(rover))
-        .with("MoveForward", () => moveForward(planet, rover))
-        .with("MoveBackward", () => moveBackward(planet, rover))
-        .exhaustive()
+  (rover: Rover, command: Command): Rover =>
+    match(command)
+      .with("TurnRight", () => turnRight(rover))
+      .with("TurnLeft", () => turnLeft(rover))
+      .with("MoveForward", () => moveForward(planet, rover))
+      .with("MoveBackward", () => moveBackward(planet, rover))
+      .exhaustive()
 
 const turnRight = (rover: Rover): Rover => {
   const newDirection = match(rover.direction)
@@ -278,11 +278,7 @@ const delta = (direction: Direction): Delta => {
 
 // TODO 2: change return type (follow result type) in the domain Either
 // HINT: the result should be either a Rover or ObstacleDetected
-const next = (
-  planet: Planet,
-  rover: Rover,
-  delta: Delta,
-): Position => {
+const next = (planet: Planet, rover: Rover, delta: Delta): Position => {
   const position = rover.position
   const newX = wrap(position.x, planet.size.width, delta.x)
   const newY = wrap(position.y, planet.size.height, delta.y)

@@ -12,11 +12,11 @@ import {
   RoverReader,
   runApp,
   runAppWired,
-} from "../../solutions/version5"
+} from "../version5"
 import * as TE from "fp-ts/TaskEither"
 import * as T from "fp-ts/Task"
 import { constVoid, pipe } from "fp-ts/function"
-import { green } from "../../utils/infra-console"
+import { green } from "../utils/infra-console"
 import * as IR from "fp-ts/IORef"
 import { IORef } from "fp-ts/IORef"
 
@@ -30,7 +30,9 @@ jest.mock("readline", () => ({
   }),
 }))
 
+// TODO 1: remove the skip marker and check that all tests are green
 describe.skip("version 5", () => {
+  // TODO 2: get familiar with stubs implementations
   const createPlanetReader = (planet: Planet): PlanetReader => ({
     read: () => TE.of(planet),
   })
@@ -51,6 +53,7 @@ describe.skip("version 5", () => {
       T.fromIO(output.write(`[ERROR] ${renderError(error)}`)),
   })
 
+  // TODO 3: get familiar with wired app for testing
   const runTestApp = async (
     planet: Planet,
     rover: Rover,
@@ -75,6 +78,7 @@ describe.skip("version 5", () => {
     return await run()
   }
 
+  // TODO 4: test completely run in memory
   test("go to opposite angle", async () => {
     const result = await runTestApp(
       {
@@ -126,6 +130,7 @@ describe.skip("version 5", () => {
       consoleLogSpy.mockRestore()
     })
 
+    // TODO 5: test with real infrastructure are still possible via runAppWired
     test("hit an obstacle (integration test)", async () => {
       stdinCommands = "RFF"
       const run = runAppWired("data/planet.txt", "data/rover.txt")
