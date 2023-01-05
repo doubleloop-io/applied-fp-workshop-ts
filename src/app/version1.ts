@@ -1,11 +1,13 @@
 /*
     ## V1 - Focus on the center (pure domain logic)
+
     Develop an API (types and functions) that executes commands:
     - Implement all commands logic.
     - Commands are sent in batch and executed sequentially.
     - The planet grid has a wrapping effect from one edge to another (pacman).
     - For now, ignore obstacle detection logic
  */
+
 import { match } from "ts-pattern"
 
 // TODO 1: Those type alias are only placeholders,
@@ -26,7 +28,7 @@ export const executeAll = (
   throw new Error("TODO")
 }
 
-// TODO 3: Dispatch one command to a specific function
+// TODO 3: Dispatch each command to the specific function
 export const execute =
   (planet: Planet) =>
   (rover: Rover, command: Command): Rover => {

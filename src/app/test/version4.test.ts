@@ -1,15 +1,9 @@
-import {
-  loadCommands,
-  loadPlanet,
-  loadRover,
-  runApp,
-} from "../../solutions/version4"
+import { loadCommands, loadPlanet, loadRover, runApp } from "../version4"
 import * as E from "fp-ts/Either"
 import { constVoid } from "fp-ts/function"
-import { green, red } from "../../utils/infra-console"
+import { green, red } from "../utils/infra-console"
 
 let stdinCommands = ""
-
 jest.mock("readline", () => ({
   createInterface: jest.fn().mockReturnValue({
     question: jest
@@ -19,7 +13,8 @@ jest.mock("readline", () => ({
   }),
 }))
 
-describe.skip("version 4", () => {
+// TODO 1: for each test, remove the skip marker and make it green
+describe("version 4", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let consoleLogSpy: any
   const lastStdout = () => consoleLogSpy.mock.calls[1][0]
@@ -32,7 +27,7 @@ describe.skip("version 4", () => {
     consoleLogSpy.mockRestore()
   })
 
-  test("load planet (integration test)", async () => {
+  test.skip("load planet (integration test)", async () => {
     const load = loadPlanet("data/planet.txt")
 
     const result = await load()
@@ -45,7 +40,7 @@ describe.skip("version 4", () => {
     )
   })
 
-  test("load rover (integration test)", async () => {
+  test.skip("load rover (integration test)", async () => {
     const load = loadRover("data/rover.txt")
 
     const result = await load()
@@ -58,7 +53,7 @@ describe.skip("version 4", () => {
     )
   })
 
-  test("load commands (integration test)", async () => {
+  test.skip("load commands (integration test)", async () => {
     stdinCommands = "RBB"
     const load = loadCommands()
 
@@ -69,7 +64,7 @@ describe.skip("version 4", () => {
     )
   })
 
-  test("go to opposite angle (integration test)", async () => {
+  test.skip("go to opposite angle (integration test)", async () => {
     stdinCommands = "RBBLBRF"
     const run = runApp("data/planet.txt", "data/rover.txt")
 
@@ -79,7 +74,7 @@ describe.skip("version 4", () => {
     expect(lastStdout()).toStrictEqual(green("[OK] 4:3:E"))
   })
 
-  test("hit an obstacle (integration test)", async () => {
+  test.skip("hit an obstacle (integration test)", async () => {
     stdinCommands = "RFF"
     const run = runApp("data/planet.txt", "data/rover.txt")
 
@@ -89,7 +84,7 @@ describe.skip("version 4", () => {
     expect(lastStdout()).toStrictEqual(green("[OK] O:1:0:E"))
   })
 
-  test("planet file contains invalid size (integration test)", async () => {
+  test.skip("planet file contains invalid size (integration test)", async () => {
     const run = runApp("data/planet_invalid_size.txt", "data/rover.txt")
 
     const result = await run()
@@ -98,7 +93,7 @@ describe.skip("version 4", () => {
     expect(lastStdout()).toStrictEqual(red("[ERROR] Invalid size. Input: ax4"))
   })
 
-  test("invalid planet file content (integration test)", async () => {
+  test.skip("invalid planet file content (integration test)", async () => {
     const run = runApp("data/planet_invalid_content.txt", "data/rover.txt")
 
     const result = await run()

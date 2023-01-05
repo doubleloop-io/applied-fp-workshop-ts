@@ -1,6 +1,6 @@
 import { execute, executeAll } from "../version1"
 
-// TODO  1: for each test, remove the skip marker and make it green
+// TODO 1: for each test, remove the skip marker and make it green
 describe("version 1", () => {
   // Planet layout
   // +-----+-----+-----+-----+-----+

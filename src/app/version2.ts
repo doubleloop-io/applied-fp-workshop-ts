@@ -1,5 +1,6 @@
 /*
     ## V2 - Focus on boundaries (from primitive to domain types and viceversa)
+
     Our domain is declared with rich types but inputs/outputs are should be primitive types
     - Write a parser for input planet data (size, obstacles)
     - Write a parser for input rover data (position, orientation)
