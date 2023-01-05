@@ -13,12 +13,13 @@ import {
   reportObstacleDetected,
   reportSequenceCompleted,
   update,
-} from "../../solutions/version6"
-import { tuple } from "../../utils/tuple"
+} from "../version6"
+import { tuple } from "../utils/tuple"
 import * as O from "fp-ts/Option"
 
+// TODO 1: for each test, remove the skip marker and make it green
 describe.skip("version 6", () => {
-  test("load mission data", () => {
+  test.skip("load mission data", () => {
     const result = init("planet-file", "rover-file")()
 
     expect(result).toStrictEqual(
@@ -26,7 +27,7 @@ describe.skip("version 6", () => {
     )
   })
 
-  test("load mission successful", () => {
+  test.skip("load mission successful", () => {
     const planet = { size: { width: 5, height: 5 }, obstacles: [] }
     const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
 
@@ -35,7 +36,7 @@ describe.skip("version 6", () => {
     expect(result).toStrictEqual(tuple(appReady(planet, rover), askCommands()))
   })
 
-  test("load mission failed", () => {
+  test.skip("load mission failed", () => {
     const result = update(appLoading(), loadMissionFailed(new Error("any")))
 
     expect(result).toStrictEqual(
@@ -43,7 +44,7 @@ describe.skip("version 6", () => {
     )
   })
 
-  test("all commands executed", () => {
+  test.skip("all commands executed", () => {
     const planet = { size: { width: 5, height: 5 }, obstacles: [] }
     const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
 
@@ -61,7 +62,7 @@ describe.skip("version 6", () => {
     )
   })
 
-  test("hit obstacle", () => {
+  test.skip("hit obstacle", () => {
     const planet = {
       size: { width: 5, height: 5 },
       obstacles: [{ position: { x: 0, y: 2 } }],
@@ -82,8 +83,8 @@ describe.skip("version 6", () => {
     )
   })
 
-  describe("infrastructure tests", () => {
-    test("load planet (integration test)", async () => {
+  describe.skip("infrastructure tests", () => {
+    test.skip("load planet (integration test)", async () => {
       const load = infrastructure(
         loadMission("data/planet.txt", "data/rover.txt"),
       )

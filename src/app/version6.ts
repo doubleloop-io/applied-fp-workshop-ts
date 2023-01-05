@@ -1,5 +1,13 @@
-import { tuple, Tuple, unsafeParse } from "../utils/tuple"
-import { ask, logError, logInfo } from "../utils/infra-console"
+/*
+    ## V6 (bonus iteration) - Testability via values (Elm-ish architectural style)
+
+    Use values to obtain a strong and simple separation between domain and infrastructure logic
+    - implement init, update and test them without infrastructure and mocks
+    - implement infrastructure and test it with integration tests
+ */
+
+import { tuple, Tuple, unsafeParse } from "./utils/tuple"
+import { ask, logError, logInfo } from "./utils/infra-console"
 import { match } from "ts-pattern"
 import { constVoid, flip, flow, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
@@ -8,7 +16,7 @@ import * as T from "fp-ts/Task"
 import { Task } from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
 import { TaskEither } from "fp-ts/TaskEither"
-import { loadTuple } from "../utils/infra-file"
+import { loadTuple } from "./utils/infra-file"
 import * as O from "fp-ts/Option"
 import { Option } from "fp-ts/Option"
 
@@ -88,6 +96,10 @@ const invalidCommand = (e: Error): ParseError => ({
 
 // ELM ARCHITECTURE
 
+// NOTE: Domain and Infrastructure "talks" to each other with values
+
+// TODO 1: get familiar with following types and constructors
+// HINT: All possible discrete application states
 type AppState = AppLoading | AppReady | AppFailed
 type AppLoading = { readonly _tag: "AppLoading" }
 type AppReady = {
@@ -107,6 +119,8 @@ export const appReady = (planet: Planet, rover: Rover): AppState => ({
 })
 export const appFailed = (): AppState => ({ _tag: "AppFailed" })
 
+// TODO 2: get familiar with following types and constructors
+// HINT: Effects represent something the infrastructure has to do (Domain => Infrastructure)
 type Effect =
   | LoadMissionEffect
   | AskCommandsEffect
@@ -154,6 +168,8 @@ export const reportError = (error: Error): Effect => ({
   error,
 })
 
+// TODO 3: get familiar with following types and constructors
+// HINT: Events represent something that happened in the infrastructure (Infrastructure => Domain)
 type Event =
   | LoadMissionSuccessfulEvent
   | LoadMissionFailedEvent
@@ -186,6 +202,8 @@ export const commandsReceived = (commands: Commands): Event => ({
   commands,
 })
 
+// TODO 4: get familiar with following function
+// HINT: it is the "runtime" loop that dispatch effects/events between domain and infrastructure
 const start = <M, EV, EF>(
   init: () => Tuple<M, EF>,
   update: (model: M, event: EV) => Tuple<M, EF>,
@@ -211,12 +229,16 @@ const start = <M, EV, EF>(
   return loop(iniModel, initEffect)
 }
 
+// NOTE: utility functions to signal the desire to continue or stop the "runtime" loop
 const keepGoing = (ev: Event): Option<Event> => O.some(ev)
 const stop = (_: void): Option<Event> => O.none
 
+// TODO 5: create a tuple appLoading and loadMission
+// HINT: use just plain old functions
 export const init =
-  (pathPlanet: string, pathRover: string) => (): Tuple<AppState, Effect> =>
-    tuple(appLoading(), loadMission(pathPlanet, pathRover))
+  (pathPlanet: string, pathRover: string) => (): Tuple<AppState, Effect> => {
+    throw new Error("TODO")
+  }
 
 export const update = (
   model: AppState,
@@ -225,39 +247,38 @@ export const update = (
   match<[AppState, Event], Tuple<AppState, Effect>>([model, event])
     .with(
       [{ _tag: "AppLoading" }, { _tag: "LoadMissionSuccessfulEvent" }],
-      ([_, ev]) => tuple(appReady(ev.planet, ev.rover), askCommands()),
+      // TODO 6: create a tuple appReady and askCommands
+      ([_, ev]) => {
+        throw new Error("TODO")
+      },
     )
     .with(
       [{ _tag: "AppLoading" }, { _tag: "LoadMissionFailedEvent" }],
-      ([_, ev]) => tuple(appFailed(), reportError(ev.error)),
+      // TODO 7: create a tuple appFailed and reportError
+      ([_, ev]) => {
+        throw new Error("TODO")
+      },
     )
     .with(
       [{ _tag: "AppReady" }, { _tag: "CommandsReceivedEvent" }],
-      ([m, ev]) =>
-        pipe(
-          executeAll(m.planet)(m.rover)(ev.commands),
-          E.fold(
-            (ob) => tuple(appReady(m.planet, ob), reportObstacleDetected(ob)),
-            (r) => tuple(appReady(m.planet, r), reportSequenceCompleted(r)),
-          ),
-        ),
+      // TODO 8: create a tuple appReady and reportObstacleDetected or reportSequenceCompleted
+      ([m, ev]) => {
+        throw new Error("TODO")
+      },
     )
-    .otherwise(() =>
-      tuple(
-        appFailed(),
-        reportError(
-          new Error(`Cannot handle ${event} event in ${model} state.`),
-        ),
-      ),
-    )
+    .otherwise(() => {
+      // TODO 9: create a tuple appFailed and reportError (we are in unknown/invalid state)
+      throw new Error("TODO")
+    })
 
+// TODO 10: get familiar with following dispatch function
 export const infrastructure = (effect: Effect): Task<Option<Event>> => {
   return match(effect)
     .with({ _tag: "LoadMissionEffect" }, (eff) => {
       const loadMission =
         (p: Planet) =>
-        (r: Rover): Event =>
-          loadMissionSuccessful(p, r)
+          (r: Rover): Event =>
+            loadMissionSuccessful(p, r)
 
       return pipe(
         pipe(
@@ -291,6 +312,8 @@ export const infrastructure = (effect: Effect): Task<Option<Event>> => {
 
 // ENTRY POINT
 
+// TODO 11: get familiar with following function
+// HINT: wire together init, update and infrastructure and start the "runtime" loop
 const runApp = (pathPlanet: string, pathRover: string): Task<void> =>
   start(init(pathPlanet, pathRover), update, infrastructure)
 

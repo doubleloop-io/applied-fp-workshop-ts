@@ -11,7 +11,7 @@ import { tuple } from "../utils/tuple"
 
 // TODO 1: remove the skip marker and check that all tests are green
 describe.skip("version 2", () => {
-  test("go to opposite angle", () => {
+  test.skip("go to opposite angle", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
@@ -21,7 +21,7 @@ describe.skip("version 2", () => {
     expect(result).toStrictEqual(E.right("4:3:E"))
   })
 
-  test("invalid planet size", () => {
+  test.skip("invalid planet size", () => {
     const planet = tuple("ax4", "2,0 0,3 3,2")
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
@@ -31,7 +31,7 @@ describe.skip("version 2", () => {
     expect(result).toStrictEqual(E.left(invalidSize(new Error("Input: ax4"))))
   })
 
-  test("invalid planet obstacle", () => {
+  test.skip("invalid planet obstacle", () => {
     const planet = tuple("5x4", "2,0 03 3,2")
     const rover = tuple("0,0", "N")
     const commands = "RBBLBRF"
@@ -43,7 +43,7 @@ describe.skip("version 2", () => {
     )
   })
 
-  test("invalid rover position", () => {
+  test.skip("invalid rover position", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")
     const rover = tuple("asd", "N")
     const commands = "RBBLBRF"
@@ -55,7 +55,7 @@ describe.skip("version 2", () => {
     )
   })
 
-  test("invalid rover direction", () => {
+  test.skip("invalid rover direction", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")
     const rover = tuple("0,0", "X")
     const commands = "RBBLBRF"
@@ -67,7 +67,7 @@ describe.skip("version 2", () => {
     )
   })
 
-  test("invalid command", () => {
+  test.skip("invalid command", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")
     const rover = tuple("0,0", "N")
     const commands = "RBBGBRF"

@@ -53,7 +53,6 @@ describe.skip("version 5", () => {
       T.fromIO(output.write(`[ERROR] ${renderError(error)}`)),
   })
 
-  // TODO 3: get familiar with wired app for testing
   const runTestApp = async (
     planet: Planet,
     rover: Rover,
@@ -78,8 +77,9 @@ describe.skip("version 5", () => {
     return await run()
   }
 
-  // TODO 4: test completely run in memory
-  test("go to opposite angle", async () => {
+  // TODO 3: get familiar with wired app for testing
+  // HINT: test completely run in memory thanks to runTestApp function
+  test.skip("go to opposite angle", async () => {
     const result = await runTestApp(
       {
         size: { width: 5, height: 4 },
@@ -102,7 +102,7 @@ describe.skip("version 5", () => {
     expect(result).toStrictEqual("[OK] 4:3:E")
   })
 
-  test("hit an obstacle", async () => {
+  test.skip("hit an obstacle", async () => {
     const result = await runTestApp(
       {
         size: { width: 5, height: 4 },
@@ -117,7 +117,7 @@ describe.skip("version 5", () => {
     expect(result).toStrictEqual("[OK] O:1:0:E")
   })
 
-  describe("wired app (integration tests)", () => {
+  describe.skip("wired app (integration tests)", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let consoleLogSpy: any
     const lastStdout = () => consoleLogSpy.mock.calls[1][0]
@@ -131,7 +131,7 @@ describe.skip("version 5", () => {
     })
 
     // TODO 5: test with real infrastructure are still possible via runAppWired
-    test("hit an obstacle (integration test)", async () => {
+    test.skip("hit an obstacle (integration test)", async () => {
       stdinCommands = "RFF"
       const run = runAppWired("data/planet.txt", "data/rover.txt")
 
