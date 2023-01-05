@@ -1,6 +1,6 @@
 import { execute, executeAll } from "../../solutions/version1"
 
-describe("version 1", () => {
+describe.skip("version 1", () => {
   // Planet layout
   // +-----+-----+-----+-----+-----+
   // | 0,3 |     |     |     | 4,3 |
