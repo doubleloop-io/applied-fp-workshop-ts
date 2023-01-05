@@ -1,5 +1,3 @@
-// PARSING
-
 import { Either } from "fp-ts/Either"
 import * as E from "fp-ts/Either"
 import { match } from "ts-pattern"

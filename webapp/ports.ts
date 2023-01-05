@@ -1,5 +1,3 @@
-// PORTS
-
 import { TaskEither } from "fp-ts/TaskEither"
 import { Task } from "fp-ts/Task"
 import { ObstacleDetected, Planet, Rover, Command } from "./core"

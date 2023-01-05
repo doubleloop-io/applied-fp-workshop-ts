@@ -2,7 +2,9 @@ import Fastify from "fastify"
 import {
   createFileMissionSource,
   createRequestCommandsChannel,
-  createStdoutMissionReport,
+  createResponseMissionReport,
+  MissionRequest,
+  MissionResponse,
 } from "./adapterts"
 import { runApp } from "./handler"
 
@@ -13,27 +15,26 @@ const fastify = Fastify({
 const pathPlanet = "data/planet.txt"
 const pathRover = "data/rover.txt"
 
-interface RoverParams {
-  commands: string
-}
+fastify.get(
+  "/rover/:commands",
+  async (request: MissionRequest, reply: MissionResponse) => {
+    const missionSource = createFileMissionSource(pathPlanet, pathRover)
+    const commandsSource = createRequestCommandsChannel(request.params)
+    const report = { code: 200, result: "" }
+    const missionReport = createResponseMissionReport(report)
 
-fastify.get<{
-  Params: RoverParams
-}>("/rover/:commands", async (request, reply) => {
-  const missionSource = createFileMissionSource(pathPlanet, pathRover)
-  const commandsSource = createRequestCommandsChannel(request.params)
-  // TODO: mission report from reply
-  const missionReport = createStdoutMissionReport()
+    const app = runApp(missionSource, commandsSource, missionReport)
+    await app()
 
-  const app = runApp(missionSource, commandsSource, missionReport)
-  await app()
-  reply.type("application/json").code(200)
-  return { hello: "world" }
-})
+    return reply
+      .type("application/json")
+      .code(report.code)
+      .send({ result: report.result })
+  },
+)
 
-fastify.get("/", async (request, reply) => {
-  reply.type("application/json").code(200)
-  return { hello: "world" }
+fastify.get("/", (request, reply) => {
+  reply.send("hello world")
 })
 
 fastify.listen({ port: 8080 }, (err, address) => {
@@ -41,5 +42,8 @@ fastify.listen({ port: 8080 }, (err, address) => {
     console.error(err)
     process.exit(1)
   }
-  console.log(`Server listening at ${address}/rover/RFF`)
+  console.log(`Server listening at ${address}`)
+  console.log(`Try sequence completed ${address}/rover/RBBLBRF`)
+  console.log(`Try hit an obstacle ${address}/rover/RFF`)
+  console.log(`Try invalid commands ${address}/rover/RBXL`)
 })

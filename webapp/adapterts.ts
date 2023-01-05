@@ -1,61 +1,86 @@
-// ADAPTERS
-
 import { CommandsChannel, MissionReport, MissionSource } from "./ports"
-import { TaskEither } from "fp-ts/TaskEither"
-import { flow, pipe } from "fp-ts/function"
-import { loadTuple } from "../app/utils/infra-file"
 import * as TE from "fp-ts/TaskEither"
+import * as T from "fp-ts/Task"
+import { constVoid, flow, pipe } from "fp-ts/function"
+import { loadTuple } from "../app/utils/infra-file"
 import * as E from "fp-ts/Either"
-import { logError, logInfo } from "../app/utils/infra-console"
 import { Task } from "fp-ts/Task"
-import { Planet, Rover, ParseError } from "./core"
+import { ParseError, Rover } from "./core"
 import {
   renderComplete,
   renderError,
   renderObstacle,
   renderParseError,
 } from "./rendering"
-import { parsePlanet, parseRover, parseCommands } from "./parser"
+import { parseCommands, parsePlanet, parseRover } from "./parser"
+import {
+  FastifyReply,
+  FastifyRequest,
+  RawReplyDefaultExpression,
+  RawRequestDefaultExpression,
+  RawServerDefault,
+} from "fastify"
+import { RouteGenericInterface } from "fastify/types/route"
+
+const toError = (error: ParseError): Error => new Error(renderParseError(error))
 
 export const createFileMissionSource = (
   pathPlanet: string,
   pathRover: string,
 ): MissionSource => ({
-  readPlanet: () => loadPlanet(pathPlanet),
-  readRover: () => loadRover(pathRover),
+  readPlanet: () =>
+    pipe(
+      loadTuple(pathPlanet),
+      TE.chain(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
+    ),
+  readRover: () =>
+    pipe(
+      loadTuple(pathRover),
+      TE.chain(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
+    ),
 })
 
-export const createRequestCommandsChannel = (params: {
-  commands: string
-}): CommandsChannel => ({
+
+interface MissionResult {
+  result: string
+}
+interface Mission extends RouteGenericInterface {
+  Params: { commands: string }
+  Reply: MissionResult // put the response payload interface here
+}
+export type MissionRequest = FastifyRequest<Mission>
+export type MissionResponse = FastifyReply<
+  RawServerDefault,
+  RawRequestDefaultExpression,
+  RawReplyDefaultExpression,
+  Mission
+>
+
+export const createRequestCommandsChannel = (params: Mission['Params']): CommandsChannel => ({
   read: () =>
     pipe(params.commands, parseCommands, E.mapLeft(toError), TE.fromEither),
 })
-export const createStdoutMissionReport = (): MissionReport => ({
-  sequenceCompleted: writeSequenceCompleted,
-  obstacleDetected: writeObstacleDetected,
-  missionFailed: writeError,
+
+const setReply =
+  (code: number, reply: { code: number; result: string }) =>
+  (result: string) => {
+    reply.code = code
+    reply.result = result
+    return T.of(constVoid())
+  }
+
+export const createResponseMissionReport = (reply: {
+  code: number
+  result: string
+}): MissionReport => ({
+  sequenceCompleted: (rover: Rover): Task<void> =>
+    // 200 OK
+    pipe(renderComplete(rover), setReply(200, reply)),
+  obstacleDetected: (rover: Rover): Task<void> =>
+    // 200 OK
+    pipe(renderObstacle(rover), setReply(200, reply)),
+  missionFailed: (error: Error): Task<void> =>
+    // 422 Unprocessable Entity
+    pipe(renderError(error), setReply(422, reply)),
 })
 
-const toError = (error: ParseError): Error => new Error(renderParseError(error))
-
-export const loadPlanet = (path: string): TaskEither<Error, Planet> =>
-  pipe(
-    loadTuple(path),
-    TE.chain(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
-  )
-
-export const loadRover = (path: string): TaskEither<Error, Rover> =>
-  pipe(
-    loadTuple(path),
-    TE.chain(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
-  )
-
-export const writeSequenceCompleted = (rover: Rover): Task<void> =>
-  pipe(renderComplete(rover), logInfo)
-
-export const writeObstacleDetected = (rover: Rover): Task<void> =>
-  pipe(renderObstacle(rover), logInfo)
-
-export const writeError = (error: Error): Task<void> =>
-  pipe(renderError(error), logError)

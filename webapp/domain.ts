@@ -1,5 +1,3 @@
-// DOMAIN
-
 import { Either } from "fp-ts/Either"
 import { flip, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"

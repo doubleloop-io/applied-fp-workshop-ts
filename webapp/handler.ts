@@ -1,4 +1,3 @@
-// ENTRY POINT
 import { Task } from "fp-ts/Task"
 import { pipe } from "fp-ts/function"
 import * as TE from "fp-ts/TaskEither"

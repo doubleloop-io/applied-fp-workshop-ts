@@ -1,5 +1,3 @@
-// RENDERING
-
 import { match } from "ts-pattern"
 import { ParseError, Rover } from "./core"
 
