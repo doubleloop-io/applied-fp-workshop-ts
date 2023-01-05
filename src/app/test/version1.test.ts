@@ -1,6 +1,6 @@
 import { execute, executeAll } from "../version1"
 
-// TODO 1: for each test, remove the skip marker and make it green
+// TODO 1: gradually eliminate the "skip marker" and check that the test is green
 describe.skip("version 1", () => {
   // Planet layout
   // +-----+-----+-----+-----+-----+
