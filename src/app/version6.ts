@@ -277,8 +277,8 @@ export const infrastructure = (effect: Effect): Task<Option<Event>> => {
     .with({ _tag: "LoadMissionEffect" }, (eff) => {
       const loadMission =
         (p: Planet) =>
-          (r: Rover): Event =>
-            loadMissionSuccessful(p, r)
+        (r: Rover): Event =>
+          loadMissionSuccessful(p, r)
 
       return pipe(
         pipe(

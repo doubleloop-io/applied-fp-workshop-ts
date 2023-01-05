@@ -86,16 +86,14 @@ const invalidCommand = (e: Error): ParseError => ({
 // PORTS
 
 // TODO 1: get familiar with the following types
-export type PlanetReader = {
-  read: () => TaskEither<Error, Planet>
+export type MissionSource = {
+  readPlanet: () => TaskEither<Error, Planet>
+  readRover: () => TaskEither<Error, Rover>
 }
-export type RoverReader = {
-  read: () => TaskEither<Error, Rover>
-}
-export type CommandsReader = {
+export type CommandsChannel = {
   read: () => TaskEither<Error, ReadonlyArray<Command>>
 }
-export type DisplayWriter = {
+export type MissionReport = {
   sequenceCompleted: (_: Rover) => Task<void>
   obstacleDetected: (_: ObstacleDetected) => Task<void>
   missionFailed: (_: Error) => Task<void>
@@ -103,25 +101,26 @@ export type DisplayWriter = {
 
 // ADAPTERS
 
-const createFilePlanetReader = (pathPlanet: string): PlanetReader => ({
+const createFileMissionSource = (
+  pathPlanet: string,
+  pathRover: string,
+): MissionSource => ({
   // TODO 2: implement with loadPlanet
-  read: () => {
+  readPlanet: () => {
     throw new Error("TODO")
   },
-})
-const createFileRoverReader = (pathRover: string): RoverReader => ({
   // TODO 3: implement with loadRover
-  read: () => {
+  readRover: () => {
     throw new Error("TODO")
   },
 })
-const createStdinCommandsReader = (): CommandsReader => ({
+const createStdinCommandsChannel = (): CommandsChannel => ({
   // TODO 4: implement with loadCommands
   read: () => {
     throw new Error("TODO")
   },
 })
-const createStdoutDisplayWriter = (): DisplayWriter => ({
+const createStdoutMissionReport = (): MissionReport => ({
   // TODO 5: implement with writeSequenceCompleted
   sequenceCompleted: (rover: Rover) => {
     throw new Error("TODO")
@@ -142,41 +141,38 @@ export const runAppWired = (
   pathRover: string,
 ): Task<void> =>
   runApp(
-    createFilePlanetReader(pathPlanet),
-    createFileRoverReader(pathRover),
-    createStdinCommandsReader(),
-    createStdoutDisplayWriter(),
+    createFileMissionSource(pathPlanet, pathRover),
+    createStdinCommandsChannel(),
+    createStdoutMissionReport(),
   )
 
 // TODO 8: get familiar with injected function
 // HINT: dependencies are normal parameters
 export const runApp = (
-  planetReader: PlanetReader,
-  roverReader: RoverReader,
-  commandsReader: CommandsReader,
-  displayWriter: DisplayWriter,
+  missionSource: MissionSource,
+  commandsChannel: CommandsChannel,
+  missionReport: MissionReport,
 ): Task<void> =>
   // TODO 9: compare with version4 implementation
   pipe(
-    runMission(planetReader, roverReader, commandsReader),
+    runMission(missionSource, commandsChannel),
     TE.map(
-      E.fold(displayWriter.obstacleDetected, displayWriter.sequenceCompleted),
+      E.fold(missionReport.obstacleDetected, missionReport.sequenceCompleted),
     ),
     TE.chain((t) => TE.fromTask(t)),
-    TE.getOrElse(displayWriter.missionFailed),
+    TE.getOrElse(missionReport.missionFailed),
   )
 
 // TODO 10: compare with version4 implementation
 const runMission = (
-  planetReader: PlanetReader,
-  roverReader: RoverReader,
-  commandsReader: CommandsReader,
+  missionSource: MissionSource,
+  commandsChannel: CommandsChannel,
 ): TaskEither<Error, Either<ObstacleDetected, Rover>> =>
   pipe(
     TE.of(executeAll),
-    TE.ap(planetReader.read()),
-    TE.ap(roverReader.read()),
-    TE.ap(commandsReader.read()),
+    TE.ap(missionSource.readPlanet()),
+    TE.ap(missionSource.readRover()),
+    TE.ap(commandsChannel.read()),
   )
 
 // INFRASTRUCTURE

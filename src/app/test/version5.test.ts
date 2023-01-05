@@ -1,15 +1,14 @@
 import {
   Commands,
-  CommandsReader,
-  DisplayWriter,
+  CommandsChannel,
+  MissionReport,
+  MissionSource,
   ObstacleDetected,
   Planet,
-  PlanetReader,
   renderComplete,
   renderError,
   renderObstacle,
   Rover,
-  RoverReader,
   runApp,
   runAppWired,
 } from "../version5"
@@ -33,16 +32,17 @@ jest.mock("readline", () => ({
 // TODO 1: gradually eliminate the "skip marker" and check that the test is green
 describe.skip("version 5", () => {
   // TODO 2: get familiar with stubs implementations
-  const createPlanetReader = (planet: Planet): PlanetReader => ({
-    read: () => TE.of(planet),
+  const createMissionSource = (
+    planet: Planet,
+    rover: Rover,
+  ): MissionSource => ({
+    readPlanet: () => TE.of(planet),
+    readRover: () => TE.of(rover),
   })
-  const createRoverReader = (rover: Rover): RoverReader => ({
-    read: () => TE.of(rover),
-  })
-  const createCommandsReader = (commands: Commands): CommandsReader => ({
+  const createCommandsChannel = (commands: Commands): CommandsChannel => ({
     read: () => TE.of(commands),
   })
-  const createDisplayWriter = (output: IORef<string>): DisplayWriter => ({
+  const createMissionReport = (output: IORef<string>): MissionReport => ({
     sequenceCompleted: (rover: Rover) =>
       T.fromIO(output.write(`[OK] ${renderComplete(rover)}`)),
 
@@ -64,10 +64,9 @@ describe.skip("version 5", () => {
       T.chain((output) =>
         pipe(
           runApp(
-            createPlanetReader(planet),
-            createRoverReader(rover),
-            createCommandsReader(commands),
-            createDisplayWriter(output),
+            createMissionSource(planet, rover),
+            createCommandsChannel(commands),
+            createMissionReport(output),
           ),
           T.chain(() => T.fromIO(output.read)),
         ),
