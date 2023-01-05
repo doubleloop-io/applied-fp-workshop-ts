@@ -2,7 +2,6 @@
   "name": "applied-fp-ts",
   "homepage": "https://github.com/doubleloop-io/applied-fp-workshop-ts",
   "version": "1.0.0",
-  "main": "dist/index.js",
   "license": "MIT",
   "peerDependencies": {
     "fp-ts": "2.13.1"
@@ -25,8 +24,7 @@
     "ts-node": "10.9.1"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "build:watch": "tsc -w -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.json",
     "pretty": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0",
     "test": "jest",

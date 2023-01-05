@@ -21,6 +21,6 @@ export const unsafeParse = (
 export const unsafeFromArray = (
   values: ReadonlyArray<string>,
 ): Tuple<string, string> => {
-  if (values.length != 2) throw new Error("Invalid legth")
+  if (values.length != 2) throw new Error("Invalid length")
   return tuple(String(values[0]), String(values[1]))
 }

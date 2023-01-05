@@ -1,5 +1,5 @@
 /*
-    ## V2 - Focus on boundaries (from primitive to domain types and viceversa)
+    ## V2 - Focus on boundaries (from primitive to domain types and vice versa)
 
     Our domain is declared with rich types but inputs/outputs are should be primitive types
     - Write a parser for input planet data (size, obstacles)

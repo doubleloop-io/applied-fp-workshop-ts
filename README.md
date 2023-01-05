@@ -4,10 +4,24 @@
 
 ## Yarn Commands
 
+Run build:
+
+```sh
+$ yarn build
+```
+
 Run tests:
 
 ```sh
 $ yarn test
+# or with file watcher
+$ yarn test:watch
+```
+
+Run Typescript file:
+
+```sh
+$ yarn eval src/app/index.ts
 ```
 
 ## Documentation

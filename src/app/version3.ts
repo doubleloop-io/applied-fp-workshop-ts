@@ -106,7 +106,7 @@ export const runApp = (
   )
 
 // TODO 7: fix return type in order to propagate the domain Either
-// HINT: funciton implementation should not change
+// HINT: function implementation should not change
 const runMission = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
