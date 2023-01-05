@@ -1,5 +1,3 @@
-import { match } from "ts-pattern"
-
 /*
     ## V1 - Focus on the center (pure domain logic)
     Develop an API (types and functions) that executes commands:
@@ -8,6 +6,7 @@ import { match } from "ts-pattern"
     - The planet grid has a wrapping effect from one edge to another (pacman).
     - For now, ignore obstacle detection logic
  */
+import { match } from "ts-pattern"
 
 // TODO 1: Those type alias are only placeholders,
 //  use correct type definitions and feel free to add more...

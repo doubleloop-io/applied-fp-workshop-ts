@@ -5,10 +5,11 @@ import {
   invalidCommand,
   invalidObstacle,
   invalidPosition,
-} from "../../solutions/version2"
+} from "../version2"
 import * as E from "fp-ts/Either"
-import { tuple } from "../../utils/tuple"
+import { tuple } from "../utils/tuple"
 
+// TODO - 1: remove the skip marker
 describe.skip("version 2", () => {
   test("go to opposite angle", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")
