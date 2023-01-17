@@ -1,5 +1,4 @@
-describe("algebraic data types", () => {
-  // MODEL DATA
+describe("model data - algebraic data types", () => {
   // In FP types are used to model/describe data and behavior intent.
   //   - Algebraic Data Type (ADT) to model data
   //   - Functions to model behaviors

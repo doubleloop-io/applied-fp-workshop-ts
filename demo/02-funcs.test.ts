@@ -1,8 +1,6 @@
 import { flow, pipe } from "fp-ts/function"
 
-describe("function", () => {
-  // MODEL BEHAVIOURS
-  // Function models behaviour.
+describe("model behaviors - functions", () => {
   // A function is something that accepts an input value (Domain)
   // and produces an output value (Codomain).
 
