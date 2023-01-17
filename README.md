@@ -26,5 +26,6 @@ $ yarn eval src/app/index.ts
 
 ## Documentation
 
-[ts-pattern](https://github.com/gvergnaud/ts-pattern)
-[fp-ts](https://gcanti.github.io/fp-ts/modules/)
+- [Typescript](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [ts-pattern](https://github.com/gvergnaud/ts-pattern)
+- [fp-ts](https://gcanti.github.io/fp-ts/modules/)
