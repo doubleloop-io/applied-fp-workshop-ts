@@ -7,7 +7,7 @@
     "@types/jest": "26.0.20",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
-    "cspell": "6.18.1",
+    "cspell": "6.19.2",
     "eslint": "7.32.0",
     "fp-ts": "2.13.1",
     "jest": "26.6.3",
