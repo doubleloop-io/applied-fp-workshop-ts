@@ -21,7 +21,7 @@ $ yarn test:watch
 Run Typescript file:
 
 ```sh
-$ yarn eval src/app/index.ts
+$ yarn eval app/index.ts
 ```
 
 ## Documentation
