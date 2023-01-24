@@ -34,7 +34,7 @@ describe.skip("combination phase - many", () => {
       O.chain((n) =>
         pipe(
           checkQty(qty),
-          O.map((q) => ({ name: n, qty: q })),
+          O.map((q) => itemCtor(n)(q)),
         ),
       ),
     )
