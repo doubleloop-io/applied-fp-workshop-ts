@@ -335,10 +335,10 @@ const parseCommands = (
 
 const parseCommand = (input: string): Either<ParseError, Command> =>
   match(input.toLocaleUpperCase())
-    .with("R", () => E.right<ParseError, Command>("TurnRight"))
-    .with("L", () => E.right<ParseError, Command>("TurnLeft"))
-    .with("F", () => E.right<ParseError, Command>("MoveForward"))
-    .with("B", () => E.right<ParseError, Command>("MoveBackward"))
+    .with("R", () => E.right("TurnRight" as const))
+    .with("L", () => E.right("TurnLeft" as const))
+    .with("F", () => E.right("MoveForward" as const))
+    .with("B", () => E.right("MoveBackward" as const))
     .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
 const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
@@ -357,10 +357,10 @@ const parsePosition = (input: string): Either<ParseError, Position> =>
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
   match(input.toLocaleUpperCase())
-    .with("N", () => E.right<ParseError, Direction>("N"))
-    .with("E", () => E.right<ParseError, Direction>("E"))
-    .with("W", () => E.right<ParseError, Direction>("W"))
-    .with("S", () => E.right<ParseError, Direction>("S"))
+    .with("N", () => E.right("N" as const))
+    .with("E", () => E.right("E" as const))
+    .with("W", () => E.right("W" as const))
+    .with("S", () => E.right("S" as const))
     .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
 const parsePlanet = (
