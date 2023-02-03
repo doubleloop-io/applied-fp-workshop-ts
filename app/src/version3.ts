@@ -258,23 +258,21 @@ const moveBackward = (planet: Planet, rover: Rover): Rover => {
   return updateRover({ position: newPosition })(rover)
 }
 
-const opposite = (direction: Direction): Direction => {
-  return match(direction)
+const opposite = (direction: Direction): Direction =>
+  match(direction)
     .with("N", () => "S" as const)
     .with("S", () => "N" as const)
     .with("E", () => "W" as const)
     .with("W", () => "E" as const)
     .exhaustive()
-}
 
-const delta = (direction: Direction): Delta => {
-  return match(direction)
+const delta = (direction: Direction): Delta =>
+  match(direction)
     .with("N", () => ({ x: 0, y: 1 }))
     .with("S", () => ({ x: 0, y: -1 }))
     .with("E", () => ({ x: 1, y: 0 }))
     .with("W", () => ({ x: -1, y: 0 }))
     .exhaustive()
-}
 
 // TODO 2: change return type (follow result type) in the domain Either
 // HINT: the result should be either a Rover or ObstacleDetected
