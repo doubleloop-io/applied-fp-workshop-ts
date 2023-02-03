@@ -449,7 +449,6 @@ const execute =
       .with("MoveForward", () => moveForward(planet, rover))
       .with("MoveBackward", () => moveBackward(planet, rover))
       .exhaustive()
-
 const turnRight = (rover: Rover): Rover => {
   const newDirection = match(rover.direction)
     .with("N", () => "E" as const)
@@ -458,7 +457,7 @@ const turnRight = (rover: Rover): Rover => {
     .with("W", () => "N" as const)
     .exhaustive()
 
-  return updateRover({ direction: newDirection })(rover)
+  return pipe(rover, updateRover({ direction: newDirection }))
 }
 
 const turnLeft = (rover: Rover): Rover => {
@@ -469,7 +468,7 @@ const turnLeft = (rover: Rover): Rover => {
     .with("E", () => "N" as const)
     .exhaustive()
 
-  return updateRover({ direction: newDirection })(rover)
+  return pipe(rover, updateRover({ direction: newDirection }))
 }
 
 const moveForward = (

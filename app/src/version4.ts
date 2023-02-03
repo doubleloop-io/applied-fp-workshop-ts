@@ -291,7 +291,7 @@ const turnRight = (rover: Rover): Rover => {
     .with("W", () => "N" as const)
     .exhaustive()
 
-  return updateRover({ direction: newDirection })(rover)
+  return pipe(rover, updateRover({ direction: newDirection }))
 }
 
 const turnLeft = (rover: Rover): Rover => {
@@ -302,7 +302,7 @@ const turnLeft = (rover: Rover): Rover => {
     .with("E", () => "N" as const)
     .exhaustive()
 
-  return updateRover({ direction: newDirection })(rover)
+  return pipe(rover, updateRover({ direction: newDirection }))
 }
 
 const moveForward = (
