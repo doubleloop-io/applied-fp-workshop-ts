@@ -414,13 +414,13 @@ const wrap = (value: number, limit: number, delta: number): number =>
 const updatePosition =
   (values: Partial<Position>) =>
   (actual: Position): Position => ({
-    x: values.x != null ? values.x : actual.x,
-    y: values.y != null ? values.y : actual.y,
+    ...actual,
+    ...values,
   })
 
 const updateRover =
   (values: Partial<Rover>) =>
   (actual: Rover): Rover => ({
-    position: values.position != null ? values.position : actual.position,
-    direction: values.direction != null ? values.direction : actual.direction,
+    ...actual,
+    ...values,
   })
