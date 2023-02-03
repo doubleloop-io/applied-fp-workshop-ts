@@ -13,24 +13,24 @@ describe("model data - algebraic data types", () => {
 
   // Type wrapper - rename a type and change it
   type Age = { value: number }
-  const ageCtor = (value: number): Age => ({ value })
+  const age = (value: number): Age => ({ value })
   // alternative implementation with native class
   // class Age {
   //   constructor(readonly value: number) {}
   // }
 
   it("type wrapper - values equality", () => {
-    const age = ageCtor(12)
-    // const age = new Age(12)
-    expect(age).toStrictEqual(age)
+    const value = age(12)
+    // const value = new Age(12)
+    expect(value).toStrictEqual(value)
 
-    const same = ageCtor(12)
+    const same = age(12)
     // const same = new Age(12)
-    expect(age).toStrictEqual(same)
+    expect(value).toStrictEqual(same)
 
-    const different = ageCtor(20)
+    const different = age(20)
     // const different = new Age(20)
-    expect(age).not.toStrictEqual(different)
+    expect(value).not.toStrictEqual(different)
   })
 
   // Composed Types Modelling
@@ -38,17 +38,17 @@ describe("model data - algebraic data types", () => {
   // Product types - put many types together. e.g. struct in C, POJO in JAVA, POCO in C#.
   // Useful to model independent data in AND e.g. a Person is composed by a name *and* an age.
   type Person = { readonly name: string; readonly age: number }
-  const personCtor = (name: string, age: number): Person => ({ name, age })
+  const person = (name: string, age: number): Person => ({ name, age })
 
   it("product type - values equality", () => {
-    const person = personCtor("john", 12)
-    expect(person).toStrictEqual(person)
+    const value = person("john", 12)
+    expect(value).toStrictEqual(value)
 
-    const same = personCtor("john", 12)
-    expect(person).toStrictEqual(same)
+    const same = person("john", 12)
+    expect(value).toStrictEqual(same)
 
-    const different = personCtor("mario", 12)
-    expect(person).not.toStrictEqual(different)
+    const different = person("mario", 12)
+    expect(value).not.toStrictEqual(different)
   })
 
   // Sum types - model exclusive types e.g. union in C, enum in JAVA/C#.
@@ -56,18 +56,18 @@ describe("model data - algebraic data types", () => {
   type LightState = On | Off
   type On = { readonly _tag: "On"; readonly intensity: number }
   type Off = { readonly _tag: "Off" }
-  const onCtor = (intensity: number): LightState => ({ _tag: "On", intensity })
-  const offCtor = (): LightState => ({ _tag: "Off" })
+  const onState = (intensity: number): LightState => ({ _tag: "On", intensity })
+  const offState = (): LightState => ({ _tag: "Off" })
 
   it("sum type - values equality", () => {
-    const light: LightState = onCtor(10)
-    expect(light).toStrictEqual(light)
+    const value: LightState = onState(10)
+    expect(value).toStrictEqual(value)
 
-    const same: LightState = onCtor(10)
-    expect(light).toStrictEqual(same)
+    const same: LightState = onState(10)
+    expect(value).toStrictEqual(same)
 
-    const different: LightState = offCtor()
-    expect(light).not.toStrictEqual(different)
+    const different: LightState = offState()
+    expect(value).not.toStrictEqual(different)
   })
 
   // Polymorphic Types

@@ -12,11 +12,11 @@ import {
   Direction,
   Size,
   Obstacle,
-  roverCtor,
-  positionCtor,
-  planetCtor,
-  sizeCtor,
-  obstacleCtor,
+  rover,
+  position,
+  planet,
+  size,
+  obstacle,
   invalidSize,
   invalidDirection,
   invalidCommand,
@@ -41,7 +41,7 @@ export const parseRover = (
   input: Tuple<string, string>,
 ): Either<ParseError, Rover> =>
   pipe(
-    E.of(roverCtor),
+    E.of(rover),
     E.ap(parsePosition(input.first)),
     E.ap(parseDirection(input.second)),
   )
@@ -50,7 +50,7 @@ const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
     parseTuple(",", input),
     E.mapLeft(invalidPosition),
-    E.map((tuple) => positionCtor(tuple.first)(tuple.second)),
+    E.map((tuple) => position(tuple.first)(tuple.second)),
   )
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
@@ -65,7 +65,7 @@ export const parsePlanet = (
   input: Tuple<string, string>,
 ): Either<ParseError, Planet> =>
   pipe(
-    E.of(planetCtor),
+    E.of(planet),
     E.ap(parseSize(input.first)),
     E.ap(parseObstacles(input.second)),
   )
@@ -74,7 +74,7 @@ const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
     parseTuple("x", input),
     E.mapLeft(invalidSize),
-    E.map((tuple) => sizeCtor(tuple.first)(tuple.second)),
+    E.map((tuple) => size(tuple.first)(tuple.second)),
   )
 
 const parseObstacles = (
@@ -86,7 +86,7 @@ const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
   pipe(
     parseTuple(",", input),
     E.mapLeft(invalidObstacle),
-    E.map((tuple) => obstacleCtor(tuple.first)(tuple.second)),
+    E.map((tuple) => obstacle(tuple.first)(tuple.second)),
   )
 
 const parseTuple = (

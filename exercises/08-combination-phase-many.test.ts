@@ -9,7 +9,7 @@ describe("combination phase - many", () => {
     qty: number
   }
 
-  const itemCtor =
+  const item =
     (name: string) =>
     (qty: number): Item => ({ name, qty })
 

@@ -1,17 +1,17 @@
+import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
 import { flip, pipe } from "fp-ts/function"
-import * as E from "fp-ts/Either"
 import { match } from "ts-pattern"
 import {
+  Command,
   Commands,
+  Delta,
+  Direction,
   ObstacleDetected,
   Planet,
-  Rover,
-  Command,
-  Direction,
   Position,
-  Delta,
-  positionCtor,
+  position,
+  Rover,
   updatePosition,
   updateRover,
 } from "./core"
@@ -97,10 +97,9 @@ const next = (
   rover: Rover,
   delta: Delta,
 ): Either<ObstacleDetected, Position> => {
-  const position = rover.position
-  const newX = wrap(position.x, planet.size.width, delta.x)
-  const newY = wrap(position.y, planet.size.height, delta.y)
-  const candidate = positionCtor(newX)(newY)
+  const newX = wrap(rover.position.x, planet.size.width, delta.x)
+  const newY = wrap(rover.position.y, planet.size.height, delta.y)
+  const candidate = position(newX)(newY)
 
   const hitObstacle = planet.obstacles.findIndex(
     (x) => x.position.x == newX && x.position.y == newY,
@@ -108,7 +107,7 @@ const next = (
 
   return hitObstacle != -1
     ? E.left(rover)
-    : E.right(updatePosition(candidate)(position))
+    : E.right(updatePosition(candidate)(rover.position))
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>

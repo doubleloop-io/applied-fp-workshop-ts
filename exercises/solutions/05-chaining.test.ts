@@ -14,9 +14,9 @@ describe.skip("chaining", () => {
 
   const checkIn =
     (value: number) =>
-    (item: Item): Item => ({
-      ...item,
-      qty: item.qty + value,
+    (current: Item): Item => ({
+      ...current,
+      qty: current.qty + value,
     })
 
   const aItem: Item = { id: 123, qty: 10 }

@@ -8,10 +8,10 @@ describe.skip("combination phase - list", () => {
     qty: number
   }
 
-  const itemCtor = (qty: number): Item => ({ qty })
+  const item = (qty: number): Item => ({ qty })
 
   const createItem = (qty: string): Option<Item> =>
-    qty.match(/^[0-9]+$/i) ? O.some(itemCtor(Number(qty))) : O.none
+    qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   test("all valid - individual results", () => {
     const values = ["1", "10", "100"]

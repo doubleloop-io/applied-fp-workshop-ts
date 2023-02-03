@@ -8,15 +8,15 @@ describe("combination phase - normal", () => {
     qty: number
   }
 
-  const itemCtor = (qty: number): Item => ({ qty })
+  const item = (qty: number): Item => ({ qty })
 
   const createItem = (qty: string): Option<Item> =>
-    qty.match(/^[0-9]+$/i) ? O.some(itemCtor(Number(qty))) : O.none
+    qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   const checkIn =
     (value: number) =>
-    (item: Item): Item =>
-      itemCtor(item.qty + value)
+    (current: Item): Item =>
+      item(current.qty + value)
 
   test.skip("checkIn after valid creation", () => {
     const result = pipe(

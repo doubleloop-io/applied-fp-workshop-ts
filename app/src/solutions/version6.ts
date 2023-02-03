@@ -23,23 +23,23 @@ type Commands = ReadonlyArray<Command>
 type Delta = { x: number; y: number }
 export type ObstacleDetected = Rover
 
-const planetCtor =
+const planet =
   (size: Size) =>
   (obstacles: ReadonlyArray<Obstacle>): Planet => ({ size, obstacles })
 
-const roverCtor =
+const rover =
   (position: Position) =>
   (direction: Direction): Rover => ({ position, direction })
 
-const positionCtor =
+const position =
   (x: number) =>
   (y: number): Position => ({ x, y })
 
-const sizeCtor =
+const size =
   (width: number) =>
   (height: number): Size => ({ width, height })
 
-const obstacleCtor =
+const obstacle =
   (x: number) =>
   (y: number): Obstacle => ({ position: { x, y } })
 
@@ -343,7 +343,7 @@ const parseCommand = (input: string): Either<ParseError, Command> =>
 
 const parseRover = (input: Tuple<string, string>): Either<ParseError, Rover> =>
   pipe(
-    E.of(roverCtor),
+    E.of(rover),
     E.ap(parsePosition(input.first)),
     E.ap(parseDirection(input.second)),
   )
@@ -352,7 +352,7 @@ const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
     parseTuple(",", input),
     E.mapLeft(invalidPosition),
-    E.map((tuple) => positionCtor(tuple.first)(tuple.second)),
+    E.map((tuple) => position(tuple.first)(tuple.second)),
   )
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
@@ -367,7 +367,7 @@ const parsePlanet = (
   input: Tuple<string, string>,
 ): Either<ParseError, Planet> =>
   pipe(
-    E.of(planetCtor),
+    E.of(planet),
     E.ap(parseSize(input.first)),
     E.ap(parseObstacles(input.second)),
   )
@@ -376,7 +376,7 @@ const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
     parseTuple("x", input),
     E.mapLeft(invalidSize),
-    E.map((tuple) => sizeCtor(tuple.first)(tuple.second)),
+    E.map((tuple) => size(tuple.first)(tuple.second)),
   )
 
 const parseObstacles = (
@@ -388,7 +388,7 @@ const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
   pipe(
     parseTuple(",", input),
     E.mapLeft(invalidObstacle),
-    E.map((tuple) => obstacleCtor(tuple.first)(tuple.second)),
+    E.map((tuple) => obstacle(tuple.first)(tuple.second)),
   )
 
 const parseTuple = (
@@ -511,10 +511,9 @@ const next = (
   rover: Rover,
   delta: Delta,
 ): Either<ObstacleDetected, Position> => {
-  const position = rover.position
-  const newX = wrap(position.x, planet.size.width, delta.x)
-  const newY = wrap(position.y, planet.size.height, delta.y)
-  const candidate = positionCtor(newX)(newY)
+  const newX = wrap(rover.position.x, planet.size.width, delta.x)
+  const newY = wrap(rover.position.y, planet.size.height, delta.y)
+  const candidate = position(newX)(newY)
 
   const hitObstacle = planet.obstacles.findIndex(
     (x) => x.position.x == newX && x.position.y == newY,
@@ -522,7 +521,7 @@ const next = (
 
   return hitObstacle != -1
     ? E.left(rover)
-    : E.right(updatePosition(candidate)(position))
+    : E.right(updatePosition(candidate)(rover.position))
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>

@@ -9,23 +9,23 @@ export type Commands = ReadonlyArray<Command>
 export type Delta = { x: number; y: number }
 export type ObstacleDetected = Rover
 
-export const planetCtor =
+export const planet =
   (size: Size) =>
   (obstacles: ReadonlyArray<Obstacle>): Planet => ({ size, obstacles })
 
-export const roverCtor =
+export const rover =
   (position: Position) =>
   (direction: Direction): Rover => ({ position, direction })
 
-export const positionCtor =
+export const position =
   (x: number) =>
   (y: number): Position => ({ x, y })
 
-export const sizeCtor =
+export const size =
   (width: number) =>
   (height: number): Size => ({ width, height })
 
-export const obstacleCtor =
+export const obstacle =
   (x: number) =>
   (y: number): Obstacle => ({ position: { x, y } })
 

@@ -8,10 +8,10 @@ describe("removal phase", () => {
     qty: number
   }
 
-  const itemCtor = (qty: number): Item => ({ qty })
+  const item = (qty: number): Item => ({ qty })
 
   const createItem = (qty: string): Option<Item> =>
-    qty.match(/^[0-9]+$/i) ? O.some(itemCtor(Number(qty))) : O.none
+    qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   test.skip("item creation", () => {
     const result = pipe(
@@ -34,7 +34,7 @@ describe("removal phase", () => {
   test.skip("get or default - valid", () => {
     const result = pipe(
       createItem("10"),
-      O.getOrElse(() => itemCtor(0)),
+      O.getOrElse(() => item(0)),
     )
 
     // TODO  4: change expectation
@@ -44,7 +44,7 @@ describe("removal phase", () => {
   test.skip("get or default - invalid", () => {
     const result = pipe(
       createItem("asd"),
-      O.getOrElse(() => itemCtor(0)),
+      O.getOrElse(() => item(0)),
     )
 
     // TODO  5: change expectation

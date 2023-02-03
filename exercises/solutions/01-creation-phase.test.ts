@@ -6,7 +6,7 @@ describe.skip("creation phase", () => {
     qty: number
   }
 
-  const itemCtor = (qty: number): Item => ({ qty })
+  const item = (qty: number): Item => ({ qty })
 
   type OptionalItem = Invalid | Valid
   type Invalid = {
@@ -21,7 +21,7 @@ describe.skip("creation phase", () => {
   const valid = (item: Item): Valid => ({ _tag: "Valid", value: item })
 
   const createItem = (qty: string): OptionalItem =>
-    qty.match(/^[0-9]+$/i) ? valid(itemCtor(Number(qty))) : invalid()
+    qty.match(/^[0-9]+$/i) ? valid(item(Number(qty))) : invalid()
 
   test("item creation", () => {
     const result = createItem("10")

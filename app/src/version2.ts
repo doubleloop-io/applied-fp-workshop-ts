@@ -25,23 +25,23 @@ type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Commands = ReadonlyArray<Command>
 type Delta = { x: number; y: number }
 
-const planetCtor =
+const planet =
   (size: Size) =>
   (obstacles: ReadonlyArray<Obstacle>): Planet => ({ size, obstacles })
 
-const roverCtor =
+const rover =
   (position: Position) =>
   (direction: Direction): Rover => ({ position, direction })
 
-const positionCtor =
+const position =
   (x: number) =>
   (y: number): Position => ({ x, y })
 
-const sizeCtor =
+const size =
   (width: number) =>
   (height: number): Size => ({ width, height })
 
-const obstacleCtor =
+const obstacle =
   (x: number) =>
   (y: number): Obstacle => ({ position: { x, y } })
 
@@ -266,11 +266,10 @@ const delta = (direction: Direction): Delta =>
     .exhaustive()
 
 const next = (planet: Planet, rover: Rover, delta: Delta): Position => {
-  const position = rover.position
-  const newX = wrap(position.x, planet.size.width, delta.x)
-  const newY = wrap(position.y, planet.size.height, delta.y)
-  const candidate = positionCtor(newX)(newY)
-  return updatePosition(candidate)(position)
+  const newX = wrap(rover.position.x, planet.size.width, delta.x)
+  const newY = wrap(rover.position.y, planet.size.height, delta.y)
+  const candidate = position(newX)(newY)
+  return updatePosition(candidate)(rover.position)
 }
 
 const wrap = (value: number, limit: number, delta: number): number =>

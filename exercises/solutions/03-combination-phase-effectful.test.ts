@@ -7,20 +7,20 @@ describe.skip("combination phase - effectful", () => {
     qty: number
   }
 
-  const itemCtor = (qty: number): Item => ({ qty })
+  const item = (qty: number): Item => ({ qty })
 
   const createItem = (qty: string): Option<Item> =>
-    qty.match(/^[0-9]+$/i) ? O.some(itemCtor(Number(qty))) : O.none
+    qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   const checkIn =
     (value: number) =>
-    (item: Item): Item =>
-      itemCtor(item.qty + value)
+    (current: Item): Item =>
+      item(current.qty + value)
 
   const checkOut =
     (value: number) =>
-    (item: Item): Option<Item> =>
-      value <= item.qty ? O.some(itemCtor(item.qty - value)) : O.none
+    (current: Item): Option<Item> =>
+      value <= current.qty ? O.some(item(current.qty - value)) : O.none
 
   test("checkOut after valid creation", () => {
     const result = pipe(createItem("100"), O.chain(checkOut(10)))
