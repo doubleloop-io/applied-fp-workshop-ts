@@ -17,7 +17,7 @@
     "prettier-plugin-jsdoc": "0.4.2",
     "ts-jest": "29.0.5",
     "ts-node": "10.9.1",
-    "ts-pattern": "4.2.1",
+    "ts-pattern": "4.2.2",
     "typescript": "5.0.2"
   },
   "scripts": {
