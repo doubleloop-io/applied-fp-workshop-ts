@@ -4069,10 +4069,10 @@ ts-node@10.9.1:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-ts-pattern@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.0.3.tgz#bd81acab451428eeab2c9cb49eafe0ac9a2611ac"
-  integrity sha512-JMfGCcuRz0/efyv7vI71QgIp7en2n7KxQ/cFk9nlyo8eFFgsa6TEfbnKw3N5mLGo7Mf8oUwOyRpTEqXU0kuV+w==
+ts-pattern@5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.0.4.tgz#11508e1fb09c4a65b3fa85fd297941792c0ab7d1"
+  integrity sha512-D5iVliqugv2C9541W2CNXFYNEZxr4TiHuLPuf49tKEdQFp/8y8fR0v1RExUvXkiWozKCwE7zv07C6EKxf0lKuQ==
 
 tslib@^1.8.1:
   version "1.14.1"
