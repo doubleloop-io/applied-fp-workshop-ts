@@ -3783,10 +3783,10 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier-plugin-jsdoc@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/prettier-plugin-jsdoc/-/prettier-plugin-jsdoc-1.0.2.tgz#0c97ff6159884d21541af86179a7d1c384b05451"
-  integrity sha512-mhLT3qiSmfzjOEDvgLntX3XmSJaiDrgoN7WmOp4IH2mZ6LhbvZAnPDJH3Rs0k1O6WR7HcmM92fU1ArB0ALLG+A==
+prettier-plugin-jsdoc@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-jsdoc/-/prettier-plugin-jsdoc-1.0.3.tgz#fdbde1dd363939bd5daa63621e902bb2ca4acfc7"
+  integrity sha512-pRUKfIeYAefIs0+FZEs2BZCa++1SA80MwjWws8tepXdYUVSFF9dhEnYkD+mv991cCMFZizxHPuAD1gVl8N5ETQ==
   dependencies:
     binary-searching "^2.0.5"
     comment-parser "^1.4.0"
