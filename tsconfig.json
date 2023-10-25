@@ -17,6 +17,17 @@
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": ["app/**/*.ts", "exercises/**/*.ts", "webapp/**/*.ts"],
-  "exclude": ["node_modules/**/*", ".github/**/*", ".idea/**/*", ".vscode/**/*"]
+  "include": [
+    "app/**/*",
+    "demo/**/*",
+    "exercises/**/*",
+    "webapp/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*",
+    ".github/**/*",
+    ".idea/**/*",
+    ".vscode/**/*",
+    "data/**/*"
+  ]
 }
