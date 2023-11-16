@@ -1,4 +1,4 @@
-import { pipe } from "fp-ts/function"
+import { flow, identity, pipe } from "fp-ts/function"
 
 describe.skip("custom option monad", () => {
   const increment: (x: number) => number = (x) => x + 1
@@ -46,6 +46,20 @@ describe.skip("custom option monad", () => {
     )
 
     expect(result).toStrictEqual("none")
+  })
+
+  describe("functor laws", () => {
+    test("identity: identities map to identities", () => {
+      const result = pipe(some(10), map(identity))
+      const expected = pipe(10, identity, some)
+      expect(result).toStrictEqual(expected)
+    })
+
+    test("composition: mapping a composition is the composition of the mappings", () => {
+      const result = pipe(some(10), map(increment), map(increment))
+      const expected = pipe(some(10), map(flow(increment, increment)))
+      expect(result).toStrictEqual(expected)
+    })
   })
 
   // data types
