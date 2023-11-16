@@ -1,4 +1,4 @@
-import {flow, identity, pipe} from "fp-ts/function"
+import { flow, identity, pipe } from "fp-ts/function"
 
 describe.skip("custom lazy monad", () => {
   let logs: string[] = []
@@ -57,6 +57,29 @@ describe.skip("custom lazy monad", () => {
     test("composition: mapping a composition is the composition of the mappings", () => {
       const result = pipe(of(10), map(increment), map(increment))
       const expected = pipe(of(10), map(flow(increment, increment)))
+      expect(result()).toStrictEqual(expected())
+    })
+  })
+
+  describe("monad laws", () => {
+    test("left identity", () => {
+      const result = pipe(of(10), chain(reverseString))
+      const expected = pipe(10, reverseString)
+      expect(result()).toStrictEqual(expected())
+    })
+
+    test("right identity", () => {
+      const result = pipe(of(10), chain(of))
+      const expected = pipe(10, of)
+      expect(result()).toStrictEqual(expected())
+    })
+
+    test("associativity", () => {
+      const result = pipe(of(10), chain(of), chain(reverseString))
+      const expected = pipe(
+        of(10),
+        chain((x) => pipe(of(x), chain(reverseString))),
+      )
       expect(result()).toStrictEqual(expected())
     })
   })
