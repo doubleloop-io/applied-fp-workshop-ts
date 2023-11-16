@@ -7,12 +7,12 @@ describe("model behaviors - functions", () => {
   // Functions are described/documented by it's type definition.
   //   f:  InType => OutType
 
-  // independent functions
+  // functions
   const asString = (value: number): string => value.toString()
   const parseString = (value: string): number => Number(value)
   const reciprocal = (value: number): number => 1.0 / value
 
-  it("manual compose", () => {
+  it("manual passing of values to functions", () => {
     const input = "42"
 
     const input2 = parseString(input)
@@ -22,7 +22,7 @@ describe("model behaviors - functions", () => {
     expect(result).toEqual("0.023809523809523808")
   })
 
-  it("compose through automatic inputs passing (pipe)", () => {
+  it("automatic passing of values to functions (pipe)", () => {
     const input = "42"
 
     const result = pipe(input, parseString, reciprocal, asString)
@@ -30,7 +30,7 @@ describe("model behaviors - functions", () => {
     expect(result).toEqual("0.023809523809523808")
   })
 
-  it("compose by generating new function (flow)", () => {
+  it("compose functions by generating new function (flow)", () => {
     const input = "42"
 
     const composed = flow(parseString, reciprocal, asString)
@@ -39,7 +39,7 @@ describe("model behaviors - functions", () => {
     expect(result).toEqual("0.023809523809523808")
   })
 
-  it("function with more than one parameter", () => {
+  it("pipe function with more than one parameter", () => {
     const substring = (size: number, value: string): string =>
       value.substring(0, size)
 
@@ -50,7 +50,7 @@ describe("model behaviors - functions", () => {
       parseString,
       reciprocal,
       asString,
-      // requires an anonymous function
+      // requires a lambda (aka anonymous function)
       // to adapt input signatures
       (v) => substring(4, v),
     )
@@ -58,7 +58,7 @@ describe("model behaviors - functions", () => {
     expect(result).toEqual("0.02")
   })
 
-  it("curried function with more than one parameter", () => {
+  it("pipe curried function with more than one parameter", () => {
     // curry means one parameter per function
     // (param1: ...) => (param2: ...) => (paramN: ...): ... => implementation
     const substring =
@@ -74,7 +74,7 @@ describe("model behaviors - functions", () => {
       reciprocal,
       asString,
       // curry enables function partial application
-      // that "automatically" create the adapted function
+      // that returns the adapted function
       substring(4),
     )
 
