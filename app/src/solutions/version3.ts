@@ -4,16 +4,19 @@ import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
 import { Tuple, unsafeParse } from "../../utils/tuple"
 
-type Rover = Readonly<{ position: Position; direction: Direction }>
-type Position = Readonly<{ x: number; y: number }>
-type Direction = "N" | "E" | "W" | "S"
-type Planet = Readonly<{ size: Size; obstacles: ReadonlyArray<Obstacle> }>
-type Size = Readonly<{ width: number; height: number }>
-type Obstacle = Readonly<{ position: Position }>
-type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
-type Commands = ReadonlyArray<Command>
+export type Rover = Readonly<{ position: Position; direction: Direction }>
+export type Position = Readonly<{ x: number; y: number }>
+export type Direction = "N" | "E" | "W" | "S"
+export type Planet = Readonly<{
+  size: Size
+  obstacles: ReadonlyArray<Obstacle>
+}>
+export type Size = Readonly<{ width: number; height: number }>
+export type Obstacle = Readonly<{ position: Position }>
+export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+export type Commands = ReadonlyArray<Command>
+export type ObstacleDetected = Rover
 type Delta = Readonly<{ x: number; y: number }>
-type ObstacleDetected = Rover
 
 const planet =
   (size: Size) =>

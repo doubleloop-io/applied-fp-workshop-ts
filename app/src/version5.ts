@@ -10,18 +10,18 @@ import { TaskEither } from "fp-ts/TaskEither"
 import { loadTuple } from "../utils/infra-file"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
-type Position = Readonly<{ x: number; y: number }>
-type Direction = "N" | "E" | "W" | "S"
+export type Position = Readonly<{ x: number; y: number }>
+export type Direction = "N" | "E" | "W" | "S"
 export type Planet = Readonly<{
   size: Size
   obstacles: ReadonlyArray<Obstacle>
 }>
-type Size = Readonly<{ width: number; height: number }>
-type Obstacle = Readonly<{ position: Position }>
-type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+export type Size = Readonly<{ width: number; height: number }>
+export type Obstacle = Readonly<{ position: Position }>
+export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 export type Commands = ReadonlyArray<Command>
-type Delta = Readonly<{ x: number; y: number }>
 export type ObstacleDetected = Rover
+type Delta = Readonly<{ x: number; y: number }>
 
 const planet =
   (size: Size) =>
