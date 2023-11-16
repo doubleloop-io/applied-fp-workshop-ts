@@ -9,7 +9,16 @@ export const unsafeParse = (
   separator: string,
   input: string,
 ): Tuple<number, number> => {
+  const isNumeric = (value: string | undefined) => {
+    if (value == undefined) return false
+    return value.match(/^[0-9]+$/i)
+  }
+
   const parts = input.split(separator)
+  if (parts.length != 2) throw new Error(`Input: ${input}`)
+  if (!isNumeric(parts[0]) || !isNumeric(parts[1]))
+    throw new Error(`Input: ${input}`)
+
   const first = Number(parts[0])
   const second = Number(parts[1])
 

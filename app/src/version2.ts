@@ -119,7 +119,7 @@ export const parseCommands = (
 // TODO 6: parse string in a command or returns an error
 // HINT: creation phase
 // INPUT EXAMPLE: "B"
-const parseCommand = (input: string): Either<ParseError, Command> => {
+export const parseCommand = (input: string): Either<ParseError, Command> => {
   throw new Error("TODO")
 }
 
@@ -135,21 +135,23 @@ const parseRover = (
 // TODO 8: first parse string in a tuple and then in a position
 // HINT: combination phase normal (Functor)
 // INPUT EXAMPLE: "2,0"
-const parsePosition = (input: string): Either<ParseError, Position> => {
+export const parsePosition = (input: string): Either<ParseError, Position> => {
   throw new Error("TODO")
 }
 
 // TODO 9: parse string in a direction
 // HINT: creation phase
 // INPUT EXAMPLE: "N"
-const parseDirection = (input: string): Either<ParseError, Direction> => {
+export const parseDirection = (
+  input: string,
+): Either<ParseError, Direction> => {
   throw new Error("TODO")
 }
 
 // TODO 10: parse tuple in a planet
 // HINT: combination phase many...what abstraction is needed?
 // INPUT EXAMPLE: ("5x4", "2,0 0,3")
-const parsePlanet = (
+export const parsePlanet = (
   input: Tuple<string, string>,
 ): Either<ParseError, Planet> => {
   throw new Error("TODO")
@@ -158,14 +160,14 @@ const parsePlanet = (
 // TODO 11: parse string in a size
 // HINT: combination phase normal...what abstraction is needed?
 // INPUT EXAMPLE: "5x4"
-const parseSize = (input: string): Either<ParseError, Size> => {
+export const parseSize = (input: string): Either<ParseError, Size> => {
   throw new Error("TODO")
 }
 
 // TODO 12: parse each string part in an obstacle
 // HINT: combination phase list...what abstraction is needed?
 // INPUT EXAMPLE: "2,0 0,3"
-const parseObstacles = (
+export const parseObstacles = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Obstacle>> => {
   throw new Error("TODO")
@@ -174,7 +176,7 @@ const parseObstacles = (
 // TODO 13: first parse the string in a tuple and then in an obstacle
 // HINT: combination phase normal...what abstraction is needed?
 // INPUT EXAMPLE: "2,0"
-const parseObstacle = (input: string): Either<ParseError, Obstacle> => {
+export const parseObstacle = (input: string): Either<ParseError, Obstacle> => {
   throw new Error("TODO")
 }
 
