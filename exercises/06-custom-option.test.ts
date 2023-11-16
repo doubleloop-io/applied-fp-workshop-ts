@@ -1,4 +1,4 @@
-import {flow, identity, pipe} from "fp-ts/function"
+import { flow, identity, pipe } from "fp-ts/function"
 
 // TODO  1: for each test, remove the skip marker and make it green
 describe("custom option monad", () => {
@@ -53,7 +53,7 @@ describe("custom option monad", () => {
     expect(result).toStrictEqual("none")
   })
 
-  // TODO  6: remove skip marker and check if functor laws holds
+  // TODO 6: remove skip marker and check if functor laws holds
   describe.skip("functor laws", () => {
     test("identity: identities map to identities", () => {
       const result = pipe(some(10), map(identity))
@@ -64,6 +64,30 @@ describe("custom option monad", () => {
     test("composition: mapping a composition is the composition of the mappings", () => {
       const result = pipe(some(10), map(increment), map(increment))
       const expected = pipe(some(10), map(flow(increment, increment)))
+      expect(result).toStrictEqual(expected)
+    })
+  })
+
+  // TODO 7: remove skip marker and check if monad laws holds
+  describe.skip("monad laws", () => {
+    test("left identity", () => {
+      const result = pipe(some(10), chain(reverseString))
+      const expected = pipe(10, reverseString)
+      expect(result).toStrictEqual(expected)
+    })
+
+    test("right identity", () => {
+      const result = pipe(some(10), chain(some))
+      const expected = pipe(10, some)
+      expect(result).toStrictEqual(expected)
+    })
+
+    test("associativity", () => {
+      const result = pipe(some(10), chain(some), chain(reverseString))
+      const expected = pipe(
+        some(10),
+        chain((x) => pipe(some(x), chain(reverseString))),
+      )
       expect(result).toStrictEqual(expected)
     })
   })

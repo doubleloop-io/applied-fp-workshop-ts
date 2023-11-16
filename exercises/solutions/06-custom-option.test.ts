@@ -62,6 +62,29 @@ describe.skip("custom option monad", () => {
     })
   })
 
+  describe("monad laws", () => {
+    test("left identity", () => {
+      const result = pipe(some(10), chain(reverseString))
+      const expected = pipe(10, reverseString)
+      expect(result).toStrictEqual(expected)
+    })
+
+    test("right identity", () => {
+      const result = pipe(some(10), chain(some))
+      const expected = pipe(10, some)
+      expect(result).toStrictEqual(expected)
+    })
+
+    test("associativity", () => {
+      const result = pipe(some(10), chain(some), chain(reverseString))
+      const expected = pipe(
+        some(10),
+        chain((x) => pipe(some(x), chain(reverseString))),
+      )
+      expect(result).toStrictEqual(expected)
+    })
+  })
+
   // data types
   type Option<A> = None | Some<A>
   type None = {
