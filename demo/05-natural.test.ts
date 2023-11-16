@@ -6,7 +6,7 @@ import { pipe } from "fp-ts/function"
 describe("natural transformation", () => {
   // Natural transformation is a conversion between two effects
 
-  it("from Option to Either", () => {
+  test("from Option to Either", () => {
     expect(
       pipe(
         O.some(42),
@@ -22,7 +22,7 @@ describe("natural transformation", () => {
     ).toEqual(E.left("error"))
   })
 
-  it("from Either to TaskEither", async () => {
+  test("from Either to TaskEither", async () => {
     expect(await pipe(E.right(42), TE.fromEither)()).toEqual(await TE.of(42)())
     expect(await pipe(E.left("error"), TE.fromEither)()).toEqual(
       await TE.left("error")(),

@@ -4,13 +4,13 @@ describe("foldable", () => {
 
   const merge = (item1: Item, item2: Item): Item => item(item1.qty + item2.qty)
 
-  it("calculate total qty", () => {
+  test("calculate total qty", () => {
     const items = [item(100), item(10), item(42)]
     const result = items.reduce((acc, cur) => acc + cur.qty, 0)
     expect(result).toEqual(152)
   })
 
-  it("apply a function many times", () => {
+  test("apply a function many times", () => {
     const items = [item(100), item(10), item(42)]
     const result = items.reduce(merge, item(0))
     expect(result).toEqual(item(152))

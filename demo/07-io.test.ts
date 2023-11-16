@@ -6,7 +6,7 @@ describe("IO api", () => {
   // Represents a synchronous computation that
   // yields a value and never fails.
 
-  it("constructors", () => {
+  test("constructors", () => {
     // From a value
     //    v-- it's type is IO<number>
     const io1 = I.of(5)
@@ -22,7 +22,7 @@ describe("IO api", () => {
     expect(v2).toEqual(5)
   })
 
-  it("mapping", () => {
+  test("mapping", () => {
     const io1 = I.of(5)
 
     // Change the type parameter's type

@@ -7,7 +7,7 @@ describe("TaskEither api", () => {
   // Represents an asynchronous computation that
   // yields a value or fails yielding an error
 
-  it("constructors", async () => {
+  test("constructors", async () => {
     // Right constructor fix only the right type parameter so,
     //    v-- it's type is TaskEither<never, number>
     const te1 = TE.right(5)
@@ -33,7 +33,7 @@ describe("TaskEither api", () => {
     expect(await te4()).toEqual(E.right(5))
   })
 
-  it("mapping", async () => {
+  test("mapping", async () => {
     const te1 = TE.right<string, number>(5)
     expect(await te1()).toEqual(E.right(5))
 

@@ -6,7 +6,7 @@ describe("Task api", () => {
   // Represents an asynchronous computation that
   // yields a value and never fails.
 
-  it("constructors", async () => {
+  test("constructors", async () => {
     // From a value
     //    v-- it's type is IO<number>
     const t1 = T.of(5)
@@ -22,7 +22,7 @@ describe("Task api", () => {
     expect(v2).toEqual(5)
   })
 
-  it("mapping", async () => {
+  test("mapping", async () => {
     const t1 = T.of(5)
 
     // Change the type parameter's type

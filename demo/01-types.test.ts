@@ -23,7 +23,7 @@ describe("model data - algebraic data types", () => {
   //   constructor(readonly value: number) {}
   // }
 
-  it("type wrapper - values equality", () => {
+  test("type wrapper - values equality", () => {
     const value = age(12)
     // alternative creation with class
     // const value = new Age(12)
@@ -45,7 +45,7 @@ describe("model data - algebraic data types", () => {
   // type Person = { readonly name: string; readonly age: number }
   const person = (name: string, age: number): Person => ({ name, age })
 
-  it("product type - values equality", () => {
+  test("product type - values equality", () => {
     const value = person("john", 12)
     expect(value).toStrictEqual(value)
 
@@ -66,7 +66,7 @@ describe("model data - algebraic data types", () => {
   const on = (intensity: number): LightState => ({ _tag: "On", intensity })
   const off = (): LightState => ({ _tag: "Off" })
 
-  it("sum type - values equality", () => {
+  test("sum type - values equality", () => {
     const value: LightState = on(10)
     expect(value).toStrictEqual(value)
 

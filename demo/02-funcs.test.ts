@@ -12,7 +12,7 @@ describe("model behaviors - functions", () => {
   const parseString = (value: string): number => Number(value)
   const reciprocal = (value: number): number => 1.0 / value
 
-  it("manual passing of values to functions", () => {
+  test("manual passing of values to functions", () => {
     const input = "42"
 
     const input2 = parseString(input)
@@ -22,7 +22,7 @@ describe("model behaviors - functions", () => {
     expect(result).toEqual("0.023809523809523808")
   })
 
-  it("automatic passing of values to functions (pipe)", () => {
+  test("automatic passing of values to functions (pipe)", () => {
     const input = "42"
 
     const result = pipe(input, parseString, reciprocal, asString)
@@ -43,7 +43,7 @@ describe("model behaviors - functions", () => {
     */
   })
 
-  it("compose functions by generating new function (flow)", () => {
+  test("compose functions by generating new function (flow)", () => {
     const input = "42"
 
     const composed = flow(parseString, reciprocal, asString)
@@ -64,7 +64,7 @@ describe("model behaviors - functions", () => {
     */
   })
 
-  it("pipe function with more than one parameter", () => {
+  test("pipe function with more than one parameter", () => {
     const substring = (size: number, value: string): string =>
       value.substring(0, size)
 
@@ -83,7 +83,7 @@ describe("model behaviors - functions", () => {
     expect(result).toEqual("0.02")
   })
 
-  it("pipe curried function with more than one parameter", () => {
+  test("pipe curried function with more than one parameter", () => {
     // curry means one parameter per function
     // (param1: ...) => (param2: ...) => (paramN: ...): ... => implementation
     const substring =
