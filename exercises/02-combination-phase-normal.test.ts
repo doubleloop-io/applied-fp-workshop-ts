@@ -1,6 +1,6 @@
 import { pipe } from "fp-ts/function"
-import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 // TODO  1: for each test, remove the skip marker and make it green
 describe("combination phase - normal", () => {
@@ -24,17 +24,15 @@ describe("combination phase - normal", () => {
       // TODO  2: use 'map' to check in 10
     )
 
-    // TODO  3: change expectation
-    expect(result).toStrictEqual(null)
+    expect(result).toStrictEqual(O.some({ qty: 110 }))
   })
 
   test.skip("checkIn after invalid creation", () => {
     const result = pipe(
       parseItem("asd"),
-      // TODO  4: check in 10
+      // TODO  3: check in 10
     )
 
-    // TODO  5: change expectation
-    expect(result).toStrictEqual(null)
+    expect(result).toStrictEqual(O.none)
   })
 })
