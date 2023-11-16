@@ -1,4 +1,4 @@
-import { pipe } from "fp-ts/function"
+import {flow, identity, pipe} from "fp-ts/function"
 
 // TODO  1: for each test, remove the skip marker and make it green
 describe("custom lazy monad", () => {
@@ -50,6 +50,21 @@ describe("custom lazy monad", () => {
     const result = pipe(of(10), run())
 
     expect(result).toStrictEqual(10)
+  })
+
+  // TODO  6: remove skip marker and check if functor laws holds
+  describe.skip("functor laws", () => {
+    test("identity: identities map to identities", () => {
+      const result = pipe(of(10), map(identity))
+      const expected = pipe(10, identity, of)
+      expect(result()).toStrictEqual(expected())
+    })
+
+    test("composition: mapping a composition is the composition of the mappings", () => {
+      const result = pipe(of(10), map(increment), map(increment))
+      const expected = pipe(of(10), map(flow(increment, increment)))
+      expect(result()).toStrictEqual(expected())
+    })
   })
 
   // data types

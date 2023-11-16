@@ -53,6 +53,7 @@ describe("custom option monad", () => {
     expect(result).toStrictEqual("none")
   })
 
+  // TODO  6: remove skip marker and check if functor laws holds
   describe.skip("functor laws", () => {
     test("identity: identities map to identities", () => {
       const result = pipe(some(10), map(identity))
