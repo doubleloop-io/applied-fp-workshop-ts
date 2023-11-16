@@ -32,6 +32,8 @@
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0 --fix",
     "test": "jest",
     "test:watch": "jest --watch",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
     "spell": "cspell '**/*.*'",
     "eval": "ts-node",
     "web": "yarn build && node dist/webapp/index.js"
