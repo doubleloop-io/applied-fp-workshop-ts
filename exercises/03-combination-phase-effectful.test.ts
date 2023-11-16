@@ -24,7 +24,7 @@ describe("combination phase - effectful", () => {
   test.skip("checkOut after valid creation", () => {
     const result = pipe(
       parseItem("100"),
-      // TODO  2: use 'chain' to check out 10
+      // TODO  2: use 'flatMap' to check out 10
     )
 
     expect(result).toStrictEqual(O.some({ qty: 90 }))

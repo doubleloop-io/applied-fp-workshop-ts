@@ -181,7 +181,7 @@ const start = <M, EV, EF>(
   const loop = (model: M, effect: EF): Task<void> =>
     pipe(
       infrastructure(effect),
-      T.chain((wishToContinue) =>
+      T.flatMap((wishToContinue) =>
         match(wishToContinue)
           .with({ _tag: "Some" }, (ev) => {
             const { first: nextModel, second: nextEffect } = update(
@@ -288,20 +288,20 @@ const toError = (error: ParseError): Error => new Error(renderParseError(error))
 const loadPlanet = (path: string): TaskEither<Error, Planet> =>
   pipe(
     loadTuple(path),
-    TE.chain(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
+    TE.flatMap(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
   )
 
 const loadRover = (path: string): TaskEither<Error, Rover> =>
   pipe(
     loadTuple(path),
-    TE.chain(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
+    TE.flatMap(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
   )
 
 const loadCommands = (): TaskEither<Error, Commands> =>
   pipe(
     ask("Waiting commands..."),
     TE.fromTask,
-    TE.chain(flow(parseCommands, E.mapLeft(toError), TE.fromEither)),
+    TE.flatMap(flow(parseCommands, E.mapLeft(toError), TE.fromEither)),
   )
 
 const writeSequenceCompleted = (rover: Rover): Task<void> =>
@@ -422,7 +422,7 @@ const executeAll =
   (rover: Rover) =>
   (commands: Commands): Either<ObstacleDetected, Rover> =>
     commands.reduce(
-      (prev, cmd) => pipe(prev, E.chain(flip(execute(planet))(cmd))),
+      (prev, cmd) => pipe(prev, E.flatMap(flip(execute(planet))(cmd))),
       E.of<Rover, Rover>(rover),
     )
 

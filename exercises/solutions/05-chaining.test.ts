@@ -28,7 +28,7 @@ describe.skip("chaining", () => {
     const program: Option<void> = pipe(
       load(123),
       O.map(checkIn(10)),
-      O.chain(save),
+      O.flatMap(save),
     )
   })
 
@@ -40,7 +40,7 @@ describe.skip("chaining", () => {
     const program: Either<Error, Item> = pipe(
       load(123),
       E.map(checkIn(10)),
-      E.chain(save),
+      E.flatMap(save),
     )
   })
 
@@ -51,7 +51,7 @@ describe.skip("chaining", () => {
     const program: Task<Item> = pipe(
       load(123),
       T.map(checkIn(10)),
-      T.chain(save),
+      T.flatMap(save),
     )
   })
 
@@ -63,7 +63,7 @@ describe.skip("chaining", () => {
     const program: TaskEither<Error, Item> = pipe(
       load(123),
       TE.map(checkIn(10)),
-      TE.chain(save),
+      TE.flatMap(save),
     )
   })
 })

@@ -11,7 +11,7 @@ export const loadTuple = (
 ): TaskEither<Error, Tuple<string, string>> =>
   pipe(
     loadLines(path),
-    TE.chain(flow(linesToTuple, TE.fromEither)),
+    TE.flatMap(flow(linesToTuple, TE.fromEither)),
     TE.mapLeft((_) => new Error(`Invalid file content: ${path}`)),
   )
 

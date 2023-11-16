@@ -9,7 +9,7 @@ const GREEN = "\x1b[32m"
 const RED = "\x1b[31m"
 
 export const ask = (question: string): Task<string> =>
-  pipe(puts(question), T.chain(reads))
+  pipe(puts(question), T.flatMap(reads))
 
 export const logInfo = (message: string): Task<void> =>
   puts(green(`[OK] ${message}`))

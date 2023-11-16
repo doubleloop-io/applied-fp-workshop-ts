@@ -31,12 +31,12 @@ export const createFileMissionSource = (
   readPlanet: () =>
     pipe(
       loadTuple(pathPlanet),
-      TE.chain(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
+      TE.flatMap(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
     ),
   readRover: () =>
     pipe(
       loadTuple(pathRover),
-      TE.chain(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
+      TE.flatMap(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
     ),
 })
 

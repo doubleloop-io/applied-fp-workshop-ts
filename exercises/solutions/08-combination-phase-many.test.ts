@@ -28,7 +28,7 @@ describe.skip("combination phase - many", () => {
   const createItemNoAp = (name: string, qty: string): Option<Item> => {
     return pipe(
       checkName(name),
-      O.chain((n) =>
+      O.flatMap((n) =>
         pipe(
           checkQty(qty),
           O.map((q) => item(n)(q)),

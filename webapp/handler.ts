@@ -18,7 +18,7 @@ export const runApp = (
     TE.map(
       E.fold(missionReport.obstacleDetected, missionReport.sequenceCompleted),
     ),
-    TE.chain((t) => TE.fromTask(t)),
+    TE.flatMap((t) => TE.fromTask(t)),
     TE.getOrElse(missionReport.missionFailed),
   )
 

@@ -49,7 +49,7 @@ describe("TaskEither api", () => {
     //    v-- it's type is TaskEither<string, string>
     const te3 = pipe(
       te2,
-      TE.chain((x) => TE.left<string, string>(`error${x}`)),
+      TE.flatMap((x) => TE.left<string, string>(`error${x}`)),
     )
     expect(await te3()).toEqual(E.left("error5"))
 

@@ -83,7 +83,7 @@ export const runApp = (pathPlanet: string, pathRover: string): Task<void> =>
   pipe(
     runMission(pathPlanet, pathRover),
     TE.map(E.fold(writeObstacleDetected, writeSequenceCompleted)),
-    TE.chain((t) => TE.fromTask(t)),
+    TE.flatMap((t) => TE.fromTask(t)),
     TE.getOrElse(writeMissionFailed),
   )
 
@@ -105,20 +105,20 @@ const toError = (error: ParseError): Error => new Error(renderParseError(error))
 export const loadPlanet = (path: string): TaskEither<Error, Planet> =>
   pipe(
     loadTuple(path),
-    TE.chain(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
+    TE.flatMap(flow(parsePlanet, E.mapLeft(toError), TE.fromEither)),
   )
 
 export const loadRover = (path: string): TaskEither<Error, Rover> =>
   pipe(
     loadTuple(path),
-    TE.chain(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
+    TE.flatMap(flow(parseRover, E.mapLeft(toError), TE.fromEither)),
   )
 
 export const loadCommands = (): TaskEither<Error, Commands> =>
   pipe(
     ask("Waiting commands..."),
     TE.fromTask,
-    TE.chain(flow(parseCommands, E.mapLeft(toError), TE.fromEither)),
+    TE.flatMap(flow(parseCommands, E.mapLeft(toError), TE.fromEither)),
   )
 
 const writeSequenceCompleted = (rover: Rover): Task<void> =>
@@ -239,7 +239,7 @@ const executeAll =
   (rover: Rover) =>
   (commands: Commands): Either<ObstacleDetected, Rover> =>
     commands.reduce(
-      (prev, cmd) => pipe(prev, E.chain(flip(execute(planet))(cmd))),
+      (prev, cmd) => pipe(prev, E.flatMap(flip(execute(planet))(cmd))),
       E.of<Rover, Rover>(rover),
     )
 

@@ -37,8 +37,8 @@ describe("custom lazy monad", () => {
   })
 
   test.skip("combination phase - effectful", () => {
-    // TODO  4: implement 'chain' function
-    const result = pipe(of(10), chain(reverseString))
+    // TODO  4: implement 'flatMap' function
+    const result = pipe(of(10), flatMap(reverseString))
 
     expect(logs).toStrictEqual([])
     expect(result()).toStrictEqual("01")
@@ -70,22 +70,22 @@ describe("custom lazy monad", () => {
   // TODO 7: remove skip marker and check if monad laws holds
   describe.skip("monad laws", () => {
     test("left identity", () => {
-      const result = pipe(of(10), chain(reverseString))
+      const result = pipe(of(10), flatMap(reverseString))
       const expected = pipe(10, reverseString)
       expect(result()).toStrictEqual(expected())
     })
 
     test("right identity", () => {
-      const result = pipe(of(10), chain(of))
+      const result = pipe(of(10), flatMap(of))
       const expected = pipe(10, of)
       expect(result()).toStrictEqual(expected())
     })
 
     test("associativity", () => {
-      const result = pipe(of(10), chain(of), chain(reverseString))
+      const result = pipe(of(10), flatMap(of), flatMap(reverseString))
       const expected = pipe(
         of(10),
-        chain((x) => pipe(of(x), chain(reverseString))),
+        flatMap((x) => pipe(of(x), flatMap(reverseString))),
       )
       expect(result()).toStrictEqual(expected())
     })
@@ -109,7 +109,7 @@ describe("custom lazy monad", () => {
       throw new Error("TODO")
     }
 
-  const chain =
+  const flatMap =
     <A, B>(f: (a: A) => Lazy<B>) =>
     (fa: Lazy<A>): Lazy<B> =>
     () => {

@@ -21,13 +21,13 @@ describe.skip("combination phase - effectful", () => {
       value <= current.qty ? O.some(item(current.qty - value)) : O.none
 
   test("checkOut after valid creation", () => {
-    const result = pipe(parseItem("100"), O.chain(checkOut(10)))
+    const result = pipe(parseItem("100"), O.flatMap(checkOut(10)))
 
     expect(result).toStrictEqual(O.some({ qty: 90 }))
   })
 
   test("checkOut after invalid creation", () => {
-    const result = pipe(parseItem("asd"), O.chain(checkOut(10)))
+    const result = pipe(parseItem("asd"), O.flatMap(checkOut(10)))
 
     expect(result).toStrictEqual(O.none)
   })
@@ -36,7 +36,7 @@ describe.skip("combination phase - effectful", () => {
     const result = pipe(
       parseItem("100"),
       O.map(checkIn(10)),
-      O.chain(checkOut(20)),
+      O.flatMap(checkOut(20)),
     )
 
     expect(result).toStrictEqual(O.some({ qty: 90 }))

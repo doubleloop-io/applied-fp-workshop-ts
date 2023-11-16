@@ -43,7 +43,7 @@ describe("Either api", () => {
     //    v-- it's type is Either<string, string>
     const e3 = pipe(
       e2,
-      E.chain((x) => E.left<string, string>(`error${x}`)),
+      E.flatMap((x) => E.left<string, string>(`error${x}`)),
     )
     expect(e3).toEqual(E.left("error5"))
 

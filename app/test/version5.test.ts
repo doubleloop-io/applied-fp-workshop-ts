@@ -61,14 +61,14 @@ describe.skip("version 5", () => {
     const run = pipe(
       IR.newIORef(""),
       T.fromIO,
-      T.chain((output) =>
+      T.flatMap((output) =>
         pipe(
           runApp(
             createMissionSource(planet, rover),
             createCommandsChannel(commands),
             createMissionReport(output),
           ),
-          T.chain(() => T.fromIO(output.read)),
+          T.flatMap(() => T.fromIO(output.read)),
         ),
       ),
     )

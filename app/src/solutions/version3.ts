@@ -182,7 +182,7 @@ const executeAll =
   (rover: Rover) =>
   (commands: Commands): Either<ObstacleDetected, Rover> =>
     commands.reduce(
-      (prev, cmd) => pipe(prev, E.chain(flip(execute(planet))(cmd))),
+      (prev, cmd) => pipe(prev, E.flatMap(flip(execute(planet))(cmd))),
       E.of<Rover, Rover>(rover),
     )
 

@@ -22,8 +22,8 @@ describe("custom option monad", () => {
   })
 
   test.skip("combination phase - effectful", () => {
-    // TODO  4: implement 'chain' function
-    const result = pipe(some(10), chain(reverseString))
+    // TODO  4: implement 'flatMap' function
+    const result = pipe(some(10), flatMap(reverseString))
 
     expect(result).toStrictEqual(some("01"))
   })
@@ -71,22 +71,22 @@ describe("custom option monad", () => {
   // TODO 7: remove skip marker and check if monad laws holds
   describe.skip("monad laws", () => {
     test("left identity", () => {
-      const result = pipe(some(10), chain(reverseString))
+      const result = pipe(some(10), flatMap(reverseString))
       const expected = pipe(10, reverseString)
       expect(result).toStrictEqual(expected)
     })
 
     test("right identity", () => {
-      const result = pipe(some(10), chain(some))
+      const result = pipe(some(10), flatMap(some))
       const expected = pipe(10, some)
       expect(result).toStrictEqual(expected)
     })
 
     test("associativity", () => {
-      const result = pipe(some(10), chain(some), chain(reverseString))
+      const result = pipe(some(10), flatMap(some), flatMap(reverseString))
       const expected = pipe(
         some(10),
-        chain((x) => pipe(some(x), chain(reverseString))),
+        flatMap((x) => pipe(some(x), flatMap(reverseString))),
       )
       expect(result).toStrictEqual(expected)
     })
@@ -117,7 +117,7 @@ describe("custom option monad", () => {
       throw new Error("TODO")
     }
 
-  const chain =
+  const flatMap =
     <A, B>(f: (a: A) => Option<B>) =>
     (fa: Option<A>): Option<B> => {
       throw new Error("TODO")
