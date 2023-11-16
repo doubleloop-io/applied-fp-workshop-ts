@@ -10,12 +10,12 @@ describe.skip("combination phase - list", () => {
 
   const item = (qty: number): Item => ({ qty })
 
-  const createItem = (qty: string): Option<Item> =>
+  const parseItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   test("all valid - individual results", () => {
     const values = ["1", "10", "100"]
-    const result = pipe(values, A.map(createItem))
+    const result = pipe(values, A.map(parseItem))
 
     expect(result).toStrictEqual([
       O.some({ qty: 1 }),
@@ -26,7 +26,7 @@ describe.skip("combination phase - list", () => {
 
   test("some invalid - individual results", () => {
     const values = ["1", "asd", "100"]
-    const result = pipe(values, A.map(createItem))
+    const result = pipe(values, A.map(parseItem))
 
     expect(result).toStrictEqual([
       O.some({ qty: 1 }),
@@ -37,7 +37,7 @@ describe.skip("combination phase - list", () => {
 
   test("all valid - summon result", () => {
     const values = ["1", "10", "100"]
-    const result = pipe(values, O.traverseArray(createItem))
+    const result = pipe(values, O.traverseArray(parseItem))
 
     expect(result).toStrictEqual(
       O.some([{ qty: 1 }, { qty: 10 }, { qty: 100 }]),
@@ -46,7 +46,7 @@ describe.skip("combination phase - list", () => {
 
   test("some invalid - summon result", () => {
     const values = ["1", "asd", "100"]
-    const result = pipe(values, O.traverseArray(createItem))
+    const result = pipe(values, O.traverseArray(parseItem))
 
     expect(result).toStrictEqual(O.none)
   })

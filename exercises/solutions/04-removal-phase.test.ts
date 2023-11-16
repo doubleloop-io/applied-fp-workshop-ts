@@ -9,12 +9,12 @@ describe.skip("removal phase", () => {
 
   const item = (qty: number): Item => ({ qty })
 
-  const createItem = (qty: string): Option<Item> =>
+  const parseItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   test("item creation", () => {
     const result = pipe(
-      createItem("100"),
+      parseItem("100"),
       O.fold(
         () => "alternative value",
         (x) => x.qty.toString(),
@@ -26,7 +26,7 @@ describe.skip("removal phase", () => {
 
   test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
     const result = pipe(
-      createItem(x),
+      parseItem(x),
       O.fold(
         () => "alternative value",
         (x) => x.qty.toString(),
@@ -38,7 +38,7 @@ describe.skip("removal phase", () => {
 
   test("get or default - valid", () => {
     const result = pipe(
-      createItem("10"),
+      parseItem("10"),
       O.getOrElse(() => item(0)),
     )
 
@@ -47,7 +47,7 @@ describe.skip("removal phase", () => {
 
   test("get or default - invalid", () => {
     const result = pipe(
-      createItem("asd"),
+      parseItem("asd"),
       O.getOrElse(() => item(0)),
     )
 

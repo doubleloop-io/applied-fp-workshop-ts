@@ -18,7 +18,7 @@ describe.skip("combination phase - many", () => {
   const checkQty = (value: string): Option<number> =>
     value.match(/^[0-9]+$/i) ? O.some(Number(value)) : O.none
 
-  const createItem = (name: string, qty: string): Option<Item> =>
+  const parseItem = (name: string, qty: string): Option<Item> =>
     pipe(O.of(item), O.ap(checkName(name)), O.ap(checkQty(qty)))
 
   // NOTE: different way, call the first effectful function,
@@ -41,19 +41,19 @@ describe.skip("combination phase - many", () => {
   }
 
   test("creation with valid parameters", () => {
-    const result = createItem("foo", "100")
+    const result = parseItem("foo", "100")
 
     expect(result).toStrictEqual(O.some({ name: "foo", qty: 100 }))
   })
 
   test("creation with invalid name", () => {
-    const result = createItem("", "100")
+    const result = parseItem("", "100")
 
     expect(result).toStrictEqual(O.none)
   })
 
   test("creation with invalid quantity", () => {
-    const result = createItem("foo", "")
+    const result = parseItem("foo", "")
 
     expect(result).toStrictEqual(O.none)
   })

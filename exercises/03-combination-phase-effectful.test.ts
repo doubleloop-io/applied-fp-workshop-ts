@@ -10,7 +10,7 @@ describe("combination phase - effectful", () => {
 
   const item = (qty: number): Item => ({ qty })
 
-  const createItem = (qty: string): Option<Item> =>
+  const parseItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   const checkIn =
@@ -25,7 +25,7 @@ describe("combination phase - effectful", () => {
 
   test.skip("checkOut after valid creation", () => {
     const result = pipe(
-      createItem("100"),
+      parseItem("100"),
       // TODO  2: use 'chain' to check out 10
     )
 
@@ -35,7 +35,7 @@ describe("combination phase - effectful", () => {
 
   test.skip("checkOut after invalid creation", () => {
     const result = pipe(
-      createItem("asd"),
+      parseItem("asd"),
       // TODO  4: check out 10
     )
 
@@ -45,7 +45,7 @@ describe("combination phase - effectful", () => {
 
   test.skip("checkIn and checkOut after valid creation", () => {
     const result = pipe(
-      createItem("100"),
+      parseItem("100"),
       // TODO  6: check in 10
       // TODO  7: check out 20
     )

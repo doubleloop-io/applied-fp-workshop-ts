@@ -9,7 +9,7 @@ describe.skip("combination phase - normal", () => {
 
   const item = (qty: number): Item => ({ qty })
 
-  const createItem = (qty: string): Option<Item> =>
+  const parseItem = (qty: string): Option<Item> =>
     qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   const checkIn =
@@ -18,13 +18,13 @@ describe.skip("combination phase - normal", () => {
       item(current.qty + value)
 
   test("checkIn after valid creation", () => {
-    const result = pipe(createItem("100"), O.map(checkIn(10)))
+    const result = pipe(parseItem("100"), O.map(checkIn(10)))
 
     expect(result).toStrictEqual(O.some({ qty: 110 }))
   })
 
   test("checkIn after invalid creation", () => {
-    const result = pipe(createItem("asd"), O.map(checkIn(10)))
+    const result = pipe(parseItem("asd"), O.map(checkIn(10)))
 
     expect(result).toStrictEqual(O.none)
   })

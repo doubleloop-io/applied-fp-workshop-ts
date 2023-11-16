@@ -20,11 +20,11 @@ describe.skip("creation phase", () => {
 
   const valid = (item: Item): Valid => ({ _tag: "Valid", value: item })
 
-  const createItem = (qty: string): OptionalItem =>
+  const parseItem = (qty: string): OptionalItem =>
     qty.match(/^[0-9]+$/i) ? valid(item(Number(qty))) : invalid()
 
   test("item creation", () => {
-    const result = createItem("10")
+    const result = parseItem("10")
 
     expect(result).toStrictEqual({
       _tag: "Valid",
@@ -33,7 +33,7 @@ describe.skip("creation phase", () => {
   })
 
   test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
-    const result = createItem(x)
+    const result = parseItem(x)
 
     expect(result).toStrictEqual({
       _tag: "Invalid",
