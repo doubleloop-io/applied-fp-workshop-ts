@@ -4,6 +4,12 @@
 
 ## Yarn Commands
 
+Install dependencies:
+
+```sh
+$ yarn install
+```
+
 Run build:
 
 ```sh
@@ -18,11 +24,18 @@ $ yarn test
 $ yarn test:watch
 ```
 
-Run Typescript file:
+Run a TypeScript file:
 
 ```sh
 $ yarn eval app/index.ts
 ```
+
+Run the web application:
+
+```sh
+$ yarn web
+```
+then click on demo links.
 
 ## Documentation
 
