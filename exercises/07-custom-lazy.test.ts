@@ -68,7 +68,7 @@ describe("custom lazy monad", () => {
   })
 
   // TODO 7: remove skip marker and check if monad laws holds
-  describe("monad laws", () => {
+  describe.skip("monad laws", () => {
     test("left identity", () => {
       const result = pipe(of(10), chain(reverseString))
       const expected = pipe(10, reverseString)
