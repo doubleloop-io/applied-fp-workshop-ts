@@ -3,14 +3,14 @@ import { match } from "ts-pattern"
 describe("multiple dispatch", () => {
   // Multiple dispatch is a feature in which a function can be dispatched
   // based on the type of one of its arguments.
-  // The pattern match enable the structural recursion a fancy name
-  // to express a way to dispatch logic by type and data.
+  // The pattern match enable the structural recursion
+  // that is a way to dispatch logic by type and data.
   // It goes hand in hand with ADT specially Sum Type.
 
   type TrafficLight = Red | Yellow | Green
-  type Red = { readonly _tag: "Red" }
-  type Yellow = { readonly _tag: "Yellow" }
-  type Green = { readonly _tag: "Green" }
+  type Red = Readonly<{ _tag: "Red" }>
+  type Yellow = Readonly<{ _tag: "Yellow" }>
+  type Green = Readonly<{ _tag: "Green" }>
 
   const red = (): TrafficLight => ({ _tag: "Red" })
   const yellow = (): TrafficLight => ({ _tag: "Yellow" })
@@ -23,7 +23,7 @@ describe("multiple dispatch", () => {
       .with({ _tag: "Green" }, () => yellow())
       .exhaustive()
 
-  it("provides the next state", () => {
+  test("provides the next state", () => {
     expect(next(red())).toEqual(green())
     expect(next(yellow())).toEqual(red())
     expect(next(green())).toEqual(yellow())
@@ -31,18 +31,18 @@ describe("multiple dispatch", () => {
 
   // PROGRAM AS VALUES
 
-  // We can model behavior intent with data types.
-  // Then, data can be stored, combined and finally interpreted.
+  // We can model behavior intent with data types instead of functions.
+  // Then, data can be stored, combined, optimized and finally interpreted.
   // Whit different interpreters we can execute different behaviors.
 
-  // In order to do that, we must split a program in two parts:
+  // In order to do that, we should split a program in two parts:
   // - description: build a program description w/ values
   // - evaluation: execute logic based on the description
 
   type Expr = Num | Plus | Times
-  type Num = { readonly _tag: "Num"; readonly x: number }
-  type Plus = { readonly _tag: "Plus"; readonly x: Expr; readonly y: Expr }
-  type Times = { readonly _tag: "Times"; readonly x: Expr; readonly y: Expr }
+  type Num = Readonly<{ _tag: "Num"; x: number }>
+  type Plus = Readonly<{ _tag: "Plus"; x: Expr; y: Expr }>
+  type Times = Readonly<{ _tag: "Times"; x: Expr; y: Expr }>
 
   const num = (x: number): Expr => ({ _tag: "Num", x })
   const plus = (x: Expr, y: Expr): Expr => ({ _tag: "Plus", x, y })
@@ -57,7 +57,7 @@ describe("multiple dispatch", () => {
       .with({ _tag: "Times" }, ({ x, y }) => evalNumber(x) * evalNumber(y))
       .exhaustive()
 
-  it("eval number", () => {
+  test("eval the expression as number", () => {
     const result = evalNumber(program)
     expect(result).toEqual(9)
   })
@@ -75,7 +75,7 @@ describe("multiple dispatch", () => {
       )
       .exhaustive()
 
-  it("eval string", () => {
+  test("eval the expression as string", () => {
     const result = evalString(program)
     expect(result).toEqual("((1 + 2) * 3)")
   })
