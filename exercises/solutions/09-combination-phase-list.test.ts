@@ -4,9 +4,7 @@ import * as O from "fp-ts/Option"
 import * as A from "fp-ts/Array"
 
 describe.skip("combination phase - list", () => {
-  type Item = {
-    qty: number
-  }
+  type Item = Readonly<{ qty: number }>
 
   const item = (qty: number): Item => ({ qty })
 

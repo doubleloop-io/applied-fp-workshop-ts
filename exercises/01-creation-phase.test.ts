@@ -1,8 +1,6 @@
 // TODO  1: for each test, remove the skip marker and make it green
 describe("creation phase", () => {
-  type Item = {
-    qty: number
-  }
+  type Item = Readonly<{ qty: number }>
 
   const item = (qty: number): Item => ({ qty })
 

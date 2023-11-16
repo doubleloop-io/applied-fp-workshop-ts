@@ -2,20 +2,15 @@ import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 
 describe.skip("creation phase", () => {
-  type Item = {
-    qty: number
-  }
+  type Item = Readonly<{ qty: number }>
 
   const item = (qty: number): Item => ({ qty })
 
   type OptionalItem = Invalid | Valid
-  type Invalid = {
-    readonly _tag: "Invalid"
-  }
-  type Valid = {
-    readonly _tag: "Valid"
-    readonly value: Item
-  }
+
+  type Invalid = Readonly<{ _tag: "Invalid" }>
+  type Valid = Readonly<{ _tag: "Valid"; value: Item }>
+
   const invalid = (): Invalid => ({ _tag: "Invalid" })
 
   const valid = (item: Item): Valid => ({ _tag: "Valid", value: item })

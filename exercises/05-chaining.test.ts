@@ -11,7 +11,7 @@ import * as TE from "fp-ts/TaskEither"
 // TODO  1: for each test, remove the skip marker and make it green
 describe("chaining", () => {
   type ItemId = number
-  type Item = { id: ItemId; qty: number }
+  type Item = Readonly<{ id: ItemId; qty: number }>
 
   const checkIn =
     (value: number) =>
@@ -20,10 +20,10 @@ describe("chaining", () => {
       qty: current.qty + value,
     })
 
-  const aItem: Item = { id: 123, qty: 10 }
+  const anItem: Item = { id: 123, qty: 10 }
 
   test.skip("chaining w/ Option Monad", () => {
-    const load = (id: ItemId): Option<Item> => O.of(aItem)
+    const load = (id: ItemId): Option<Item> => O.of(anItem)
     const save = (item: Item): Option<void> => O.of(constVoid())
 
     // TODO  1: write a program that load an item, check in 10 and finally save the item
@@ -32,7 +32,7 @@ describe("chaining", () => {
 
   test.skip("chaining w/ Either Monad", () => {
     type Error = string
-    const load = (id: ItemId): Either<Error, Item> => E.of(aItem)
+    const load = (id: ItemId): Either<Error, Item> => E.of(anItem)
     const save = (item: Item): Either<Error, Item> => E.of(item)
 
     // TODO  2: write a program that load an item, check in 10 and finally save the item
@@ -40,7 +40,7 @@ describe("chaining", () => {
   })
 
   test.skip("chaining w/ Task Monad", () => {
-    const load = (id: ItemId): Task<Item> => T.of(aItem)
+    const load = (id: ItemId): Task<Item> => T.of(anItem)
     const save = (item: Item): Task<Item> => T.of(item)
 
     // TODO  3: write a program that load an item, check in 10 and finally save the item
@@ -49,7 +49,7 @@ describe("chaining", () => {
 
   test.skip("chaining w/ TaskEither Monad", () => {
     type Error = string
-    const load = (id: ItemId): TaskEither<Error, Item> => TE.of(aItem)
+    const load = (id: ItemId): TaskEither<Error, Item> => TE.of(anItem)
     const save = (item: Item): TaskEither<Error, Item> => TE.of(item)
 
     // TODO  4: write a program that load an item, check in 10 and finally save the item

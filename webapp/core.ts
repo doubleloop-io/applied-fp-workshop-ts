@@ -1,12 +1,15 @@
-export type Rover = { position: Position; direction: Direction }
-export type Position = { x: number; y: number }
+export type Rover = Readonly<{ position: Position; direction: Direction }>
+export type Position = Readonly<{ x: number; y: number }>
 export type Direction = "N" | "E" | "W" | "S"
-export type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
-export type Size = { width: number; height: number }
-export type Obstacle = { position: Position }
+export type Planet = Readonly<{
+  size: Size
+  obstacles: ReadonlyArray<Obstacle>
+}>
+export type Size = Readonly<{ width: number; height: number }>
+export type Obstacle = Readonly<{ position: Position }>
 export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 export type Commands = ReadonlyArray<Command>
-export type Delta = { x: number; y: number }
+export type Delta = Readonly<{ x: number; y: number }>
 export type ObstacleDetected = Rover
 
 export const planet =
@@ -50,20 +53,11 @@ export type ParseError =
   | InvalidDirection
   | InvalidCommand
 
-type InvalidSize = { readonly _tag: "InvalidSize"; readonly error: Error }
-type InvalidObstacle = {
-  readonly _tag: "InvalidObstacle"
-  readonly error: Error
-}
-type InvalidPosition = {
-  readonly _tag: "InvalidPosition"
-  readonly error: Error
-}
-type InvalidDirection = {
-  readonly _tag: "InvalidDirection"
-  readonly error: Error
-}
-type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
+type InvalidSize = Readonly<{ _tag: "InvalidSize"; error: Error }>
+type InvalidObstacle = Readonly<{ _tag: "InvalidObstacle"; error: Error }>
+type InvalidPosition = Readonly<{ _tag: "InvalidPosition"; error: Error }>
+type InvalidDirection = Readonly<{ _tag: "InvalidDirection"; error: Error }>
+type InvalidCommand = Readonly<{ _tag: "InvalidCommand"; error: Error }>
 
 export const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",

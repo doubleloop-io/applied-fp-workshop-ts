@@ -15,15 +15,15 @@ import { Either } from "fp-ts/Either"
 import { Tuple, unsafeParse } from "../utils/tuple"
 
 // TODO 1: get familiar with domain types and constructors
-type Rover = { position: Position; direction: Direction }
-type Position = { x: number; y: number }
+type Rover = Readonly<{ position: Position; direction: Direction }>
+type Position = Readonly<{ x: number; y: number }>
 type Direction = "N" | "E" | "W" | "S"
-type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
-type Size = { width: number; height: number }
-type Obstacle = { position: Position }
+type Planet = Readonly<{ size: Size; obstacles: ReadonlyArray<Obstacle> }>
+type Size = Readonly<{ width: number; height: number }>
+type Obstacle = Readonly<{ position: Position }>
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Commands = ReadonlyArray<Command>
-type Delta = { x: number; y: number }
+type Delta = Readonly<{ x: number; y: number }>
 
 const planet =
   (size: Size) =>
@@ -53,20 +53,11 @@ type ParseError =
   | InvalidDirection
   | InvalidCommand
 
-type InvalidSize = { readonly _tag: "InvalidSize"; readonly error: Error }
-type InvalidObstacle = {
-  readonly _tag: "InvalidObstacle"
-  readonly error: Error
-}
-type InvalidPosition = {
-  readonly _tag: "InvalidPosition"
-  readonly error: Error
-}
-type InvalidDirection = {
-  readonly _tag: "InvalidDirection"
-  readonly error: Error
-}
-type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
+type InvalidSize = Readonly<{ _tag: "InvalidSize"; error: Error }>
+type InvalidObstacle = Readonly<{ _tag: "InvalidObstacle"; error: Error }>
+type InvalidPosition = Readonly<{ _tag: "InvalidPosition"; error: Error }>
+type InvalidDirection = Readonly<{ _tag: "InvalidDirection"; error: Error }>
+type InvalidCommand = Readonly<{ _tag: "InvalidCommand"; error: Error }>
 
 export const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",

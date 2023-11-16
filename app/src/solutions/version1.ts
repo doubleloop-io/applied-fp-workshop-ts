@@ -1,15 +1,18 @@
 import { match } from "ts-pattern"
 import { pipe } from "fp-ts/function"
 
-type Rover = { position: Position; direction: Direction }
-type Position = { x: number; y: number }
+export type Rover = Readonly<{ position: Position; direction: Direction }>
+type Position = Readonly<{ x: number; y: number }>
 type Direction = "N" | "E" | "W" | "S"
-type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
-type Size = { width: number; height: number }
-type Obstacle = { position: Position }
-type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
-type Commands = ReadonlyArray<Command>
-type Delta = { x: number; y: number }
+export type Planet = Readonly<{
+  size: Size
+  obstacles: ReadonlyArray<Obstacle>
+}>
+type Size = Readonly<{ width: number; height: number }>
+type Obstacle = Readonly<{ position: Position }>
+export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+export type Commands = ReadonlyArray<Command>
+type Delta = Readonly<{ x: number; y: number }>
 
 export const executeAll = (
   planet: Planet,

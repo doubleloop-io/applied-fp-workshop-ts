@@ -28,6 +28,19 @@ describe("model behaviors - functions", () => {
     const result = pipe(input, parseString, reciprocal, asString)
 
     expect(result).toEqual("0.023809523809523808")
+
+    /*
+    let program input =
+      input
+        |> parseString
+        |> reciprocal
+        |> asString
+
+    def program(input) =
+      parseString(input)
+        .reciprocal()
+        .asString()
+    */
   })
 
   it("compose functions by generating new function (flow)", () => {
@@ -37,6 +50,18 @@ describe("model behaviors - functions", () => {
     const result = composed(input)
 
     expect(result).toEqual("0.023809523809523808")
+
+    /*
+    let program () =
+      parseString
+        >> reciprocal
+        >> asString
+
+    def program() =
+      parseString
+        .andThen(reciprocal)
+        .andThen(asString)
+    */
   })
 
   it("pipe function with more than one parameter", () => {
@@ -79,5 +104,20 @@ describe("model behaviors - functions", () => {
     )
 
     expect(result).toEqual("0.02")
+
+    /*
+    let program input =
+      input
+        |> parseString
+        |> reciprocal
+        |> asString
+        |> substring 4
+
+    def program(input) =
+      parseString(input)
+        .reciprocal()
+        .asString()
+        .substring(4)
+    */
   })
 })

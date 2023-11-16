@@ -94,13 +94,9 @@ describe("custom option monad", () => {
 
   // data types
   type Option<A> = None | Some<A>
-  type None = {
-    readonly _tag: "None"
-  }
-  type Some<A> = {
-    readonly _tag: "Some"
-    readonly value: A
-  }
+
+  type None = Readonly<{ _tag: "None" }>
+  type Some<A> = Readonly<{ _tag: "Some"; value: A }>
 
   // constructors
   const none = <A>(): Option<A> => ({ _tag: "None" })

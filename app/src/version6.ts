@@ -20,15 +20,18 @@ import { loadTuple } from "../utils/infra-file"
 import * as O from "fp-ts/Option"
 import { Option } from "fp-ts/Option"
 
-type Rover = { position: Position; direction: Direction }
-type Position = { x: number; y: number }
+export type Rover = Readonly<{ position: Position; direction: Direction }>
+type Position = Readonly<{ x: number; y: number }>
 type Direction = "N" | "E" | "W" | "S"
-type Planet = { size: Size; obstacles: ReadonlyArray<Obstacle> }
-type Size = { width: number; height: number }
-type Obstacle = { position: Position }
+export type Planet = Readonly<{
+  size: Size
+  obstacles: ReadonlyArray<Obstacle>
+}>
+type Size = Readonly<{ width: number; height: number }>
+type Obstacle = Readonly<{ position: Position }>
 type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
 type Commands = ReadonlyArray<Command>
-type Delta = { x: number; y: number }
+type Delta = Readonly<{ x: number; y: number }>
 type ObstacleDetected = Rover
 
 const planet =
@@ -58,20 +61,11 @@ type ParseError =
   | InvalidDirection
   | InvalidCommand
 
-type InvalidSize = { readonly _tag: "InvalidSize"; readonly error: Error }
-type InvalidObstacle = {
-  readonly _tag: "InvalidObstacle"
-  readonly error: Error
-}
-type InvalidPosition = {
-  readonly _tag: "InvalidPosition"
-  readonly error: Error
-}
-type InvalidDirection = {
-  readonly _tag: "InvalidDirection"
-  readonly error: Error
-}
-type InvalidCommand = { readonly _tag: "InvalidCommand"; readonly error: Error }
+type InvalidSize = Readonly<{ _tag: "InvalidSize"; error: Error }>
+type InvalidObstacle = Readonly<{ _tag: "InvalidObstacle"; error: Error }>
+type InvalidPosition = Readonly<{ _tag: "InvalidPosition"; error: Error }>
+type InvalidDirection = Readonly<{ _tag: "InvalidDirection"; error: Error }>
+type InvalidCommand = Readonly<{ _tag: "InvalidCommand"; error: Error }>
 
 const invalidSize = (e: Error): ParseError => ({
   _tag: "InvalidSize",
@@ -101,15 +95,10 @@ const invalidCommand = (e: Error): ParseError => ({
 // TODO 1: get familiar with following types and constructors
 // HINT: All possible discrete application states
 type AppState = AppLoading | AppReady | AppFailed
-type AppLoading = { readonly _tag: "AppLoading" }
-type AppReady = {
-  readonly _tag: "AppReady"
-  readonly planet: Planet
-  readonly rover: Rover
-}
-type AppFailed = {
-  readonly _tag: "AppFailed"
-}
+
+type AppLoading = Readonly<{ _tag: "AppLoading" }>
+type AppReady = Readonly<{ _tag: "AppReady"; planet: Planet; rover: Rover }>
+type AppFailed = Readonly<{ _tag: "AppFailed" }>
 
 export const appLoading = (): AppState => ({ _tag: "AppLoading" })
 export const appReady = (planet: Planet, rover: Rover): AppState => ({
@@ -127,25 +116,22 @@ type Effect =
   | ReportObstacleDetectedEffect
   | ReportSequenceCompletedEffect
   | ReportErrorEffect
-type LoadMissionEffect = {
-  readonly _tag: "LoadMissionEffect"
-  readonly pathPlanet: string
-  readonly pathRover: string
-}
-type AskCommandsEffect = { readonly _tag: "AskCommandsEffect" }
-type ReportObstacleDetectedEffect = {
-  readonly _tag: "ReportObstacleDetectedEffect"
-  readonly rover: ObstacleDetected
-}
-type ReportSequenceCompletedEffect = {
-  readonly _tag: "ReportSequenceCompletedEffect"
 
-  readonly rover: Rover
-}
-type ReportErrorEffect = {
-  readonly _tag: "ReportErrorEffect"
-  readonly error: Error
-}
+type LoadMissionEffect = Readonly<{
+  _tag: "LoadMissionEffect"
+  pathPlanet: string
+  pathRover: string
+}>
+type AskCommandsEffect = Readonly<{ _tag: "AskCommandsEffect" }>
+type ReportObstacleDetectedEffect = Readonly<{
+  _tag: "ReportObstacleDetectedEffect"
+  rover: ObstacleDetected
+}>
+type ReportSequenceCompletedEffect = Readonly<{
+  _tag: "ReportSequenceCompletedEffect"
+  rover: Rover
+}>
+type ReportErrorEffect = Readonly<{ _tag: "ReportErrorEffect"; error: Error }>
 
 export const loadMission = (pathPlanet: string, pathRover: string): Effect => ({
   _tag: "LoadMissionEffect",
@@ -174,19 +160,20 @@ type Event =
   | LoadMissionSuccessfulEvent
   | LoadMissionFailedEvent
   | CommandsReceivedEvent
-type LoadMissionSuccessfulEvent = {
-  readonly _tag: "LoadMissionSuccessfulEvent"
-  readonly planet: Planet
-  readonly rover: Rover
-}
-type LoadMissionFailedEvent = {
-  readonly _tag: "LoadMissionFailedEvent"
-  readonly error: Error
-}
-type CommandsReceivedEvent = {
-  readonly _tag: "CommandsReceivedEvent"
-  readonly commands: Commands
-}
+
+type LoadMissionSuccessfulEvent = Readonly<{
+  _tag: "LoadMissionSuccessfulEvent"
+  planet: Planet
+  rover: Rover
+}>
+type LoadMissionFailedEvent = Readonly<{
+  _tag: "LoadMissionFailedEvent"
+  error: Error
+}>
+type CommandsReceivedEvent = Readonly<{
+  _tag: "CommandsReceivedEvent"
+  commands: Commands
+}>
 
 export const loadMissionSuccessful = (planet: Planet, rover: Rover): Event => ({
   _tag: "LoadMissionSuccessfulEvent",

@@ -1,5 +1,5 @@
 describe("foldable", () => {
-  type Item = { readonly qty: number }
+  type Item = Readonly<{ qty: number }>
   const item = (qty: number): Item => ({ qty })
 
   const merge = (item1: Item, item2: Item): Item => item(item1.qty + item2.qty)

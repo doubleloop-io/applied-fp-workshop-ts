@@ -1,4 +1,6 @@
 import {
+  Planet,
+  Rover,
   appFailed,
   appLoading,
   appReady,
@@ -28,8 +30,8 @@ describe.skip("version 6", () => {
   })
 
   test.skip("load mission successful", () => {
-    const planet = { size: { width: 5, height: 5 }, obstacles: [] }
-    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const planet: Planet = { size: { width: 5, height: 5 }, obstacles: [] }
+    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }
 
     const result = update(appLoading(), loadMissionSuccessful(planet, rover))
 
@@ -45,15 +47,15 @@ describe.skip("version 6", () => {
   })
 
   test.skip("all commands executed", () => {
-    const planet = { size: { width: 5, height: 5 }, obstacles: [] }
-    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const planet: Planet = { size: { width: 5, height: 5 }, obstacles: [] }
+    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }
 
     const result = update(
       appReady(planet, rover),
       commandsReceived(["MoveForward", "MoveForward", "MoveForward"]),
     )
 
-    const updatedRover = { ...rover, position: { x: 0, y: 3 } }
+    const updatedRover: Rover = { ...rover, position: { x: 0, y: 3 } }
     expect(result).toStrictEqual(
       tuple(
         appReady(planet, updatedRover),
@@ -63,18 +65,18 @@ describe.skip("version 6", () => {
   })
 
   test.skip("hit obstacle", () => {
-    const planet = {
+    const planet: Planet = {
       size: { width: 5, height: 5 },
       obstacles: [{ position: { x: 0, y: 2 } }],
     }
-    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }
 
     const result = update(
       appReady(planet, rover),
       commandsReceived(["MoveForward", "MoveForward", "MoveForward"]),
     )
 
-    const updatedRover = { ...rover, position: { x: 0, y: 1 } }
+    const updatedRover: Rover = { ...rover, position: { x: 0, y: 1 } }
     expect(result).toStrictEqual(
       tuple(
         appReady(planet, updatedRover),
@@ -91,11 +93,11 @@ describe.skip("version 6", () => {
 
       const result = await load()
 
-      const planet = {
+      const planet: Planet = {
         size: { width: 5, height: 4 },
         obstacles: [{ position: { x: 2, y: 0 } }, { position: { x: 0, y: 3 } }],
       }
-      const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+      const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }
       expect(result).toStrictEqual(O.some(loadMissionSuccessful(planet, rover)))
     })
   })
