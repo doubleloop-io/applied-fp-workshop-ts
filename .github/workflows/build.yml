@@ -1,5 +1,5 @@
 name: CI
-on:  
+on:
   push:
     branches:
       - $default-branch
@@ -7,7 +7,7 @@ on:
     branches:
       - $default-branch
   workflow_dispatch:
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest

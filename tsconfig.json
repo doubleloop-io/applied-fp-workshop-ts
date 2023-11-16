@@ -17,12 +17,7 @@
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": [
-    "app/**/*",
-    "demo/**/*",
-    "exercises/**/*",
-    "webapp/**/*"
-  ],
+  "include": ["app/**/*", "demo/**/*", "exercises/**/*", "webapp/**/*"],
   "exclude": [
     "node_modules/**/*",
     ".github/**/*",
