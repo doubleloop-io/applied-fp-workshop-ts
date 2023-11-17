@@ -26,33 +26,37 @@ describe("chaining", () => {
     const load = (id: ItemId): Option<Item> => O.of(anItem)
     const save = (item: Item): Option<void> => O.of(constVoid())
 
-    // TODO  1: write a program that load an item, check in 10 and finally save the item
-    // const program: Option<void> = ...
+    // TODO 1: remove O.of(constVoid()) and write a program that:
+    //  load an item, check in 10 and finally save the item
+    const program: Option<void> = O.of(constVoid())
   })
 
   test.skip("chaining w/ Either Monad", () => {
     type Error = string
     const load = (id: ItemId): Either<Error, Item> => E.of(anItem)
-    const save = (item: Item): Either<Error, Item> => E.of(item)
+    const save = (item: Item): Either<Error, void> => E.of(constVoid())
 
-    // TODO  2: write a program that load an item, check in 10 and finally save the item
-    // const program: Either<Error, Item> = ...
+    // TODO 2: remove E.of(constVoid()) and write a program that:
+    //  load an item, check in 10 and finally save the item
+    const program: Either<Error, void> = E.of(constVoid())
   })
 
   test.skip("chaining w/ Task Monad", () => {
     const load = (id: ItemId): Task<Item> => T.of(anItem)
-    const save = (item: Item): Task<Item> => T.of(item)
+    const save = (item: Item): Task<void> => T.of(constVoid())
 
-    // TODO  3: write a program that load an item, check in 10 and finally save the item
-    // const program: Task<Item> = ...
+    // TODO 3: remove T.of(constVoid()) and write a program that:
+    //  load an item, check in 10 and finally save the item
+    const program: Task<void> = T.of(constVoid())
   })
 
   test.skip("chaining w/ TaskEither Monad", () => {
     type Error = string
     const load = (id: ItemId): TaskEither<Error, Item> => TE.of(anItem)
-    const save = (item: Item): TaskEither<Error, Item> => TE.of(item)
+    const save = (item: Item): TaskEither<Error, void> => TE.of(constVoid())
 
-    // TODO  4: write a program that load an item, check in 10 and finally save the item
-    // const program: TaskEither<Error, Item> = ...
+    // TODO 4: remove TE.of(constVoid()) and write a program that:
+    //  load an item, check in 10 and finally save the item
+    const program: TaskEither<Error, void> = TE.of(constVoid())
   })
 })

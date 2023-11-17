@@ -35,9 +35,9 @@ describe.skip("chaining", () => {
   test("chaining w/ Either Monad", () => {
     type Error = string
     const load = (id: ItemId): Either<Error, Item> => E.of(anItem)
-    const save = (item: Item): Either<Error, Item> => E.of(item)
+    const save = (item: Item): Either<Error, void> => E.of(constVoid())
 
-    const program: Either<Error, Item> = pipe(
+    const program: Either<Error, void> = pipe(
       load(123),
       E.map(checkIn(10)),
       E.flatMap(save),
@@ -46,9 +46,9 @@ describe.skip("chaining", () => {
 
   test("chaining w/ Task Monad", () => {
     const load = (id: ItemId): Task<Item> => T.of(anItem)
-    const save = (item: Item): Task<Item> => T.of(item)
+    const save = (item: Item): Task<void> => T.of(constVoid())
 
-    const program: Task<Item> = pipe(
+    const program: Task<void> = pipe(
       load(123),
       T.map(checkIn(10)),
       T.flatMap(save),
@@ -58,9 +58,9 @@ describe.skip("chaining", () => {
   test("chaining w/ TaskEither Monad", () => {
     type Error = string
     const load = (id: ItemId): TaskEither<Error, Item> => TE.of(anItem)
-    const save = (item: Item): TaskEither<Error, Item> => TE.of(item)
+    const save = (item: Item): TaskEither<Error, void> => TE.of(constVoid())
 
-    const program: TaskEither<Error, Item> = pipe(
+    const program: TaskEither<Error, void> = pipe(
       load(123),
       TE.map(checkIn(10)),
       TE.flatMap(save),
