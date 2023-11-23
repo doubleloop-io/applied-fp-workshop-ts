@@ -2,17 +2,6 @@ import { execute, executeAll } from "../src/version1"
 
 // TODO 1: gradually eliminate the "skip marker" and check that the test is green
 describe.skip("version 1", () => {
-  // Planet layout
-  // +-----+-----+-----+-----+-----+
-  // | 0,3 |     |     |     | 4,3 |
-  // +-----+-----+-----+-----+-----+
-  // |     |     |     |     |     |
-  // +-----+-----+-----+-----+-----+
-  // |     |     |     |     |     |
-  // +-----+-----+-----+-----+-----+
-  // | 0,0 |     |     |     | 4,0 |
-  // +-----+-----+-----+-----+-----+
-
   // NOTE: each test describe the scenario in pseudo-code
 
   test.skip("turn right command", () => {

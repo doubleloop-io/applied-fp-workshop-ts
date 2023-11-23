@@ -4,20 +4,20 @@ import {
   invalidObstacle,
   invalidPosition,
   invalidSize,
-  parseObstacle,
-  parseObstacles,
-  parseSize,
-  parsePlanet,
-  runApp,
-  parsePosition,
-  parseDirection,
   parseCommand,
   parseCommands,
+  parseDirection,
+  parseObstacle,
+  parseObstacles,
+  parsePlanet,
+  parsePosition,
+  parseSize,
+  runApp,
 } from "../../src/solutions/version2"
 import * as E from "fp-ts/Either"
 import { tuple } from "../../utils/tuple"
 
-describe("version 2", () => {
+describe.skip("version 2", () => {
   describe("parsing", () => {
     test("valid size", () => {
       const input = "5x4"

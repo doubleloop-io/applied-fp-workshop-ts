@@ -6,19 +6,19 @@
     - implement infrastructure and test it with integration tests
  */
 
-import { Tuple, unsafeParse } from "../utils/tuple"
-import { ask, logError, logInfo } from "../utils/infra-console"
-import { match } from "ts-pattern"
-import { constVoid, flip, flow, pipe } from "fp-ts/function"
+import {Tuple, unsafeParse} from "../utils/tuple"
+import {ask, logError, logInfo} from "../utils/infra-console"
+import {match} from "ts-pattern"
+import {constVoid, flip, flow, pipe} from "fp-ts/function"
 import * as E from "fp-ts/Either"
-import { Either } from "fp-ts/Either"
+import {Either} from "fp-ts/Either"
 import * as T from "fp-ts/Task"
-import { Task } from "fp-ts/Task"
+import {Task} from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
-import { TaskEither } from "fp-ts/TaskEither"
-import { loadTuple } from "../utils/infra-file"
+import {TaskEither} from "fp-ts/TaskEither"
+import {loadTuple} from "../utils/infra-file"
 import * as O from "fp-ts/Option"
-import { Option } from "fp-ts/Option"
+import {Option} from "fp-ts/Option"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
@@ -487,7 +487,7 @@ const moveForward = (
   rover: Rover,
 ): Either<ObstacleDetected, Rover> =>
   pipe(
-    next(planet, rover, delta(rover.direction)),
+    pipe(rover.direction, delta, nextPosition(planet, rover)),
     E.map((position) => updateRover({ position })(rover)),
   )
 
@@ -496,7 +496,7 @@ const moveBackward = (
   rover: Rover,
 ): Either<ObstacleDetected, Rover> =>
   pipe(
-    next(planet, rover, delta(opposite(rover.direction))),
+    pipe(rover.direction, opposite, delta, nextPosition(planet, rover)),
     E.map((position) => updateRover({ position })(rover)),
   )
 
@@ -516,23 +516,21 @@ const delta = (direction: Direction): Delta =>
     .with("W", () => ({ x: -1, y: 0 }))
     .exhaustive()
 
-const next = (
-  planet: Planet,
-  rover: Rover,
-  delta: Delta,
-): Either<ObstacleDetected, Position> => {
-  const newX = wrap(rover.position.x, planet.size.width, delta.x)
-  const newY = wrap(rover.position.y, planet.size.height, delta.y)
-  const candidate = position(newX)(newY)
+const nextPosition =
+  (planet: Planet, rover: Rover) =>
+  (delta: Delta): Either<ObstacleDetected, Position> => {
+    const newX = wrap(rover.position.x, planet.size.width, delta.x)
+    const newY = wrap(rover.position.y, planet.size.height, delta.y)
+    const candidate = position(newX)(newY)
 
-  const hitObstacle = planet.obstacles.findIndex(
-    (x) => x.position.x == newX && x.position.y == newY,
-  )
+    const hitObstacle = planet.obstacles.findIndex(
+      (x) => x.position.x == newX && x.position.y == newY,
+    )
 
-  return hitObstacle != -1
-    ? E.left(rover)
-    : E.right(updatePosition(candidate)(rover.position))
-}
+    return hitObstacle != -1
+      ? E.left(rover)
+      : E.right(updatePosition(candidate)(rover.position))
+  }
 
 const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit

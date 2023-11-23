@@ -9,11 +9,11 @@
       - obstacle detected: "O:positionX:positionY:orientation"
  */
 
-import { match } from "ts-pattern"
-import { pipe } from "fp-ts/function"
+import {match} from "ts-pattern"
+import {pipe} from "fp-ts/function"
 import * as E from "fp-ts/Either"
-import { Either } from "fp-ts/Either"
-import { Tuple, unsafeParse } from "../utils/tuple"
+import {Either} from "fp-ts/Either"
+import {Tuple, unsafeParse} from "../utils/tuple"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
@@ -241,14 +241,19 @@ const turnLeft = (rover: Rover): Rover => {
 // TODO 4: fix the implementation in order to propagate the domain Either
 // HINT: combination phase normal
 const moveForward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = next(planet, rover, delta(rover.direction))
+  const newPosition = pipe(rover.direction, delta, nextPosition(planet, rover))
   return updateRover({ position: newPosition })(rover)
 }
 
 // TODO 3: fix the implementation in order to propagate the domain Either
 // HINT: combination phase normal
 const moveBackward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = next(planet, rover, delta(opposite(rover.direction)))
+  const newPosition = pipe(
+    rover.direction,
+    opposite,
+    delta,
+    nextPosition(planet, rover),
+  )
   return updateRover({ position: newPosition })(rover)
 }
 
@@ -270,22 +275,24 @@ const delta = (direction: Direction): Delta =>
 
 // TODO 2: change return type (follow result type) in the domain Either
 // HINT: the result should be either a Rover or ObstacleDetected
-const next = (planet: Planet, rover: Rover, delta: Delta): Position => {
-  const newX = wrap(rover.position.x, planet.size.width, delta.x)
-  const newY = wrap(rover.position.y, planet.size.height, delta.y)
-  const candidate = position(newX)(newY)
+const nextPosition =
+  (planet: Planet, rover: Rover) =>
+  (delta: Delta): Position => {
+    const newX = wrap(rover.position.x, planet.size.width, delta.x)
+    const newY = wrap(rover.position.y, planet.size.height, delta.y)
+    const candidate = position(newX)(newY)
 
-  return updatePosition(candidate)(rover.position)
-  // TODO 1: remove previous line and uncomment the following to produce a domain Either
-  // HINT: get familiar with following code
-  // const hitObstacle = planet.obstacles.findIndex(
-  //   (x) => x.position.x == newX && x.position.y == newY,
-  // )
-  //
-  // return hitObstacle != -1
-  //   ? E.left(rover)
-  //   : E.right(updatePosition(candidate)(position))
-}
+    return updatePosition(candidate)(rover.position)
+    // TODO 1: remove previous line and uncomment the following to produce a domain Either
+    // HINT: get familiar with following code
+    // const hitObstacle = planet.obstacles.findIndex(
+    //   (x) => x.position.x == newX && x.position.y == newY,
+    // )
+    //
+    // return hitObstacle != -1
+    //   ? E.left(rover)
+    //   : E.right(updatePosition(candidate)(position))
+  }
 
 const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit
