@@ -54,12 +54,12 @@ const turnLeft = (rover: Rover): Rover => {
 
 const moveForward = (planet: Planet, rover: Rover): Rover => {
   const newPosition = next(planet, rover, delta(rover.direction))
-  return updateRover({ position: newPosition })(rover)
+  return pipe(rover, updateRover({ position: newPosition }))
 }
 
 const moveBackward = (planet: Planet, rover: Rover): Rover => {
   const newPosition = next(planet, rover, delta(opposite(rover.direction)))
-  return updateRover({ position: newPosition })(rover)
+  return pipe(rover, updateRover({ position: newPosition }))
 }
 
 const opposite = (direction: Direction): Direction =>
