@@ -59,7 +59,7 @@ describe.skip("version 4", () => {
 
     const result = await load()
 
-    expect(result).toEqual(
+    expect(result).toStrictEqual(
       E.right(["TurnRight", "MoveBackward", "MoveBackward"]),
     )
   })

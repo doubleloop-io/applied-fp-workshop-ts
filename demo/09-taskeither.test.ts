@@ -15,27 +15,27 @@ describe("TaskEither api", () => {
     // It's just a wrapper type
     // of a function () => Promise<Either<E, A>>
     const v1 = await te1()
-    expect(v1).toEqual(E.right(5))
+    expect(v1).toStrictEqual(E.right(5))
 
     //    v-- it's type is TaskEither<number, never>
     const te2 = TE.left(5)
-    expect(await te2()).toEqual(E.left(5))
+    expect(await te2()).toStrictEqual(E.left(5))
 
     // Explicit types to fix even the left type parameter
     //    v-- it's type is TaskEither<string, number>
     const te3 = TE.right<string, number>(5)
-    expect(await te3()).toEqual(E.right(5))
+    expect(await te3()).toStrictEqual(E.right(5))
 
     // Function definition helps the type inference
     const foo = (e: TaskEither<string, number>) => e
     //    v-- it's type is TaskEither<string, number>
     const te4 = foo(TE.right(5))
-    expect(await te4()).toEqual(E.right(5))
+    expect(await te4()).toStrictEqual(E.right(5))
   })
 
   test("mapping", async () => {
     const te1 = TE.right<string, number>(5)
-    expect(await te1()).toEqual(E.right(5))
+    expect(await te1()).toStrictEqual(E.right(5))
 
     // Change the right type parameter's type
     //    v-- it's type is TaskEither<string, string>
@@ -43,7 +43,7 @@ describe("TaskEither api", () => {
       te1,
       TE.map((x) => x.toString()),
     )
-    expect(await te2()).toEqual(E.right("5"))
+    expect(await te2()).toStrictEqual(E.right("5"))
 
     // Change either state (from right to left)
     //    v-- it's type is TaskEither<string, string>
@@ -51,7 +51,7 @@ describe("TaskEither api", () => {
       te2,
       TE.flatMap((x) => TE.left<string, string>(`error${x}`)),
     )
-    expect(await te3()).toEqual(E.left("error5"))
+    expect(await te3()).toStrictEqual(E.left("error5"))
 
     // Change the left type parameter's type
     //    v-- it's type is TaskEither<number, string>
@@ -59,7 +59,7 @@ describe("TaskEither api", () => {
       te3,
       TE.mapLeft((x) => x.length),
     )
-    expect(await te4()).toEqual(E.left(6))
+    expect(await te4()).toStrictEqual(E.left(6))
 
     // Change both type parameters types
     //    v-- it's type is TaskEither<string, number>
@@ -70,6 +70,6 @@ describe("TaskEither api", () => {
         (r) => r.length,
       ),
     )
-    expect(await te5()).toEqual(E.left("6"))
+    expect(await te5()).toStrictEqual(E.left("6"))
   })
 })

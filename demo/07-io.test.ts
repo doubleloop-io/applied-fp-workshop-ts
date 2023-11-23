@@ -14,12 +14,12 @@ describe("IO api", () => {
     // It's just a wrapper type
     // of a function () => A
     const v1 = io1()
-    expect(v1).toEqual(5)
+    expect(v1).toStrictEqual(5)
 
     // From a function
     const io2: IO<number> = () => 5
     const v2 = io2()
-    expect(v2).toEqual(5)
+    expect(v2).toStrictEqual(5)
   })
 
   test("mapping", () => {
@@ -31,6 +31,6 @@ describe("IO api", () => {
       io1,
       I.map((x) => x.toString()),
     )
-    expect(io2()).toEqual("5")
+    expect(io2()).toStrictEqual("5")
   })
 })

@@ -19,7 +19,7 @@ describe("model behaviors - functions", () => {
     const input3 = reciprocal(input2)
     const result = asString(input3)
 
-    expect(result).toEqual("0.023809523809523808")
+    expect(result).toStrictEqual("0.023809523809523808")
   })
 
   test("automatic passing of values to functions (pipe)", () => {
@@ -27,7 +27,7 @@ describe("model behaviors - functions", () => {
 
     const result = pipe(input, parseString, reciprocal, asString)
 
-    expect(result).toEqual("0.023809523809523808")
+    expect(result).toStrictEqual("0.023809523809523808")
 
     /*
     let program input =
@@ -49,7 +49,7 @@ describe("model behaviors - functions", () => {
     const composed = flow(parseString, reciprocal, asString)
     const result = composed(input)
 
-    expect(result).toEqual("0.023809523809523808")
+    expect(result).toStrictEqual("0.023809523809523808")
 
     /*
     let program () =
@@ -80,7 +80,7 @@ describe("model behaviors - functions", () => {
       (v) => substring(4, v),
     )
 
-    expect(result).toEqual("0.02")
+    expect(result).toStrictEqual("0.02")
   })
 
   test("pipe curried function with more than one parameter", () => {
@@ -103,7 +103,7 @@ describe("model behaviors - functions", () => {
       substring(4),
     )
 
-    expect(result).toEqual("0.02")
+    expect(result).toStrictEqual("0.02")
 
     /*
     let program input =

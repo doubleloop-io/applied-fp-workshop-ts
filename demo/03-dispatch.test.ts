@@ -24,9 +24,9 @@ describe("multiple dispatch", () => {
       .exhaustive()
 
   test("provides the next state", () => {
-    expect(next(red())).toEqual(green())
-    expect(next(yellow())).toEqual(red())
-    expect(next(green())).toEqual(yellow())
+    expect(next(red())).toStrictEqual(green())
+    expect(next(yellow())).toStrictEqual(red())
+    expect(next(green())).toStrictEqual(yellow())
   })
 
   // PROGRAM AS VALUES
@@ -59,7 +59,7 @@ describe("multiple dispatch", () => {
 
   test("eval the expression as number", () => {
     const result = evalNumber(program)
-    expect(result).toEqual(9)
+    expect(result).toStrictEqual(9)
   })
 
   const evalString = (e: Expr): string =>
@@ -77,6 +77,6 @@ describe("multiple dispatch", () => {
 
   test("eval the expression as string", () => {
     const result = evalString(program)
-    expect(result).toEqual("((1 + 2) * 3)")
+    expect(result).toStrictEqual("((1 + 2) * 3)")
   })
 })

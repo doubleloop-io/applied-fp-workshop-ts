@@ -14,12 +14,12 @@ describe("Task api", () => {
     // It's just a wrapper type
     // of a function () => Promise<A>
     const v1 = await t1()
-    expect(v1).toEqual(5)
+    expect(v1).toStrictEqual(5)
 
     // From a function
     const t2: Task<number> = () => Promise.resolve(5)
     const v2 = await t2()
-    expect(v2).toEqual(5)
+    expect(v2).toStrictEqual(5)
   })
 
   test("mapping", async () => {
@@ -31,6 +31,6 @@ describe("Task api", () => {
       t1,
       T.map((x) => x.toString()),
     )
-    expect(await t2()).toEqual("5")
+    expect(await t2()).toStrictEqual("5")
   })
 })

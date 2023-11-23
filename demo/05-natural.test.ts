@@ -12,19 +12,21 @@ describe("natural transformation", () => {
         O.some(42),
         E.fromOption(() => "error"),
       ),
-    ).toEqual(E.right(42))
+    ).toStrictEqual(E.right(42))
 
     expect(
       pipe(
         O.none,
         E.fromOption(() => "error"),
       ),
-    ).toEqual(E.left("error"))
+    ).toStrictEqual(E.left("error"))
   })
 
   test("from Either to TaskEither", async () => {
-    expect(await pipe(E.right(42), TE.fromEither)()).toEqual(await TE.of(42)())
-    expect(await pipe(E.left("error"), TE.fromEither)()).toEqual(
+    expect(await pipe(E.right(42), TE.fromEither)()).toStrictEqual(
+      await TE.of(42)(),
+    )
+    expect(await pipe(E.left("error"), TE.fromEither)()).toStrictEqual(
       await TE.left("error")(),
     )
   })
