@@ -1,10 +1,10 @@
 import {
-  Planet,
-  Rover,
   Command,
   Commands,
   execute,
   executeAll,
+  Planet,
+  Rover,
 } from "../../src/solutions/version1"
 
 describe.skip("version 1", () => {

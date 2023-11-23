@@ -53,12 +53,17 @@ const turnLeft = (rover: Rover): Rover => {
 }
 
 const moveForward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = next(planet, rover, delta(rover.direction))
+  const newPosition = pipe(rover.direction, delta, nextPosition(planet, rover))
   return pipe(rover, updateRover({ position: newPosition }))
 }
 
 const moveBackward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = next(planet, rover, delta(opposite(rover.direction)))
+  const newPosition = pipe(
+    rover.direction,
+    opposite,
+    delta,
+    nextPosition(planet, rover),
+  )
   return pipe(rover, updateRover({ position: newPosition }))
 }
 
@@ -78,12 +83,13 @@ const delta = (direction: Direction): Delta =>
     .with("W", () => ({ x: -1, y: 0 }))
     .exhaustive()
 
-const next = (planet: Planet, rover: Rover, delta: Delta): Position => {
-  const position = rover.position
-  const newX = wrap(position.x, planet.size.width, delta.x)
-  const newY = wrap(position.y, planet.size.height, delta.y)
-  return updatePosition({ x: newX, y: newY })(position)
-}
+const nextPosition =
+  (planet: Planet, rover: Rover) =>
+  (delta: Delta): Position => {
+    const newX = wrap(rover.position.x, planet.size.width, delta.x)
+    const newY = wrap(rover.position.y, planet.size.height, delta.y)
+    return pipe(rover.position, updatePosition({ x: newX, y: newY }))
+  }
 
 const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit
