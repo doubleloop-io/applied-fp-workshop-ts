@@ -30,6 +30,12 @@ Run a TypeScript file:
 $ yarn eval app/index.ts
 ```
 
+Run a REPL console:
+
+```sh
+$ yarn ts-node
+```
+
 Run the web application:
 
 ```sh
