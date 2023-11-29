@@ -6,13 +6,17 @@ describe("foldable", () => {
 
   test("calculate total qty", () => {
     const items = [item(100), item(10), item(42)]
+
     const result = items.reduce((acc, cur) => acc + cur.qty, 0)
+
     expect(result).toStrictEqual(152)
   })
 
   test("apply a function many times", () => {
     const items = [item(100), item(10), item(42)]
+
     const result = items.reduce(merge, item(0))
+
     expect(result).toStrictEqual(item(152))
   })
 })

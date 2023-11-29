@@ -6,28 +6,36 @@ import { pipe } from "fp-ts/function"
 describe("natural transformation", () => {
   // Natural transformation is a conversion between two effects
 
-  test("from Option to Either", () => {
-    expect(
-      pipe(
+  describe("from Option to Either", () => {
+    test("some value", () => {
+      const result = pipe(
         O.some(42),
         E.fromOption(() => "error"),
-      ),
-    ).toStrictEqual(E.right(42))
+      )
 
-    expect(
-      pipe(
+      expect(result).toStrictEqual(E.right(42))
+    })
+
+    test("none value", () => {
+      const result = pipe(
         O.none,
         E.fromOption(() => "error"),
-      ),
-    ).toStrictEqual(E.left("error"))
+      )
+      expect(result).toStrictEqual(E.left("error"))
+    })
   })
 
-  test("from Either to TaskEither", async () => {
-    expect(await pipe(E.right(42), TE.fromEither)()).toStrictEqual(
-      await TE.of(42)(),
-    )
-    expect(await pipe(E.left("error"), TE.fromEither)()).toStrictEqual(
-      await TE.left("error")(),
-    )
+  describe("from Either to TaskEither", () => {
+    test("right value", async () => {
+      const result = await pipe(E.right(42), TE.fromEither)()
+
+      expect(result).toStrictEqual(await TE.of(42)())
+    })
+
+    test("left value", async () => {
+      const result = await pipe(E.left("error"), TE.fromEither)()
+
+      expect(result).toStrictEqual(await TE.left("error")())
+    })
   })
 })
