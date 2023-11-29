@@ -22,7 +22,7 @@ describe("combination phase - normal", () => {
       // TODO  2: use 'map' to check in 10
     )
 
-    expect(result).toStrictEqual(O.some({ qty: 110 }))
+    expect(result).toStrictEqual(O.some(item(110)))
   })
 
   test.skip("checkIn after invalid creation", () => {

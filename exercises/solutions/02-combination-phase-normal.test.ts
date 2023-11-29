@@ -18,7 +18,7 @@ describe.skip("combination phase - normal", () => {
   test("checkIn after valid creation", () => {
     const result = pipe(parseItem("100"), O.map(checkIn(10)))
 
-    expect(result).toStrictEqual(O.some({ qty: 110 }))
+    expect(result).toStrictEqual(O.some(item(110)))
   })
 
   test("checkIn after invalid creation", () => {

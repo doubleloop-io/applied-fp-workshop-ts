@@ -24,7 +24,7 @@ describe("combination phase - many", () => {
   test.skip("creation with valid parameters", () => {
     const result = parseItem("foo", "100")
 
-    expect(result).toStrictEqual(O.some({ name: "foo", qty: 100 }))
+    expect(result).toStrictEqual(O.some(item("foo")(100)))
   })
 
   test.skip("creation with invalid name", () => {

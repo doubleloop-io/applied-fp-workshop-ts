@@ -1,5 +1,5 @@
-import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 describe.skip("creation phase", () => {
   type Item = Readonly<{ qty: number }>
@@ -21,18 +21,13 @@ describe.skip("creation phase", () => {
   test("item creation", () => {
     const result = parseItem("10")
 
-    expect(result).toStrictEqual({
-      _tag: "Valid",
-      value: { qty: 10 },
-    })
+    expect(result).toStrictEqual(valid(item(10)))
   })
 
   test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {
     const result = parseItem(x)
 
-    expect(result).toStrictEqual({
-      _tag: "Invalid",
-    })
+    expect(result).toStrictEqual(invalid())
   })
 
   const createItemFpTs = (qty: string): Option<Item> =>
@@ -41,7 +36,7 @@ describe.skip("creation phase", () => {
   test("item creation", () => {
     const result = createItemFpTs("10")
 
-    expect(result).toStrictEqual(O.some({ qty: 10 }))
+    expect(result).toStrictEqual(O.some(item(10)))
   })
 
   test.each(["asd", "1 0 0", ""])("invalid item creation", (x) => {

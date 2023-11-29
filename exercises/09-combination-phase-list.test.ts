@@ -20,9 +20,9 @@ describe("combination phase - list", () => {
     )
 
     expect(result).toStrictEqual([
-      O.some({ qty: 1 }),
-      O.some({ qty: 10 }),
-      O.some({ qty: 100 }),
+      O.some(item(1)),
+      O.some(item(10)),
+      O.some(item(100)),
     ])
   })
 
@@ -34,9 +34,9 @@ describe("combination phase - list", () => {
     )
 
     expect(result).toStrictEqual([
-      O.some({ qty: 1 }),
+      O.some(item(1)),
       O.none,
-      O.some({ qty: 100 }),
+      O.some(item(100)),
     ])
   })
 

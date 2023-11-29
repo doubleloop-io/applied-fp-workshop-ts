@@ -27,7 +27,7 @@ describe("combination phase - effectful", () => {
       // TODO  2: use 'flatMap' to check out 10
     )
 
-    expect(result).toStrictEqual(O.some({ qty: 90 }))
+    expect(result).toStrictEqual(O.some(item(90)))
   })
 
   test.skip("checkOut after invalid creation", () => {
@@ -46,6 +46,6 @@ describe("combination phase - effectful", () => {
       // TODO  5: check out 20
     )
 
-    expect(result).toStrictEqual(O.some({ qty: 90 }))
+    expect(result).toStrictEqual(O.some(item(90)))
   })
 })
