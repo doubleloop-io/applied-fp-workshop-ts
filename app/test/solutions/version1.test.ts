@@ -8,7 +8,6 @@ import {
 } from "../../src/solutions/version1"
 
 describe.skip("version 1", () => {
-
   test("turn right command", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }

@@ -1,6 +1,6 @@
 import { flow, identity, pipe } from "fp-ts/function"
 
-// TODO  1: for each test, remove the skip marker and make it green
+// TODO 1: for each test, remove the skip marker and make it green
 describe("custom option monad", () => {
   const increment: (x: number) => number = (x) => x + 1
 
@@ -8,28 +8,28 @@ describe("custom option monad", () => {
     some(x.toString().split("").reverse().join(""))
 
   test.skip("creation phase", () => {
-    // TODO  2: implement 'of' function
+    // TODO 2: implement 'of' function
     const result = of(10)
 
     expect(isSome(result)).toBeTruthy()
   })
 
   test.skip("combination phase - normal", () => {
-    // TODO  3: implement 'map' function
+    // TODO 3: implement 'map' function
     const result = pipe(some(10), map(increment))
 
     expect(result).toStrictEqual(some(11))
   })
 
   test.skip("combination phase - effectful", () => {
-    // TODO  4: implement 'flatMap' function
+    // TODO 4: implement 'flatMap' function
     const result = pipe(some(10), flatMap(reverseString))
 
     expect(result).toStrictEqual(some("01"))
   })
 
   test.skip("removal phase - value", () => {
-    // TODO  5: implement 'fold' function
+    // TODO 5: implement 'fold' function
     const result = pipe(
       some(10),
       fold(

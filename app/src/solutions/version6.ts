@@ -495,19 +495,19 @@ const delta = (direction: Direction): Delta =>
 
 const nextPosition =
   (planet: Planet, rover: Rover) =>
-    (delta: Delta): Either<ObstacleDetected, Position> => {
-      const newX = wrap(rover.position.x, planet.size.width, delta.x)
-      const newY = wrap(rover.position.y, planet.size.height, delta.y)
-      const candidate = position(newX)(newY)
+  (delta: Delta): Either<ObstacleDetected, Position> => {
+    const newX = wrap(rover.position.x, planet.size.width, delta.x)
+    const newY = wrap(rover.position.y, planet.size.height, delta.y)
+    const candidate = position(newX)(newY)
 
-      const hitObstacle = planet.obstacles.findIndex(
-        (x) => x.position.x == newX && x.position.y == newY,
-      )
+    const hitObstacle = planet.obstacles.findIndex(
+      (x) => x.position.x == newX && x.position.y == newY,
+    )
 
-      return hitObstacle != -1
-        ? E.left(rover)
-        : E.right(updatePosition(candidate)(rover.position))
-    }
+    return hitObstacle != -1
+      ? E.left(rover)
+      : E.right(updatePosition(candidate)(rover.position))
+  }
 
 const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit

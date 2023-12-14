@@ -6,19 +6,19 @@
     - implement infrastructure and test it with integration tests
  */
 
-import {Tuple, unsafeParse} from "../utils/tuple"
-import {ask, logError, logInfo} from "../utils/infra-console"
-import {match} from "ts-pattern"
-import {constVoid, flip, flow, pipe} from "fp-ts/function"
+import { Tuple, unsafeParse } from "../utils/tuple"
+import { ask, logError, logInfo } from "../utils/infra-console"
+import { match } from "ts-pattern"
+import { constVoid, flip, flow, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
-import {Either} from "fp-ts/Either"
+import { Either } from "fp-ts/Either"
 import * as T from "fp-ts/Task"
-import {Task} from "fp-ts/Task"
+import { Task } from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
-import {TaskEither} from "fp-ts/TaskEither"
-import {loadTuple} from "../utils/infra-file"
+import { TaskEither } from "fp-ts/TaskEither"
+import { loadTuple } from "../utils/infra-file"
 import * as O from "fp-ts/Option"
-import {Option} from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>

@@ -3,16 +3,13 @@ import { Option } from "fp-ts/Option"
 
 describe.skip("creation phase", () => {
   type Item = Readonly<{ qty: number }>
-
   const item = (qty: number): Item => ({ qty })
 
   type OptionalItem = Invalid | Valid
-
   type Invalid = Readonly<{ _tag: "Invalid" }>
   type Valid = Readonly<{ _tag: "Valid"; value: Item }>
 
   const invalid = (): Invalid => ({ _tag: "Invalid" })
-
   const valid = (item: Item): Valid => ({ _tag: "Valid", value: item })
 
   const parseItem = (qty: string): OptionalItem =>
@@ -31,7 +28,7 @@ describe.skip("creation phase", () => {
   })
 
   const createItemFpTs = (qty: string): Option<Item> =>
-    qty.match(/^[0-9]+$/i) ? O.some({ qty: Number(qty) }) : O.none
+    qty.match(/^[0-9]+$/i) ? O.some(item(Number(qty))) : O.none
 
   test("item creation", () => {
     const result = createItemFpTs("10")

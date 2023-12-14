@@ -8,7 +8,7 @@ import * as T from "fp-ts/Task"
 import { TaskEither } from "fp-ts/TaskEither"
 import * as TE from "fp-ts/TaskEither"
 
-// TODO  1: for each test, remove the skip marker and make it green
+// TODO 1: for each test, remove the skip marker and make it green
 describe("chaining", () => {
   type ItemId = number
   type Item = Readonly<{ id: ItemId; qty: number }>

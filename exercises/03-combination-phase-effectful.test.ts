@@ -2,7 +2,7 @@ import { pipe } from "fp-ts/function"
 import * as O from "fp-ts/Option"
 import { Option } from "fp-ts/Option"
 
-// TODO  1: for each test, remove the skip marker and make it green
+// TODO 1: for each test, remove the skip marker and make it green
 describe("combination phase - effectful", () => {
   type Item = Readonly<{ qty: number }>
 
@@ -24,7 +24,7 @@ describe("combination phase - effectful", () => {
   test.skip("checkOut after valid creation", () => {
     const result = pipe(
       parseItem("100"),
-      // TODO  2: use 'flatMap' to check out 10
+      // TODO 2: use 'flatMap' to check out 10
     )
 
     expect(result).toStrictEqual(O.some(item(90)))
@@ -33,7 +33,7 @@ describe("combination phase - effectful", () => {
   test.skip("checkOut after invalid creation", () => {
     const result = pipe(
       parseItem("asd"),
-      // TODO  3: check out 10
+      // TODO 3: check out 10
     )
 
     expect(result).toStrictEqual(O.none)
@@ -42,8 +42,8 @@ describe("combination phase - effectful", () => {
   test.skip("checkIn and checkOut after valid creation", () => {
     const result = pipe(
       parseItem("100"),
-      // TODO  4: check in 10
-      // TODO  5: check out 20
+      // TODO 4: check in 10
+      // TODO 5: check out 20
     )
 
     expect(result).toStrictEqual(O.some(item(90)))

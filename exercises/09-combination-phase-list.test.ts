@@ -3,7 +3,7 @@ import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 import * as A from "fp-ts/Array"
 
-// TODO  1: for each test, remove the skip marker and make it green
+// TODO 1: for each test, remove the skip marker and make it green
 describe("combination phase - list", () => {
   type Item = Readonly<{ qty: number }>
 
@@ -16,7 +16,7 @@ describe("combination phase - list", () => {
     const values = ["1", "10", "100"]
     const result = pipe(
       values,
-      // TODO  2: map over values and create items
+      // TODO 2: map over values and create items
     )
 
     expect(result).toStrictEqual([
@@ -30,21 +30,17 @@ describe("combination phase - list", () => {
     const values = ["1", "asd", "100"]
     const result = pipe(
       values,
-      // TODO  3: map over values and create items
+      // TODO 3: map over values and create items
     )
 
-    expect(result).toStrictEqual([
-      O.some(item(1)),
-      O.none,
-      O.some(item(100)),
-    ])
+    expect(result).toStrictEqual([O.some(item(1)), O.none, O.some(item(100))])
   })
 
   test.skip("all valid - summon result", () => {
     const values = ["1", "10", "100"]
     const result = pipe(values, O.traverseArray(parseItem))
 
-    // TODO  4: change expectation
+    // TODO 4: change expectation
     expect(result).toStrictEqual(null)
   })
 
@@ -52,7 +48,7 @@ describe("combination phase - list", () => {
     const values = ["1", "asd", "100"]
     const result = pipe(values, O.traverseArray(parseItem))
 
-    // TODO  5: change expectation
+    // TODO 5: change expectation
     expect(result).toStrictEqual(null)
   })
 })

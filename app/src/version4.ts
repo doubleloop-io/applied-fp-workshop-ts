@@ -12,14 +12,14 @@
       - recover from any unhandled error and print it
  */
 
-import {Tuple, unsafeParse} from "../utils/tuple"
-import {match} from "ts-pattern"
-import {flip, pipe} from "fp-ts/function"
+import { Tuple, unsafeParse } from "../utils/tuple"
+import { match } from "ts-pattern"
+import { flip, pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
-import {Either} from "fp-ts/Either"
-import {Task} from "fp-ts/Task"
+import { Either } from "fp-ts/Either"
+import { Task } from "fp-ts/Task"
 import * as TE from "fp-ts/TaskEither"
-import {TaskEither} from "fp-ts/TaskEither"
+import { TaskEither } from "fp-ts/TaskEither"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>

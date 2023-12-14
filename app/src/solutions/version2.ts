@@ -246,11 +246,11 @@ const delta = (direction: Direction): Delta =>
 
 const nextPosition =
   (planet: Planet, rover: Rover) =>
-    (delta: Delta): Position => {
-      const newX = wrap(rover.position.x, planet.size.width, delta.x)
-      const newY = wrap(rover.position.y, planet.size.height, delta.y)
-      return pipe(rover.position, updatePosition({ x: newX, y: newY }))
-    }
+  (delta: Delta): Position => {
+    const newX = wrap(rover.position.x, planet.size.width, delta.x)
+    const newY = wrap(rover.position.y, planet.size.height, delta.y)
+    return pipe(rover.position, updatePosition({ x: newX, y: newY }))
+  }
 
 const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit

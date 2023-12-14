@@ -2,7 +2,7 @@ import { pipe } from "fp-ts/function"
 import * as O from "fp-ts/Option"
 import { Option } from "fp-ts/Option"
 
-// TODO  1: for each test, remove the skip marker and make it green
+// TODO 1: for each test, remove the skip marker and make it green
 describe("combination phase - normal", () => {
   type Item = Readonly<{ qty: number }>
 
@@ -19,7 +19,8 @@ describe("combination phase - normal", () => {
   test.skip("checkIn after valid creation", () => {
     const result = pipe(
       parseItem("100"),
-      // TODO  2: use 'map' to check in 10
+      // TODO 2: just 'checkIn(10)' do not compile
+      //         use 'map' to check in 10
     )
 
     expect(result).toStrictEqual(O.some(item(110)))
@@ -28,7 +29,7 @@ describe("combination phase - normal", () => {
   test.skip("checkIn after invalid creation", () => {
     const result = pipe(
       parseItem("asd"),
-      // TODO  3: check in 10
+      // TODO 3: check in 10
     )
 
     expect(result).toStrictEqual(O.none)
