@@ -1,3 +1,6 @@
+import { Either } from "fp-ts/Either"
+import * as E from "fp-ts/Either"
+
 export type Tuple<A, B> = { first: A; second: B }
 
 export const tuple = <A, B>(first: A, second: B): Tuple<A, B> => ({
@@ -5,7 +8,17 @@ export const tuple = <A, B>(first: A, second: B): Tuple<A, B> => ({
   second,
 })
 
-export const unsafeParse = (
+// NOTE: utility function to split a string in a pair of numbers
+// EXAMPLE USAGE:
+//  parseTuple("-")("hello-world") == Right(("hello", "world"))
+//  parseTuple("-")("helloworld") == Left(Error(...))
+//  parseTuple("-")("hello, world") == Left(Error(...))
+export const parseTuple =
+  (separator: string) =>
+  (input: string): Either<Error, Tuple<number, number>> =>
+    E.tryCatch(() => unsafeParse(separator, input), E.toError)
+
+const unsafeParse = (
   separator: string,
   input: string,
 ): Tuple<number, number> => {
@@ -27,6 +40,7 @@ export const unsafeParse = (
 
   return tuple(first, second)
 }
+
 export const unsafeFromArray = (
   values: ReadonlyArray<string>,
 ): Tuple<string, string> => {

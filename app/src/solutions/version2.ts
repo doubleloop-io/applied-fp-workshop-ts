@@ -2,7 +2,8 @@ import { match } from "ts-pattern"
 import { pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
-import { Tuple, unsafeParse } from "../../utils/tuple"
+import { Tuple, parseTuple } from "../../utils/tuple"
+import { ObstacleDetected } from "./version5"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
@@ -100,7 +101,7 @@ const runMission = (
 export const parseCommands = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Command>> =>
-  E.traverseArray(parseCommand)(input.split(""))
+  pipe(input.split(""), E.traverseArray(parseCommand))
 
 export const parseCommand = (input: string): Either<ParseError, Command> =>
   match(input.toLocaleUpperCase())
@@ -110,20 +111,18 @@ export const parseCommand = (input: string): Either<ParseError, Command> =>
     .with("B", () => E.right("MoveBackward" as const))
     .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
-export const parseRover = (
-  input: Tuple<string, string>,
-): Either<ParseError, Rover> =>
-  pipe(
-    E.of(rover),
-    E.ap(parsePosition(input.first)),
-    E.ap(parseDirection(input.second)),
-  )
+export const parseRover = ({
+  first,
+  second,
+}: Tuple<string, string>): Either<ParseError, Rover> =>
+  pipe(E.of(rover), E.ap(parsePosition(first)), E.ap(parseDirection(second)))
 
 export const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
-    parseTuple(",", input),
+    input,
+    parseTuple(","),
     E.mapLeft(invalidPosition),
-    E.map((tuple) => position(tuple.first)(tuple.second)),
+    E.map(({ first, second }) => position(first)(second)),
   )
 
 export const parseDirection = (input: string): Either<ParseError, Direction> =>
@@ -134,18 +133,16 @@ export const parseDirection = (input: string): Either<ParseError, Direction> =>
     .with("S", () => E.right("S" as const))
     .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
-export const parsePlanet = (
-  input: Tuple<string, string>,
-): Either<ParseError, Planet> =>
-  pipe(
-    E.of(planet),
-    E.ap(parseSize(input.first)),
-    E.ap(parseObstacles(input.second)),
-  )
+export const parsePlanet = ({
+  first,
+  second,
+}: Tuple<string, string>): Either<ParseError, Planet> =>
+  pipe(E.of(planet), E.ap(parseSize(first)), E.ap(parseObstacles(second)))
 
 export const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
-    parseTuple("x", input),
+    input,
+    parseTuple("x"),
     E.mapLeft(invalidSize),
     E.map((tuple) => size(tuple.first)(tuple.second)),
   )
@@ -153,20 +150,15 @@ export const parseSize = (input: string): Either<ParseError, Size> =>
 export const parseObstacles = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Obstacle>> =>
-  E.traverseArray(parseObstacle)(input.split(" "))
+  pipe(input.split(" "), E.traverseArray(parseObstacle))
 
 export const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
   pipe(
-    parseTuple(",", input),
+    input,
+    parseTuple(","),
     E.mapLeft(invalidObstacle),
     E.map((tuple) => obstacle(tuple.first)(tuple.second)),
   )
-
-const parseTuple = (
-  separator: string,
-  input: string,
-): Either<Error, Tuple<number, number>> =>
-  E.tryCatch(() => unsafeParse(separator, input), E.toError)
 
 // RENDERING
 
@@ -213,20 +205,19 @@ const turnLeft = (rover: Rover): Rover => {
   return pipe(rover, updateRover({ direction }))
 }
 
-const moveForward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = pipe(rover.direction, delta, nextPosition(planet, rover))
-  return updateRover({ position: newPosition })(rover)
-}
+const moveForward = (planet: Planet, rover: Rover): Rover =>
+  pipe(rover.direction, delta, nextPosition(planet, rover), (position) =>
+    updateRover({ position })(rover),
+  )
 
-const moveBackward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = pipe(
+const moveBackward = (planet: Planet, rover: Rover): Rover =>
+  pipe(
     rover.direction,
     opposite,
     delta,
     nextPosition(planet, rover),
+    (position) => updateRover({ position })(rover),
   )
-  return updateRover({ position: newPosition })(rover)
-}
 
 const opposite = (direction: Direction): Direction =>
   match(direction)

@@ -1,7 +1,7 @@
 import { Either } from "fp-ts/Either"
 import * as E from "fp-ts/Either"
 import { match } from "ts-pattern"
-import { Tuple, unsafeParse } from "../app/utils/tuple"
+import { Tuple, parseTuple } from "../app/utils/tuple"
 import { pipe } from "fp-ts/function"
 import {
   Command,
@@ -27,7 +27,7 @@ import {
 export const parseCommands = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Command>> =>
-  E.traverseArray(parseCommand)(input.split(""))
+  pipe(input.split(""), E.traverseArray(parseCommand))
 
 const parseCommand = (input: string): Either<ParseError, Command> =>
   match(input.toLocaleUpperCase())
@@ -37,20 +37,18 @@ const parseCommand = (input: string): Either<ParseError, Command> =>
     .with("B", () => E.right("MoveBackward" as const))
     .otherwise(() => E.left(invalidCommand(new Error(`Input: ${input}`))))
 
-export const parseRover = (
-  input: Tuple<string, string>,
-): Either<ParseError, Rover> =>
-  pipe(
-    E.of(rover),
-    E.ap(parsePosition(input.first)),
-    E.ap(parseDirection(input.second)),
-  )
+export const parseRover = ({
+  first,
+  second,
+}: Tuple<string, string>): Either<ParseError, Rover> =>
+  pipe(E.of(rover), E.ap(parsePosition(first)), E.ap(parseDirection(second)))
 
 const parsePosition = (input: string): Either<ParseError, Position> =>
   pipe(
-    parseTuple(",", input),
+    input,
+    parseTuple(","),
     E.mapLeft(invalidPosition),
-    E.map((tuple) => position(tuple.first)(tuple.second)),
+    E.map(({ first, second }) => position(first)(second)),
   )
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
@@ -61,18 +59,16 @@ const parseDirection = (input: string): Either<ParseError, Direction> =>
     .with("S", () => E.right("S" as const))
     .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
-export const parsePlanet = (
-  input: Tuple<string, string>,
-): Either<ParseError, Planet> =>
-  pipe(
-    E.of(planet),
-    E.ap(parseSize(input.first)),
-    E.ap(parseObstacles(input.second)),
-  )
+export const parsePlanet = ({
+  first,
+  second,
+}: Tuple<string, string>): Either<ParseError, Planet> =>
+  pipe(E.of(planet), E.ap(parseSize(first)), E.ap(parseObstacles(second)))
 
 const parseSize = (input: string): Either<ParseError, Size> =>
   pipe(
-    parseTuple("x", input),
+    input,
+    parseTuple("x"),
     E.mapLeft(invalidSize),
     E.map((tuple) => size(tuple.first)(tuple.second)),
   )
@@ -80,17 +76,12 @@ const parseSize = (input: string): Either<ParseError, Size> =>
 const parseObstacles = (
   input: string,
 ): Either<ParseError, ReadonlyArray<Obstacle>> =>
-  E.traverseArray(parseObstacle)(input.split(" "))
+  pipe(input.split(" "), E.traverseArray(parseObstacle))
 
 const parseObstacle = (input: string): Either<ParseError, Obstacle> =>
   pipe(
-    parseTuple(",", input),
+    input,
+    parseTuple(","),
     E.mapLeft(invalidObstacle),
     E.map((tuple) => obstacle(tuple.first)(tuple.second)),
   )
-
-const parseTuple = (
-  separator: string,
-  input: string,
-): Either<Error, Tuple<number, number>> =>
-  E.tryCatch(() => unsafeParse(separator, input), E.toError)

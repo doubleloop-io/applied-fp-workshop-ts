@@ -10,9 +10,8 @@
 
 import { match } from "ts-pattern"
 import { pipe } from "fp-ts/function"
-import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
-import { Tuple, unsafeParse } from "../utils/tuple"
+import { Tuple } from "../utils/tuple"
 
 // TODO 1: get familiar with domain types and constructors
 export type Rover = Readonly<{ position: Position; direction: Direction }>
@@ -126,9 +125,10 @@ export const parseCommand = (input: string): Either<ParseError, Command> => {
 // TODO 7: parse the tuple in a rover
 // HINT: combine many value...what abstraction is needed?
 // INPUT EXAMPLE: ("2,0", "N")
-const parseRover = (
-  input: Tuple<string, string>,
-): Either<ParseError, Rover> => {
+const parseRover = ({
+  first,
+  second,
+}: Tuple<string, string>): Either<ParseError, Rover> => {
   throw new Error("TODO")
 }
 
@@ -151,9 +151,10 @@ export const parseDirection = (
 // TODO 10: parse tuple in a planet
 // HINT: combination phase many...what abstraction is needed?
 // INPUT EXAMPLE: ("5x4", "2,0 0,3")
-export const parsePlanet = (
-  input: Tuple<string, string>,
-): Either<ParseError, Planet> => {
+export const parsePlanet = ({
+  first,
+  second,
+}: Tuple<string, string>): Either<ParseError, Planet> => {
   throw new Error("TODO")
 }
 
@@ -179,17 +180,6 @@ export const parseObstacles = (
 export const parseObstacle = (input: string): Either<ParseError, Obstacle> => {
   throw new Error("TODO")
 }
-
-// NOTE: utility function to split a string in a pair of numbers
-// EXAMPLE USAGE:
-//  parseTuple("-", "hello-world") == Right(("hello", "world"))
-//  parseTuple("-", "helloworld") == Left(Error(...))
-//  parseTuple("-", "hello, world") == Left(Error(...))
-const parseTuple = (
-  separator: string,
-  input: string,
-): Either<Error, Tuple<number, number>> =>
-  E.tryCatch(() => unsafeParse(separator, input), E.toError)
 
 // RENDERING
 
@@ -239,20 +229,19 @@ const turnLeft = (rover: Rover): Rover => {
   return pipe(rover, updateRover({ direction }))
 }
 
-const moveForward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = pipe(rover.direction, delta, nextPosition(planet, rover))
-  return updateRover({ position: newPosition })(rover)
-}
+const moveForward = (planet: Planet, rover: Rover): Rover =>
+  pipe(rover.direction, delta, nextPosition(planet, rover), (position) =>
+    updateRover({ position })(rover),
+  )
 
-const moveBackward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = pipe(
+const moveBackward = (planet: Planet, rover: Rover): Rover =>
+  pipe(
     rover.direction,
     opposite,
     delta,
     nextPosition(planet, rover),
+    (position) => updateRover({ position })(rover),
   )
-  return updateRover({ position: newPosition })(rover)
-}
 
 const opposite = (direction: Direction): Direction =>
   match(direction)

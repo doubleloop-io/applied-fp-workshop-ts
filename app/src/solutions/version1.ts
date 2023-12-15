@@ -1,5 +1,8 @@
 import { match } from "ts-pattern"
 import { pipe } from "fp-ts/function"
+import { Either } from "fp-ts/Either"
+import * as E from "fp-ts/Either"
+import { ObstacleDetected } from "./version5"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
@@ -52,20 +55,19 @@ const turnLeft = (rover: Rover): Rover => {
   return pipe(rover, updateRover({ direction }))
 }
 
-const moveForward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = pipe(rover.direction, delta, nextPosition(planet, rover))
-  return pipe(rover, updateRover({ position: newPosition }))
-}
+const moveForward = (planet: Planet, rover: Rover): Rover =>
+  pipe(rover.direction, delta, nextPosition(planet, rover), (position) =>
+    updateRover({ position })(rover),
+  )
 
-const moveBackward = (planet: Planet, rover: Rover): Rover => {
-  const newPosition = pipe(
+const moveBackward = (planet: Planet, rover: Rover): Rover =>
+  pipe(
     rover.direction,
     opposite,
     delta,
     nextPosition(planet, rover),
+    (position) => updateRover({ position })(rover),
   )
-  return pipe(rover, updateRover({ position: newPosition }))
-}
 
 const opposite = (direction: Direction): Direction =>
   match(direction)
