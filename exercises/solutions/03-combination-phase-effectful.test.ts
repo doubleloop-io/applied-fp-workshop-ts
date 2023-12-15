@@ -20,6 +20,8 @@ describe.skip("combination phase - effectful", () => {
     (current: Item): Option<Item> =>
       value <= current.qty ? O.some(item(current.qty - value)) : O.none
 
+  // flatMap: (A => Option<B>) => (Option<A>) => Option<B>
+
   test("checkOut after valid creation", () => {
     const result = pipe(parseItem("100"), O.flatMap(checkOut(10)))
 

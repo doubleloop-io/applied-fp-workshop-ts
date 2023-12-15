@@ -15,6 +15,8 @@ describe.skip("combination phase - normal", () => {
     (current: Item): Item =>
       item(current.qty + value)
 
+  // map: (A => B) => (Option<A>) => Option<B>
+
   test("checkIn after valid creation", () => {
     const result = pipe(parseItem("100"), O.map(checkIn(10)))
 
