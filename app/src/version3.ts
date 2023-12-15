@@ -274,7 +274,7 @@ const delta = (direction: Direction): Delta =>
     .exhaustive()
 
 // TODO 2: change return type (follow result type) in the domain Either
-// HINT: the result should be either a Rover or ObstacleDetected
+// HINT: the result should be either a ObstacleDetected or Position
 const nextPosition =
   (planet: Planet, rover: Rover) =>
   (delta: Delta): Position => {
@@ -291,7 +291,7 @@ const nextPosition =
     //
     // return hitObstacle != -1
     //   ? E.left(rover)
-    //   : E.right(updatePosition(candidate)(position))
+    //   : E.right(updatePosition(candidate)(rover.position))
   }
 
 const wrap = (value: number, limit: number, delta: number): number =>
