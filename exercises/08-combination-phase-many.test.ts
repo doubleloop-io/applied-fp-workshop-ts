@@ -5,7 +5,6 @@ import * as O from "fp-ts/Option"
 // TODO 1: for each test, remove the skip marker and make it green
 describe("combination phase - many", () => {
   type Item = Readonly<{ name: string; qty: number }>
-
   const item =
     (name: string) =>
     (qty: number): Item => ({ name, qty })

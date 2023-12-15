@@ -3,8 +3,15 @@ import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
 
 describe.skip("combination phase - effectful", () => {
-  type Item = Readonly<{ qty: number }>
+  // Monad:
+  // 1. type constructor:
+  //      F<A>
+  // 2. flatMap (alias: bind, chain) function:
+  //      (A => F<B>) => (F<A>) => F<B>
+  // 3. respect laws (tests)
+  //      left identity, right identity, associativity
 
+  type Item = Readonly<{ qty: number }>
   const item = (qty: number): Item => ({ qty })
 
   const parseItem = (qty: string): Option<Item> =>
@@ -19,8 +26,6 @@ describe.skip("combination phase - effectful", () => {
     (value: number) =>
     (current: Item): Option<Item> =>
       value <= current.qty ? O.some(item(current.qty - value)) : O.none
-
-  // flatMap: (A => Option<B>) => (Option<A>) => Option<B>
 
   test("checkOut after valid creation", () => {
     const result = pipe(parseItem("100"), O.flatMap(checkOut(10)))

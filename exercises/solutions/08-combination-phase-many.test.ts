@@ -3,8 +3,17 @@ import * as O from "fp-ts/Option"
 import { Option } from "fp-ts/Option"
 
 describe.skip("combination phase - many", () => {
-  type Item = Readonly<{ name: string; qty: number }>
+  // Applicative (Functor):
+  // 1. type constructor:
+  //      F<A>
+  // 2. ap function:
+  //      (F<A>) => (F<A => B>) => F<B>
+  // 3. of (alias: pure) function:
+  //      (A) => F<A>
+  // 4. respect laws (tests)
+  //      identity, composition, homomorphism, interchange
 
+  type Item = Readonly<{ name: string; qty: number }>
   const item =
     (name: string) =>
     (qty: number): Item => ({ name, qty })
@@ -14,8 +23,6 @@ describe.skip("combination phase - many", () => {
 
   const checkQty = (value: string): Option<number> =>
     value.match(/^[0-9]+$/i) ? O.some(Number(value)) : O.none
-
-  // ap: (Option<A>) => (Option<A => B>) => Option<B>
 
   const parseItem = (name: string, qty: string): Option<Item> =>
     pipe(O.of(item), O.ap(checkName(name)), O.ap(checkQty(qty)))
