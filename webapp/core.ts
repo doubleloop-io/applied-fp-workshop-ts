@@ -32,6 +32,10 @@ export const obstacle =
   (x: number) =>
   (y: number): Obstacle => ({ position: { x, y } })
 
+export const delta =
+  (x: number) =>
+  (y: number): Delta => ({ x, y })
+
 export const updatePosition =
   (values: Partial<Position>) =>
   (actual: Position): Position => ({

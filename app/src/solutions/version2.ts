@@ -38,6 +38,10 @@ const obstacle =
   (x: number) =>
   (y: number): Obstacle => ({ position: { x, y } })
 
+const delta =
+  (x: number) =>
+  (y: number): Delta => ({ x, y })
+
 type ParseError =
   | InvalidSize
   | InvalidObstacle
@@ -206,7 +210,7 @@ const turnLeft = (rover: Rover): Rover => {
 }
 
 const moveForward = (planet: Planet, rover: Rover): Rover =>
-  pipe(rover.direction, delta, nextPosition(planet, rover), (position) =>
+  pipe(rover.direction, toDelta, nextPosition(planet, rover), (position) =>
     updateRover({ position })(rover),
   )
 
@@ -214,7 +218,7 @@ const moveBackward = (planet: Planet, rover: Rover): Rover =>
   pipe(
     rover.direction,
     opposite,
-    delta,
+    toDelta,
     nextPosition(planet, rover),
     (position) => updateRover({ position })(rover),
   )
@@ -227,12 +231,12 @@ const opposite = (direction: Direction): Direction =>
     .with("West", () => "Est" as const)
     .exhaustive()
 
-const delta = (direction: Direction): Delta =>
+const toDelta = (direction: Direction): Delta =>
   match(direction)
-    .with("Nord", () => ({ x: 0, y: 1 }))
-    .with("South", () => ({ x: 0, y: -1 }))
-    .with("Est", () => ({ x: 1, y: 0 }))
-    .with("West", () => ({ x: -1, y: 0 }))
+    .with("Nord", () => delta(0)(1))
+    .with("South", () => delta(0)(-1))
+    .with("Est", () => delta(1)(0))
+    .with("West", () => delta(-1)(0))
     .exhaustive()
 
 const nextPosition =
