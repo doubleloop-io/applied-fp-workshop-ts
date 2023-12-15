@@ -181,6 +181,10 @@ export const parseObstacle = (input: string): Either<ParseError, Obstacle> => {
 }
 
 // NOTE: utility function to split a string in a pair of numbers
+// EXAMPLE USAGE:
+//  parseTuple("-", "hello-world") == Right(("hello", "world"))
+//  parseTuple("-", "helloworld") == Left(Error(...))
+//  parseTuple("-", "hello, world") == Left(Error(...))
 const parseTuple = (
   separator: string,
   input: string,
