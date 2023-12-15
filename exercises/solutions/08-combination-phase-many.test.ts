@@ -1,6 +1,6 @@
 import { pipe } from "fp-ts/function"
-import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 describe.skip("combination phase - many", () => {
   type Item = Readonly<{ name: string; qty: number }>
@@ -19,12 +19,6 @@ describe.skip("combination phase - many", () => {
 
   const parseItem = (name: string, qty: string): Option<Item> =>
     pipe(O.of(item), O.ap(checkName(name)), O.ap(checkQty(qty)))
-
-  // NOTE: different way, call the first effectful function,
-  // map the pure function and then use 'ap' for each remaining parameter.
-  // More idiomatic in Haskell.
-  const createItemDifferent = (name: string, qty: string): Option<Item> =>
-    pipe(checkName(name), O.map(item), O.ap(checkQty(qty)))
 
   // NOTE: another different way with only Functor and Monad
   const createItemNoAp = (name: string, qty: string): Option<Item> => {
