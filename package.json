@@ -36,6 +36,7 @@
     "typecheck:watch": "tsc --noEmit --watch",
     "spell": "cspell '**/*.*'",
     "eval": "ts-node",
+    "app": "yarn build && node dist/app/index.js",
     "web": "yarn build && node dist/webapp/index.js"
   }
 }
