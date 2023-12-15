@@ -6,7 +6,7 @@ import { ObstacleDetected } from "./version5"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
-export type Direction = "N" | "E" | "W" | "S"
+export type Direction = "Nord" | "Est" | "West" | "South"
 export type Planet = Readonly<{
   size: Size
   obstacles: ReadonlyArray<Obstacle>
@@ -35,10 +35,10 @@ export const execute =
 
 const turnRight = (rover: Rover): Rover => {
   const direction = match(rover.direction)
-    .with("N", () => "E" as const)
-    .with("E", () => "S" as const)
-    .with("S", () => "W" as const)
-    .with("W", () => "N" as const)
+    .with("Nord", () => "Est" as const)
+    .with("Est", () => "South" as const)
+    .with("South", () => "West" as const)
+    .with("West", () => "Nord" as const)
     .exhaustive()
 
   return pipe(rover, updateRover({ direction }))
@@ -46,10 +46,10 @@ const turnRight = (rover: Rover): Rover => {
 
 const turnLeft = (rover: Rover): Rover => {
   const direction = match(rover.direction)
-    .with("N", () => "W" as const)
-    .with("W", () => "S" as const)
-    .with("S", () => "E" as const)
-    .with("E", () => "N" as const)
+    .with("Nord", () => "West" as const)
+    .with("West", () => "South" as const)
+    .with("South", () => "Est" as const)
+    .with("Est", () => "Nord" as const)
     .exhaustive()
 
   return pipe(rover, updateRover({ direction }))
@@ -71,18 +71,18 @@ const moveBackward = (planet: Planet, rover: Rover): Rover =>
 
 const opposite = (direction: Direction): Direction =>
   match(direction)
-    .with("N", () => "S" as const)
-    .with("S", () => "N" as const)
-    .with("E", () => "W" as const)
-    .with("W", () => "E" as const)
+    .with("Nord", () => "South" as const)
+    .with("South", () => "Nord" as const)
+    .with("Est", () => "West" as const)
+    .with("West", () => "Est" as const)
     .exhaustive()
 
 const delta = (direction: Direction): Delta =>
   match(direction)
-    .with("N", () => ({ x: 0, y: 1 }))
-    .with("S", () => ({ x: 0, y: -1 }))
-    .with("E", () => ({ x: 1, y: 0 }))
-    .with("W", () => ({ x: -1, y: 0 }))
+    .with("Nord", () => ({ x: 0, y: 1 }))
+    .with("South", () => ({ x: 0, y: -1 }))
+    .with("Est", () => ({ x: 1, y: 0 }))
+    .with("West", () => ({ x: -1, y: 0 }))
     .exhaustive()
 
 const nextPosition =

@@ -1,6 +1,6 @@
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
-export type Direction = "N" | "E" | "W" | "S"
+export type Direction = "Nord" | "Est" | "West" | "South"
 export type Planet = Readonly<{
   size: Size
   obstacles: ReadonlyArray<Obstacle>

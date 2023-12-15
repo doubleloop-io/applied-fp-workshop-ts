@@ -10,7 +10,10 @@ import {
 describe.skip("version 1", () => {
   test("turn right command", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 0 },
+      direction: "Nord" as const,
+    }
     const command: Command = "TurnRight"
 
     const result: Rover = execute(planet)(rover, command)
@@ -20,7 +23,10 @@ describe.skip("version 1", () => {
 
   test("turn left command", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 0 },
+      direction: "Nord" as const,
+    }
     const command: Command = "TurnLeft"
 
     const result: Rover = execute(planet)(rover, command)
@@ -30,7 +36,10 @@ describe.skip("version 1", () => {
 
   test("move forward command", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "N" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 1 },
+      direction: "Nord" as const,
+    }
     const command: Command = "MoveForward"
 
     const result: Rover = execute(planet)(rover, command)
@@ -40,7 +49,10 @@ describe.skip("version 1", () => {
 
   test("move forward command, opposite direction", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "S" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 1 },
+      direction: "South" as const,
+    }
     const command: Command = "MoveForward"
 
     const result: Rover = execute(planet)(rover, command)
@@ -50,7 +62,10 @@ describe.skip("version 1", () => {
 
   test("move backward command", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "N" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 1 },
+      direction: "Nord" as const,
+    }
     const command: Command = "MoveBackward"
 
     const result: Rover = execute(planet)(rover, command)
@@ -60,7 +75,10 @@ describe.skip("version 1", () => {
 
   test("move forward command, opposite direction", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 1 }, direction: "S" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 1 },
+      direction: "South" as const,
+    }
     const command: Command = "MoveBackward"
 
     const result: Rover = execute(planet)(rover, command)
@@ -70,7 +88,10 @@ describe.skip("version 1", () => {
 
   test("wrap on North", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 3 }, direction: "N" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 3 },
+      direction: "Nord" as const,
+    }
     const command: Command = "MoveForward"
 
     const result: Rover = execute(planet)(rover, command)
@@ -80,7 +101,10 @@ describe.skip("version 1", () => {
 
   test("go to opposite angle", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
-    const rover: Rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const rover: Rover = {
+      position: { x: 0, y: 0 },
+      direction: "Nord" as const,
+    }
     const commands: Commands = [
       "TurnLeft" as const,
       "MoveForward" as const,

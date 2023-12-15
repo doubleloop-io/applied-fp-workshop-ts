@@ -53,10 +53,10 @@ const parsePosition = (input: string): Either<ParseError, Position> =>
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
   match(input.toLocaleUpperCase())
-    .with("N", () => E.right("N" as const))
-    .with("E", () => E.right("E" as const))
-    .with("W", () => E.right("W" as const))
-    .with("S", () => E.right("S" as const))
+    .with("N", () => E.right("Nord" as const))
+    .with("E", () => E.right("Est" as const))
+    .with("W", () => E.right("West" as const))
+    .with("S", () => E.right("South" as const))
     .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))
 
 export const parsePlanet = ({

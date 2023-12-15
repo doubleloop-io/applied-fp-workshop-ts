@@ -28,7 +28,7 @@ describe.skip("version 6", () => {
 
   test("load mission successful", () => {
     const planet = { size: { width: 5, height: 5 }, obstacles: [] }
-    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const rover = { position: { x: 0, y: 0 }, direction: "Nord" as const }
 
     const result = update(appLoading(), loadMissionSuccessful(planet, rover))
 
@@ -45,7 +45,7 @@ describe.skip("version 6", () => {
 
   test("all commands executed", () => {
     const planet = { size: { width: 5, height: 5 }, obstacles: [] }
-    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const rover = { position: { x: 0, y: 0 }, direction: "Nord" as const }
 
     const result = update(
       appReady(planet, rover),
@@ -66,7 +66,7 @@ describe.skip("version 6", () => {
       size: { width: 5, height: 5 },
       obstacles: [{ position: { x: 0, y: 2 } }],
     }
-    const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+    const rover = { position: { x: 0, y: 0 }, direction: "Nord" as const }
 
     const result = update(
       appReady(planet, rover),
@@ -94,7 +94,7 @@ describe.skip("version 6", () => {
         size: { width: 5, height: 4 },
         obstacles: [{ position: { x: 2, y: 0 } }, { position: { x: 0, y: 3 } }],
       }
-      const rover = { position: { x: 0, y: 0 }, direction: "N" as const }
+      const rover = { position: { x: 0, y: 0 }, direction: "Nord" as const }
       expect(result).toStrictEqual(O.some(loadMissionSuccessful(planet, rover)))
     })
   })
