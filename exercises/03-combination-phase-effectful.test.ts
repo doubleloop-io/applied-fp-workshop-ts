@@ -39,11 +39,20 @@ describe("combination phase - effectful", () => {
     expect(result).toStrictEqual(O.none)
   })
 
+  test.skip("too musch checkOut after valid creation", () => {
+    const result = pipe(
+      parseItem("100"),
+      // TODO 4: use 'flatMap' to check out 110
+    )
+
+    expect(result).toStrictEqual(O.none)
+  })
+
   test.skip("checkIn and checkOut after valid creation", () => {
     const result = pipe(
       parseItem("100"),
-      // TODO 4: check in 10
-      // TODO 5: check out 20
+      // TODO 5: check in 10
+      // TODO 6: check out 20
     )
 
     expect(result).toStrictEqual(O.some(item(90)))
