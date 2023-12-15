@@ -270,7 +270,7 @@ const toDelta = (direction: Direction): Delta =>
     .exhaustive()
 
 // TODO 2: change return type (follow result type) in the domain Either
-// HINT: the result should be either a ObstacleDetected or Position
+// HINT: the result should be either an ObstacleDetected or Position
 const nextPosition =
   (planet: Planet, rover: Rover) =>
   (delta: Delta): Position => {
@@ -281,11 +281,12 @@ const nextPosition =
     return updatePosition(candidate)(rover.position)
     // TODO 1: remove previous line and uncomment the following to produce a domain Either
     // HINT: get familiar with following code
-    // const hitObstacle = planet.obstacles.findIndex(
-    //   (x) => x.position.x == newX && x.position.y == newY,
-    // )
+    // const hitObstacle =
+    //   planet.obstacles.findIndex(
+    //     (x) => x.position.x == newX && x.position.y == newY,
+    //   ) != -1
     //
-    // return hitObstacle != -1
+    // return hitObstacle
     //   ? E.left(rover)
     //   : E.right(updatePosition(candidate)(rover.position))
   }

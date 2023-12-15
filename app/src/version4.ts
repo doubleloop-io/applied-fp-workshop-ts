@@ -344,11 +344,12 @@ const nextPosition =
     const newY = wrap(rover.position.y, planet.size.height, delta.y)
     const candidate = position(newX)(newY)
 
-    const hitObstacle = planet.obstacles.findIndex(
-      (x) => x.position.x == newX && x.position.y == newY,
-    )
+    const hitObstacle =
+      planet.obstacles.findIndex(
+        (x) => x.position.x == newX && x.position.y == newY,
+      ) != -1
 
-    return hitObstacle != -1
+    return hitObstacle
       ? E.left(rover)
       : E.right(updatePosition(candidate)(rover.position))
   }
