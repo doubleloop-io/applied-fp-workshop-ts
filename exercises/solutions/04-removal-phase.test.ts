@@ -4,7 +4,6 @@ import * as O from "fp-ts/Option"
 
 describe.skip("removal phase", () => {
   type Item = Readonly<{ qty: number }>
-
   const item = (qty: number): Item => ({ qty })
 
   const parseItem = (qty: string): Option<Item> =>
