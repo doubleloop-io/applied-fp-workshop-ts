@@ -6,7 +6,7 @@ updates:
     pull-request-branch-name:
       separator: "-"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -14,4 +14,4 @@ updates:
     pull-request-branch-name:
       separator: "-"
     schedule:
-      interval: "daily"
+      interval: "weekly"
