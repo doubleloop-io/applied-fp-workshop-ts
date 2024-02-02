@@ -46,7 +46,7 @@ describe("custom lazy monad", () => {
   })
 
   test.skip("removal phase - value", () => {
-    // TODO 5: implement 'fold' function
+    // TODO 5: implement 'run' function
     const result = pipe(of(10), run())
 
     expect(result).toStrictEqual(10)
