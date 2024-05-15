@@ -16,7 +16,18 @@ describe("multiple dispatch", () => {
   const yellow = (): TrafficLight => ({ _tag: "Yellow" })
   const green = (): TrafficLight => ({ _tag: "Green" })
 
-  const next = (current: TrafficLight): TrafficLight =>
+  const next = (current: TrafficLight): TrafficLight => {
+    switch (current._tag) {
+      case "Red":
+        return green()
+      case "Yellow":
+        return red()
+      case "Green":
+        return yellow()
+    }
+  }
+
+  const next_match = (current: TrafficLight): TrafficLight =>
     match(current)
       .with({ _tag: "Red" }, () => green())
       .with({ _tag: "Yellow" }, () => red())
