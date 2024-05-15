@@ -10,18 +10,19 @@
 
 import { match } from "ts-pattern"
 
-// TODO 1: Those type alias are only placeholders,
-//  use correct type definitions and feel free to add more...
-export type Rover = unknown
-export type Position = unknown
-export type Direction = unknown
-export type Planet = unknown
-export type Size = unknown
-export type Obstacle = unknown
-export type Command = unknown
-export type Commands = unknown
+export type Rover = Readonly<{ position: Position; direction: Direction }>
+export type Position = Readonly<{ x: number; y: number }>
+export type Direction = "Nord" | "Est" | "West" | "South"
+export type Planet = Readonly<{
+  size: Size
+  obstacles: ReadonlyArray<Obstacle>
+}>
+export type Size = Readonly<{ width: number; height: number }>
+export type Obstacle = Readonly<{ position: Position }>
+export type Command = "TurnRight" | "TurnLeft" | "MoveForward" | "MoveBackward"
+export type Commands = ReadonlyArray<Command>
 
-// TODO 2: Execute all commands and return final rover state
+// TODO 1: Execute all commands and return final rover state
 export const executeAll = (
   planet: Planet,
   rover: Rover,
@@ -30,33 +31,47 @@ export const executeAll = (
   throw new Error("TODO")
 }
 
-// TODO 3: Dispatch each command to the specific function
+// TODO 2: Dispatch each command to the specific function
 export const execute =
   (planet: Planet) =>
-  (rover: Rover, command: Command): Rover => {
-    throw new Error("TODO")
-  }
+    (rover: Rover, command: Command): Rover => {
+      throw new Error("TODO")
+    }
 
-// TODO 4: Change rover direction
+// TODO 3: Change rover direction
 const turnRight = (rover: Rover): Rover => {
   throw new Error("TODO")
 }
 
-// TODO 5: Change rover direction
+// TODO 4: Change rover direction
 const turnLeft = (rover: Rover): Rover => {
   throw new Error("TODO")
 }
 
-// TODO 6: Change rover position
+// TODO 5: Change rover position
 const moveForward = (planet: Planet, rover: Rover): Rover => {
   throw new Error("TODO")
 }
 
-// TODO 7: Change rover position
+// TODO 6: Change rover position
 const moveBackward = (planet: Planet, rover: Rover): Rover => {
   throw new Error("TODO")
 }
 
-// NOTE: utility function for the pacman effect
+// NOTE: utility functions
 const wrap = (value: number, limit: number, delta: number): number =>
   (((value + delta) % limit) + limit) % limit
+
+const updatePosition =
+  (values: Partial<Position>) =>
+    (actual: Position): Position => ({
+      ...actual,
+      ...values,
+    })
+
+const updateRover =
+  (values: Partial<Rover>) =>
+    (actual: Rover): Rover => ({
+      ...actual,
+      ...values,
+    })

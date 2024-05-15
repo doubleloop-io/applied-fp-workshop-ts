@@ -29,7 +29,7 @@ jest.mock("readline", () => ({
   }),
 }))
 
-// TODO 1: gradually eliminate the "skip marker" and check that the test is green
+// TODO 1: gradually eliminate the "skip marker" and check that tests are green
 describe.skip("version 5", () => {
   // TODO 2: get familiar with stubs implementations
   const createMissionSource = (

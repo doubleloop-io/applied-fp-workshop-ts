@@ -19,7 +19,7 @@ import {
 import { tuple } from "../utils/tuple"
 import * as O from "fp-ts/Option"
 
-// TODO 1: gradually eliminate the "skip marker" and check that the test is green
+// TODO 1: gradually eliminate the "skip marker" and check that tests are green
 describe.skip("version 6", () => {
   test.skip("load mission data", () => {
     const result = init("planet-file", "rover-file")()
