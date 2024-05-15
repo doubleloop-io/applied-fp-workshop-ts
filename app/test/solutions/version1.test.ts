@@ -12,7 +12,7 @@ describe.skip("version 1", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 0 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
     const command: Command = "TurnRight"
 
@@ -25,7 +25,7 @@ describe.skip("version 1", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 0 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
     const command: Command = "TurnLeft"
 
@@ -38,7 +38,7 @@ describe.skip("version 1", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 1 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
     const command: Command = "MoveForward"
 
@@ -64,7 +64,7 @@ describe.skip("version 1", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 1 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
     const command: Command = "MoveBackward"
 
@@ -90,7 +90,7 @@ describe.skip("version 1", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 3 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
     const command: Command = "MoveForward"
 
@@ -103,7 +103,7 @@ describe.skip("version 1", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 0 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
     const commands: Commands = [
       "TurnLeft" as const,

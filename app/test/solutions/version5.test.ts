@@ -82,7 +82,7 @@ describe.skip("version 5", () => {
       },
       {
         position: { x: 0, y: 0 },
-        direction: "Nord" as const,
+        direction: "North" as const,
       },
       [
         "TurnRight",
@@ -105,7 +105,7 @@ describe.skip("version 5", () => {
       },
       {
         position: { x: 0, y: 0 },
-        direction: "Nord" as const,
+        direction: "North" as const,
       },
       ["TurnRight", "MoveForward", "MoveForward"],
     )

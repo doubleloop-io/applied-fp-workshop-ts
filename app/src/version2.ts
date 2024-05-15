@@ -16,7 +16,7 @@ import { Tuple } from "../utils/tuple"
 // TODO 1: get familiar with domain types and constructors
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
-export type Direction = "Nord" | "Est" | "West" | "South"
+export type Direction = "North" | "East" | "West" | "South"
 export type Planet = Readonly<{
   size: Size
   obstacles: ReadonlyArray<Obstacle>
@@ -213,10 +213,10 @@ const execute =
 
 const turnRight = (rover: Rover): Rover => {
   const direction = match(rover.direction)
-    .with("Nord", () => "Est" as const)
-    .with("Est", () => "South" as const)
+    .with("North", () => "East" as const)
+    .with("East", () => "South" as const)
     .with("South", () => "West" as const)
-    .with("West", () => "Nord" as const)
+    .with("West", () => "North" as const)
     .exhaustive()
 
   return pipe(rover, updateRover({ direction }))
@@ -224,10 +224,10 @@ const turnRight = (rover: Rover): Rover => {
 
 const turnLeft = (rover: Rover): Rover => {
   const direction = match(rover.direction)
-    .with("Nord", () => "West" as const)
+    .with("North", () => "West" as const)
     .with("West", () => "South" as const)
-    .with("South", () => "Est" as const)
-    .with("Est", () => "Nord" as const)
+    .with("South", () => "East" as const)
+    .with("East", () => "North" as const)
     .exhaustive()
 
   return pipe(rover, updateRover({ direction }))
@@ -249,17 +249,17 @@ const moveBackward = (planet: Planet, rover: Rover): Rover =>
 
 const opposite = (direction: Direction): Direction =>
   match(direction)
-    .with("Nord", () => "South" as const)
-    .with("South", () => "Nord" as const)
-    .with("Est", () => "West" as const)
-    .with("West", () => "Est" as const)
+    .with("North", () => "South" as const)
+    .with("South", () => "North" as const)
+    .with("East", () => "West" as const)
+    .with("West", () => "East" as const)
     .exhaustive()
 
 const toDelta = (direction: Direction): Delta =>
   match(direction)
-    .with("Nord", () => delta(0)(1))
+    .with("North", () => delta(0)(1))
     .with("South", () => delta(0)(-1))
-    .with("Est", () => delta(1)(0))
+    .with("East", () => delta(1)(0))
     .with("West", () => delta(-1)(0))
     .exhaustive()
 

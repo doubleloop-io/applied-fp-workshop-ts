@@ -12,7 +12,7 @@ import { match } from "ts-pattern"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
-export type Direction = "Nord" | "Est" | "West" | "South"
+export type Direction = "North" | "East" | "West" | "South"
 export type Planet = Readonly<{
   size: Size
   obstacles: ReadonlyArray<Obstacle>

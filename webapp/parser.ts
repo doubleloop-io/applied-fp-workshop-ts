@@ -53,8 +53,8 @@ const parsePosition = (input: string): Either<ParseError, Position> =>
 
 const parseDirection = (input: string): Either<ParseError, Direction> =>
   match(input.toLocaleUpperCase())
-    .with("N", () => E.right("Nord" as const))
-    .with("E", () => E.right("Est" as const))
+    .with("N", () => E.right("North" as const))
+    .with("E", () => E.right("East" as const))
     .with("W", () => E.right("West" as const))
     .with("S", () => E.right("South" as const))
     .otherwise(() => E.left(invalidDirection(new Error(`Input: ${input}`))))

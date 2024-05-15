@@ -13,7 +13,7 @@ You’re part of the team that explores Mars by sending remotely controlled vehi
 - You are given the initial starting point (x,y) of a rover and the orientation (N,S,E,W) it is facing.
 - The rover receives a character array of commands.
 - Supported commands are: move the rover forward/backward (f,b) and turn the rover left/right (l,r).
-- Implement wrapping at edges (pacman effect) from North to South, West to Est and vice versa.
+- Implement wrapping at edges (pacman effect) from North to South, West to East and vice versa.
 - Implement obstacle detection before each move to a new square. If a given sequence of commands encounters an obstacle, the rover moves up to the last possible point, **aborts** the sequence and reports the obstacle.
 
 ## Example
@@ -26,7 +26,7 @@ Given a planet of 5x4 with obstacles in 1,1 and 4,1 the layout is:
         | 0,3 |     |     |     | 4,3 |
         +-----+-----+-----+-----+-----+
         |     |     |     |     |     |
-  West  +-----+-----+-----+-----+-----+  Est
+  West  +-----+-----+-----+-----+-----+  East
         |     |*1,1*|     |     |*4,1*|
         +-----+-----+-----+-----+-----+
         | 0,0 |     |     |     | 4,0 |
@@ -35,5 +35,5 @@ Given a planet of 5x4 with obstacles in 1,1 and 4,1 the layout is:
 ```
 
 With a starting position 0,0 N the rover will be in the lower left corner facing North.
-After the `BRFFFF` commands sequence the rover will be in position 4,3 facing Est.
+After the `BRFFFF` commands sequence the rover will be in position 4,3 facing East.
 Or, after the `LFRFB` commands sequence the rover will be in position 4,0 facing North.

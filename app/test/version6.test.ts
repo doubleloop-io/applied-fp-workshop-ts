@@ -33,7 +33,7 @@ describe.skip("version 6", () => {
     const planet: Planet = { size: { width: 5, height: 5 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 0 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
 
     const result = update(appLoading(), loadMissionSuccessful(planet, rover))
@@ -53,7 +53,7 @@ describe.skip("version 6", () => {
     const planet: Planet = { size: { width: 5, height: 5 }, obstacles: [] }
     const rover: Rover = {
       position: { x: 0, y: 0 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
 
     const result = update(
@@ -77,7 +77,7 @@ describe.skip("version 6", () => {
     }
     const rover: Rover = {
       position: { x: 0, y: 0 },
-      direction: "Nord" as const,
+      direction: "North" as const,
     }
 
     const result = update(
@@ -108,7 +108,7 @@ describe.skip("version 6", () => {
       }
       const rover: Rover = {
         position: { x: 0, y: 0 },
-        direction: "Nord" as const,
+        direction: "North" as const,
       }
       expect(result).toStrictEqual(O.some(loadMissionSuccessful(planet, rover)))
     })
