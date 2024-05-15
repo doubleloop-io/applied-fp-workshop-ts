@@ -1,4 +1,4 @@
-import { Tuple, parseTuple } from "../../utils/tuple"
+import { parseTuple, Tuple } from "../../utils/tuple"
 import { ask, logError, logInfo } from "../../utils/infra-console"
 import { match } from "ts-pattern"
 import { flow, pipe } from "fp-ts/function"

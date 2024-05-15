@@ -2,7 +2,7 @@ import { match } from "ts-pattern"
 import { pipe } from "fp-ts/function"
 import * as E from "fp-ts/Either"
 import { Either } from "fp-ts/Either"
-import { Tuple, parseTuple } from "../../utils/tuple"
+import { parseTuple, Tuple } from "../../utils/tuple"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>

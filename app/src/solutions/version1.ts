@@ -1,8 +1,5 @@
 import { match } from "ts-pattern"
 import { pipe } from "fp-ts/function"
-import { Either } from "fp-ts/Either"
-import * as E from "fp-ts/Either"
-import { ObstacleDetected } from "./version5"
 
 export type Rover = Readonly<{ position: Position; direction: Direction }>
 export type Position = Readonly<{ x: number; y: number }>
