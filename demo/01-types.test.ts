@@ -6,7 +6,7 @@ describe("model data - algebraic data types", () => {
   // Single Type Modelling
 
   // Proper types
-  // es: Int, String
+  // es: number, string, boolean
 
   // Type alias - rename a type without change it
   type Name = string
