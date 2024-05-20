@@ -9,7 +9,7 @@ describe.skip("custom option monad", () => {
   test("creation phase", () => {
     const result = of(10)
 
-    expect(isSome(result)).toBeTruthy()
+    expect(result).toStrictEqual(some(10))
   })
 
   test("combination phase - normal", () => {
@@ -97,9 +97,6 @@ describe.skip("custom option monad", () => {
   const some = <A>(a: A): Option<A> => ({ _tag: "Some", value: a })
 
   const of = <A>(a: A): Option<A> => (a ? some(a) : none())
-
-  // utilities
-  const isSome = <A>(fa: Option<A>): boolean => fa._tag === "Some"
 
   // combiners
   const map =

@@ -11,7 +11,7 @@ describe("custom option monad", () => {
     // TODO 2: implement 'of' function
     const result = of(10)
 
-    expect(isSome(result)).toBeTruthy()
+    expect(result).toStrictEqual(some(10))
   })
 
   test.skip("combination phase - normal", () => {
@@ -106,9 +106,6 @@ describe("custom option monad", () => {
   const of = <A>(a: A): Option<A> => {
     throw new Error("TODO")
   }
-
-  // utilities
-  const isSome = <A>(fa: Option<A>): boolean => fa._tag === "Some"
 
   // combiners
   const map =
