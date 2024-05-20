@@ -16,10 +16,10 @@ describe("chaining", () => {
 
   const checkIn =
     (value: number) =>
-      (current: Item): Item => ({
-        ...current,
-        qty: current.qty + value,
-      })
+    (current: Item): Item => ({
+      ...current,
+      qty: current.qty + value,
+    })
 
   test.skip("chaining w/ Option Monad", () => {
     const load = (id: ItemId): Option<Item> => O.of(item(123, 10))

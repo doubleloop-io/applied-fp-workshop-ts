@@ -88,8 +88,8 @@ describe("model behaviors - functions", () => {
     // (param1: ...) => (param2: ...) => (paramN: ...): ... => implementation
     const substring =
       (size: number) =>
-        (value: string): string =>
-          value.substring(0, size)
+      (value: string): string =>
+        value.substring(0, size)
 
     const input = "42"
 

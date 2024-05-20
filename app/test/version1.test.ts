@@ -1,8 +1,14 @@
-import { Command, Commands, execute, executeAll, Planet, Rover } from "../src/version1"
+import {
+  Command,
+  Commands,
+  execute,
+  executeAll,
+  Planet,
+  Rover,
+} from "../src/version1"
 
 // TODO 1: gradually eliminate the "skip marker" and check that tests are green
 describe.skip("version 1", () => {
-
   test.skip("turn right command", () => {
     const planet: Planet = { size: { width: 5, height: 4 }, obstacles: [] }
     const rover: Rover = {

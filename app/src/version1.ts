@@ -34,9 +34,9 @@ export const executeAll = (
 // TODO 2: Dispatch each command to the specific function
 export const execute =
   (planet: Planet) =>
-    (rover: Rover, command: Command): Rover => {
-      throw new Error("TODO")
-    }
+  (rover: Rover, command: Command): Rover => {
+    throw new Error("TODO")
+  }
 
 // TODO 3: Change rover direction
 const turnRight = (rover: Rover): Rover => {
@@ -64,14 +64,14 @@ const wrap = (value: number, limit: number, delta: number): number =>
 
 const updatePosition =
   (values: Partial<Position>) =>
-    (actual: Position): Position => ({
-      ...actual,
-      ...values,
-    })
+  (actual: Position): Position => ({
+    ...actual,
+    ...values,
+  })
 
 const updateRover =
   (values: Partial<Rover>) =>
-    (actual: Rover): Rover => ({
-      ...actual,
-      ...values,
-    })
+  (actual: Rover): Rover => ({
+    ...actual,
+    ...values,
+  })

@@ -19,8 +19,8 @@ describe.skip("combination phase - normal", () => {
 
   const checkIn =
     (value: number) =>
-      (current: Item): Item =>
-        item(current.qty + value)
+    (current: Item): Item =>
+      item(current.qty + value)
 
   test("checkIn after valid creation", () => {
     const result = pipe(parseItem("100"), O.map(checkIn(10)))
