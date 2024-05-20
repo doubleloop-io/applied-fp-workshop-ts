@@ -17,7 +17,7 @@ import {
 import * as E from "fp-ts/Either"
 import { tuple } from "../../utils/tuple"
 
-describe.skip("version 2", () => {
+describe("version 2", () => {
   describe("parsing", () => {
     test("valid size", () => {
       const input = "5x4"

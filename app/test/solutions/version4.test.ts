@@ -19,7 +19,7 @@ jest.mock("readline", () => ({
   }),
 }))
 
-describe.skip("version 4", () => {
+describe("version 4", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let consoleLogSpy: any
   const lastStdout = () => consoleLogSpy.mock.calls[1][0]

@@ -17,7 +17,7 @@ import {
 import { tuple } from "../../utils/tuple"
 import * as O from "fp-ts/Option"
 
-describe.skip("version 6", () => {
+describe("version 6", () => {
   test("load mission data", () => {
     const result = init("planet-file", "rover-file")()
 

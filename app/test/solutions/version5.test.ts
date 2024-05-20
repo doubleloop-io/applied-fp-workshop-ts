@@ -29,7 +29,7 @@ jest.mock("readline", () => ({
   }),
 }))
 
-describe.skip("version 5", () => {
+describe("version 5", () => {
   const createMissionSource = (
     planet: Planet,
     rover: Rover,

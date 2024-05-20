@@ -2,7 +2,7 @@ import { invalidSize, runApp } from "../../src/solutions/version3"
 import * as E from "fp-ts/Either"
 import { tuple } from "../../utils/tuple"
 
-describe.skip("version 3", () => {
+describe("version 3", () => {
   test("go to opposite angle", () => {
     const planet = tuple("5x4", "2,0 0,3 3,2")
     const rover = tuple("0,0", "N")
