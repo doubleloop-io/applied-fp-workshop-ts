@@ -97,29 +97,29 @@ describe("custom lazy monad", () => {
   // constructors
   const of =
     <A>(a: A): Lazy<A> =>
-    () => {
-      throw new Error("TODO")
-    }
+      () => {
+        throw new Error("TODO")
+      }
 
   // combiners
   const map =
     <A, B>(f: (a: A) => B) =>
-    (fa: Lazy<A>): Lazy<B> =>
-    () => {
-      throw new Error("TODO")
-    }
+      (fa: Lazy<A>): Lazy<B> =>
+        () => {
+          throw new Error("TODO")
+        }
 
   const flatMap =
     <A, B>(f: (a: A) => Lazy<B>) =>
-    (fa: Lazy<A>): Lazy<B> =>
-    () => {
-      throw new Error("TODO")
-    }
+      (fa: Lazy<A>): Lazy<B> =>
+        () => {
+          throw new Error("TODO")
+        }
 
   // folders / runners
   const run =
     <A>() =>
-    (fa: Lazy<A>): A => {
-      throw new Error("TODO")
-    }
+      (fa: Lazy<A>): A => {
+        throw new Error("TODO")
+      }
 })

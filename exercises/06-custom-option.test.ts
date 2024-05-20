@@ -113,20 +113,20 @@ describe("custom option monad", () => {
   // combiners
   const map =
     <A, B>(f: (a: A) => B) =>
-    (fa: Option<A>): Option<B> => {
-      throw new Error("TODO")
-    }
+      (fa: Option<A>): Option<B> => {
+        throw new Error("TODO")
+      }
 
   const flatMap =
     <A, B>(f: (a: A) => Option<B>) =>
-    (fa: Option<A>): Option<B> => {
-      throw new Error("TODO")
-    }
+      (fa: Option<A>): Option<B> => {
+        throw new Error("TODO")
+      }
 
   // folders / runners
   const fold =
     <A, B>(onNone: () => B, onSome: (a: A) => B) =>
-    (fa: Option<A>): B => {
-      throw new Error("TODO")
-    }
+      (fa: Option<A>): B => {
+        throw new Error("TODO")
+      }
 })

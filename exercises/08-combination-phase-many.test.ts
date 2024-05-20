@@ -7,7 +7,7 @@ describe("combination phase - many", () => {
   type Item = Readonly<{ name: string; qty: number }>
   const item =
     (name: string) =>
-    (qty: number): Item => ({ name, qty })
+      (qty: number): Item => ({ name, qty })
 
   const checkName = (value: string): Option<string> =>
     value ? O.some(value) : O.none

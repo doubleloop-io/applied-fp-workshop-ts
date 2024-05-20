@@ -1,6 +1,6 @@
 import { pipe } from "fp-ts/function"
-import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 import * as A from "fp-ts/Array"
 
 describe.skip("combination phase - list", () => {

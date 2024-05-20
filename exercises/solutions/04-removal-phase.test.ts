@@ -1,6 +1,6 @@
 import { pipe } from "fp-ts/function"
-import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 describe.skip("removal phase", () => {
   type Item = Readonly<{ qty: number }>

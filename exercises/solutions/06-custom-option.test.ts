@@ -104,35 +104,35 @@ describe.skip("custom option monad", () => {
   // combiners
   const map =
     <A, B>(f: (a: A) => B) =>
-    (fa: Option<A>): Option<B> => {
-      switch (fa._tag) {
-        case "Some":
-          return some(f(fa.value))
-        case "None":
-          return none()
+      (fa: Option<A>): Option<B> => {
+        switch (fa._tag) {
+          case "Some":
+            return some(f(fa.value))
+          case "None":
+            return none()
+        }
       }
-    }
 
   const flatMap =
     <A, B>(f: (a: A) => Option<B>) =>
-    (fa: Option<A>): Option<B> => {
-      switch (fa._tag) {
-        case "Some":
-          return f(fa.value)
-        case "None":
-          return none()
+      (fa: Option<A>): Option<B> => {
+        switch (fa._tag) {
+          case "Some":
+            return f(fa.value)
+          case "None":
+            return none()
+        }
       }
-    }
 
   // folders / runners
   const fold =
     <A, B>(onNone: () => B, onSome: (a: A) => B) =>
-    (fa: Option<A>): B => {
-      switch (fa._tag) {
-        case "Some":
-          return onSome(fa.value)
-        case "None":
-          return onNone()
+      (fa: Option<A>): B => {
+        switch (fa._tag) {
+          case "Some":
+            return onSome(fa.value)
+          case "None":
+            return onNone()
+        }
       }
-    }
 })

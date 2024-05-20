@@ -90,25 +90,25 @@ describe.skip("custom lazy monad", () => {
   // constructors
   const of =
     <A>(a: A): Lazy<A> =>
-    () =>
-      a
+      () =>
+        a
 
   // combiners
   const map =
     <A, B>(f: (a: A) => B) =>
-    (fa: Lazy<A>): Lazy<B> =>
-    () =>
-      f(fa())
+      (fa: Lazy<A>): Lazy<B> =>
+        () =>
+          f(fa())
 
   const flatMap =
     <A, B>(f: (a: A) => Lazy<B>) =>
-    (fa: Lazy<A>): Lazy<B> =>
-    () =>
-      f(fa())()
+      (fa: Lazy<A>): Lazy<B> =>
+        () =>
+          f(fa())()
 
   // folders / runners
   const run =
     <A>() =>
-    (fa: Lazy<A>): A =>
-      fa()
+      (fa: Lazy<A>): A =>
+        fa()
 })

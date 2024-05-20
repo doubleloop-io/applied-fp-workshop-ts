@@ -4,19 +4,19 @@ import { Option } from "fp-ts/Option"
 
 describe.skip("combination phase - many", () => {
   // Applicative (Functor):
-  // 1. type constructor:
+  // 1. any type constructor:
   //      F<A>
-  // 2. ap function:
-  //      (F<A>) => (F<A => B>) => F<B>
-  // 3. of (alias: pure) function:
-  //      (A) => F<A>
-  // 4. respect laws (tests)
+  // 2. with ap function:
+  //      (Option<A>) => (Option<A => B>) => Option<B>
+  // 3. and with of (alias: pure) function:
+  //      (A) => Option<A>
+  // 4. that respect laws (tests)
   //      identity, composition, homomorphism, interchange
 
   type Item = Readonly<{ name: string; qty: number }>
   const item =
     (name: string) =>
-    (qty: number): Item => ({ name, qty })
+      (qty: number): Item => ({ name, qty })
 
   const checkName = (value: string): Option<string> =>
     value ? O.some(value) : O.none

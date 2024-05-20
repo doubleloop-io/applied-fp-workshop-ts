@@ -1,14 +1,14 @@
 import { pipe } from "fp-ts/function"
-import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 describe.skip("combination phase - normal", () => {
   // Functor:
-  // 1. type constructor:
+  // 1. any type constructor:
   //      F<A>
-  // 2. map function:
+  // 2. with a map function:
   //      (A => B) => (F<A>) => F<B>
-  // 3. respect laws (tests)
+  // 3. that respect laws (tests):
   //      identity, composition
 
   type Item = Readonly<{ qty: number }>
@@ -19,8 +19,8 @@ describe.skip("combination phase - normal", () => {
 
   const checkIn =
     (value: number) =>
-    (current: Item): Item =>
-      item(current.qty + value)
+      (current: Item): Item =>
+        item(current.qty + value)
 
   test("checkIn after valid creation", () => {
     const result = pipe(parseItem("100"), O.map(checkIn(10)))

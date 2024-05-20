@@ -1,14 +1,14 @@
 import { pipe } from "fp-ts/function"
-import { Option } from "fp-ts/Option"
 import * as O from "fp-ts/Option"
+import { Option } from "fp-ts/Option"
 
 describe.skip("combination phase - effectful", () => {
   // Monad:
-  // 1. type constructor:
+  // 1. any type constructor:
   //      F<A>
-  // 2. flatMap (alias: bind, chain) function:
-  //      (A => F<B>) => (F<A>) => F<B>
-  // 3. respect laws (tests)
+  // 2. with a flatMap (also knows as: bind, chain) function:
+  //      (A => Option<B>) => (Option<A>) => Option<B>
+  // 3. that respect laws (tests):
   //      left identity, right identity, associativity
 
   type Item = Readonly<{ qty: number }>
@@ -19,13 +19,13 @@ describe.skip("combination phase - effectful", () => {
 
   const checkIn =
     (value: number) =>
-    (current: Item): Item =>
-      item(current.qty + value)
+      (current: Item): Item =>
+        item(current.qty + value)
 
   const checkOut =
     (value: number) =>
-    (current: Item): Option<Item> =>
-      value <= current.qty ? O.some(item(current.qty - value)) : O.none
+      (current: Item): Option<Item> =>
+        value <= current.qty ? O.some(item(current.qty - value)) : O.none
 
   test("checkOut after valid creation", () => {
     const result = pipe(parseItem("100"), O.flatMap(checkOut(10)))
