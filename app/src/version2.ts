@@ -89,7 +89,7 @@ export const invalidCommand = (e: Error): ParseError => ({
 // ENTRY POINT
 
 // TODO 3: runMission and then render final rover
-// HINT: removal phase
+// HINT: combination phase normal (Functor)
 export const runApp = (
   inputPlanet: Tuple<string, string>,
   inputRover: Tuple<string, string>,
