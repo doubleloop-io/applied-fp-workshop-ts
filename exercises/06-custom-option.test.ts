@@ -54,14 +54,18 @@ describe("custom option monad", () => {
   })
 
   // TODO 6: remove skip marker and check if functor laws holds
-  describe.skip("functor laws", () => {
+  describe("functor laws", () => {
+    // https://wiki.haskell.org/Functor
+
     test("identity: identities map to identities", () => {
+      // map(fa, a => a) == fa
       const result = pipe(some(10), map(identity))
-      const expected = pipe(10, identity, some)
+      const expected = some(10)
       expect(result).toStrictEqual(expected)
     })
 
     test("composition: mapping a composition is the composition of the mappings", () => {
+      // map(fa, a => bc(ab(a))) <-> F.map(F.map(fa, ab), bc)
       const result = pipe(some(10), map(increment), map(increment))
       const expected = pipe(some(10), map(flow(increment, increment)))
       expect(result).toStrictEqual(expected)
@@ -69,20 +73,25 @@ describe("custom option monad", () => {
   })
 
   // TODO 7: remove skip marker and check if monad laws holds
-  describe.skip("monad laws", () => {
+  describe("monad laws", () => {
+    // https://wiki.haskell.org/Monad_laws
+
     test("left identity", () => {
+      // flatMap(of(a), f) == f(a)
       const result = pipe(some(10), flatMap(reverseString))
-      const expected = pipe(10, reverseString)
+      const expected = reverseString(10)
       expect(result).toStrictEqual(expected)
     })
 
     test("right identity", () => {
+      // flatMap(fa, of) == fa
       const result = pipe(some(10), flatMap(some))
-      const expected = pipe(10, some)
+      const expected = some(10)
       expect(result).toStrictEqual(expected)
     })
 
     test("associativity", () => {
+      // flatMap(flatMap(fa, afb), bfc) == flatMap(fa, a => flatMap(afb(a), bfc))
       const result = pipe(some(10), flatMap(some), flatMap(reverseString))
       const expected = pipe(
         some(10),
