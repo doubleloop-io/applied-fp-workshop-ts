@@ -4300,10 +4300,10 @@ ts-node@10.9.2:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-ts-pattern@5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.5.0.tgz#1f137eb2bd2bc30a030b5583dee022d00fac3415"
-  integrity sha512-jqbIpTsa/KKTJYWgPNsFNbLVpwCgzXfFJ1ukNn4I8hMwyQzHMJnk/BqWzggB0xpkILuKzaO/aMYhS0SkaJyKXg==
+ts-pattern@5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-5.6.0.tgz#831516bbb9041499c5525e8976d8fc6b68ac8bb9"
+  integrity sha512-SL8u60X5+LoEy9tmQHWCdPc2hhb2pKI6I1tU5Jue3v8+iRqZdcT3mWPwKKJy1fMfky6uha82c8ByHAE8PMhKHw==
 
 tslib@^1.8.1:
   version "1.14.1"
