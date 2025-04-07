@@ -22,7 +22,7 @@
     "ts-jest": "29.3.0",
     "ts-node": "10.9.2",
     "ts-pattern": "5.7.0",
-    "typescript": "5.8.2"
+    "typescript": "5.8.3"
   },
   "scripts": {
     "clean": "rm -rf dist node_modules",
