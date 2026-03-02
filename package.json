@@ -12,7 +12,7 @@
     "@types/jest": "30.0.0",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
-    "cspell": "9.6.4",
+    "cspell": "9.7.0",
     "eslint": "8.57.1",
     "fastify": "5.7.4",
     "fp-ts": "2.16.11",
