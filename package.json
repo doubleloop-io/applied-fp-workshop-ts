@@ -19,7 +19,7 @@
     "jest": "30.3.0",
     "prettier": "3.8.1",
     "prettier-plugin-jsdoc": "1.8.0",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.9",
     "ts-node": "10.9.2",
     "ts-pattern": "5.9.0",
     "typescript": "5.9.3"
