@@ -18,7 +18,7 @@
     "fp-ts": "2.16.11",
     "jest": "30.4.2",
     "prettier": "3.8.4",
-    "prettier-plugin-jsdoc": "1.8.0",
+    "prettier-plugin-jsdoc": "1.8.1",
     "ts-jest": "29.4.11",
     "ts-node": "10.9.2",
     "ts-pattern": "5.9.0",
