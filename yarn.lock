@@ -2826,10 +2826,10 @@ fast-uri@^3.0.0, fast-uri@^3.0.1:
   resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.0.1.tgz#cddd2eecfc83a71c1be2cc2ef2061331be8a7134"
   integrity sha512-MWipKbbYiYI0UC7cl8m/i/IWTqfC8YXsqjzybjddLsFjStroQzsHXkc73JutMvBiXmOvapk+axIl79ig5t55Bw==
 
-fastify@5.11.0:
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/fastify/-/fastify-5.11.0.tgz#94ec5455504c303cf31d8826cbf6b32989c43db0"
-  integrity sha512-Y/Ecx1yt0hYzrQR+QVLbxaUN8wCX+MQzMevh29r5RRvlOIArmi4+WAXXaGl5Hw5gBr2wduZpZaT3gRCnXoyVgA==
+fastify@5.11.2:
+  version "5.11.2"
+  resolved "https://registry.yarnpkg.com/fastify/-/fastify-5.11.2.tgz#591057dd3e711cafd0d1140e9827ea2c77f90b89"
+  integrity sha512-i/eJG7nXR9OkbFgoX4jFiPOHoRq0rXqDACVAXELh5Fdg6BFBErIVZ8MyibGCwup9Go1pYrxZJ0ogIub8vVdEcQ==
   dependencies:
     "@fastify/ajv-compiler" "^4.0.5"
     "@fastify/error" "^4.0.0"
