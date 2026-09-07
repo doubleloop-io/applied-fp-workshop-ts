@@ -16,7 +16,7 @@
     "eslint": "8.57.1",
     "fastify": "5.12.1",
     "fp-ts": "2.16.11",
-    "jest": "30.5.0",
+    "jest": "30.5.1",
     "prettier": "3.9.6",
     "prettier-plugin-jsdoc": "1.8.1",
     "ts-jest": "29.4.12",
