@@ -14,7 +14,7 @@
     "@typescript-eslint/parser": "5.62.0",
     "cspell": "10.3.6",
     "eslint": "8.57.1",
-    "fastify": "5.12.5",
+    "fastify": "5.12.7",
     "fp-ts": "2.16.11",
     "jest": "30.5.2",
     "prettier": "3.9.10",
